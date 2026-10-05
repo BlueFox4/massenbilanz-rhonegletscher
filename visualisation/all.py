@@ -70,7 +70,7 @@ data_dict_annotations = {
         1,  # avg temp
         1,  # avg temp max
         1,  # avg temp min
-        1,  # pressure msl
+        0.001,  # pressure msl
         1,  # humidity
         1,  # avg preci
         1,  # avg visibility
@@ -150,7 +150,7 @@ for i, (key, value) in enumerate(data_dict.items()):
     visibility = data_dict_annotations['visibility'][i]
     label = f"{key_beautified} {'in ' + unit if unit != "" else ''} {' /' + str(division_by) if division_by != 1 else ''}"
     color = data_dict_annotations['color'][i]
-    plots += ax.plot(data_dict["days_since_1955"], np.array(value)/division_by, visible=visibility, label=label, marker=".", linestyle=linestyle, c=color)
+    plots += ax.plot(data_dict["days_since_1955"], np.array(value)/division_by, visible=visibility, label=label, marker="", linestyle=linestyle, c=color)
 ax.legend()
 plots_by_label = {p.get_label(): p for p in plots}
 
