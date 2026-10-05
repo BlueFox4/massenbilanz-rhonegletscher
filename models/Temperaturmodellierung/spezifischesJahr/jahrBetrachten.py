@@ -3,10 +3,10 @@ import math
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
-STARTJAHR = 1999
+STARTJAHR = 1965
 
 def leseBesteParameter(jahr):
-    file =  open(f"Temperaturmodellierung/spezifischesJahr/bestenParameter.csv",'r')
+    file =  open(f"models/Temperaturmodellierung/spezifischesJahr/bestenParameter.csv",'r')
     alleBestenParameter = file.readlines()
     alleBestenParameter.pop(0)
     for bestenParameter in alleBestenParameter:
@@ -20,7 +20,7 @@ def f(x, a, b, c , d):
 
 def leseJahresdaten(jahr):
     #Lesen der Daten aus Datei TageslängenDA2025
-    file =  open(f"Temperaturmodellierung/spezifischesJahr/daten/klimadaten_67200_{jahr}.csv",'r')  # open braucht den genauen Pfad ab working directory
+    file =  open(f"models/Temperaturmodellierung/spezifischesJahr/daten/klimadaten_67200_{jahr}.csv",'r')  # open braucht den genauen Pfad ab working directory
     Tage = file.readlines()
     Tagestemperaturen = []   #erzeugt leeren Vektor
     Tage.pop(0) # Entferne Beschriftung
@@ -42,7 +42,6 @@ plt.ylim(-10, 30)
 plt.xlabel(r"$Tag$")
 plt.ylabel(r"Temperatur in [°C]", rotation = 90)
 
-print
 [optimales_a, optimales_b, optimales_c, optimales_d] = leseBesteParameter(STARTJAHR)
 x = np.arange(0, 365, 0.1)
 y, = plt.plot(x, f(x, optimales_a, optimales_b, optimales_c, optimales_d), 'b-', lw = 1)

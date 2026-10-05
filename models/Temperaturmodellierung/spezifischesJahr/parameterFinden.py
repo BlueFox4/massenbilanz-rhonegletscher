@@ -64,7 +64,7 @@ def findeBesteAbweichung(a, b, c, d, y_data, aktuelleAbweichung):
 besteWerteAllerJahre = [["Jahr", "a", "b", "c", "d"]]
 for jahr in range(1955, 2026, 1):
     try:
-        file = open(f"Temperaturmodellierung/spezifischesJahr/daten/klimadaten_67200_{jahr}.csv",'r')  # open braucht den genauen Pfad ab working directory
+        file = open(f"models/Temperaturmodellierung/spezifischesJahr/daten/klimadaten_67200_{jahr}.csv",'r')  # open braucht den genauen Pfad ab working directory
     except:
         print(f"Die Datei des Jahres {jahr} konnte nicht geöffnet werden und wird übersprungen.")
         continue
@@ -82,6 +82,6 @@ for jahr in range(1955, 2026, 1):
     besteWerteAllerJahre.append([jahr] + bestenWerte)
     print(f"Für das Jahr {jahr} sind die besten Werte: {bestenWerte}")
 
-with open("./Temperaturmodellierung/spezifischesJahr/bestenParameter.csv", "w", newline="") as writeToFile:
+with open("models/Temperaturmodellierung/spezifischesJahr/bestenParameter.csv", "w", newline="") as writeToFile:
     writer = csv.writer(writeToFile)
     writer.writerows(besteWerteAllerJahre)

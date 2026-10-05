@@ -12,7 +12,7 @@ def f(x, a, b, c , d):
 def tagestemperaturenVonJahr(jahr):
     #Lesen der Daten aus Datei
     try:
-        file =  open(f'Temperaturmodellierung/spezifischesJahr/daten/klimadaten_67200_{jahr}.csv','r')  # open braucht den genauen Pfad ab working directory
+        file =  open(f'models/Temperaturmodellierung/spezifischesJahr/daten/klimadaten_67200_{jahr}.csv','r')  # open braucht den genauen Pfad ab working directory
     except:
         print(f"ERROR: Jahr {jahr} konnte nicht gefunden werden.")
         Tagestemperaturen = []

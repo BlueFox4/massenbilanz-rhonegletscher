@@ -7,7 +7,7 @@ def f(x, a, b, c , d):
     return a*np.sin(2*np.pi*(x-c)/b)+d
 
 #Lesen der Daten aus Datei TageslängenDA2025
-file =  open('Temperaturmodellierung/spezifischesJahr/daten/klimadaten_67200_2023.csv','r')  # open braucht den genauen Pfad ab working directory
+file =  open('models/Temperaturmodellierung/spezifischesJahr/daten/klimadaten_67200_2023.csv','r')  # open braucht den genauen Pfad ab working directory
 Tage = file.readlines()
 Tagestemperaturen = []   #erzeugt leeren Vektor
 Tage.pop(0) # Entferne Beschriftung
