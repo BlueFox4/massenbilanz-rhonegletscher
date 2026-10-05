@@ -55,7 +55,7 @@ data_dict_annotations = {
         "blue",            # avg temp min
         "teal",            # pressure msl
         "aqua",            # humidity
-        "gray",            # avg preci
+        "gray",            # precipitation
         "lawngreen",       # avg visibility
         "olive",           # avg wind speed
         "olivedrab",       # max sustained speed
@@ -72,7 +72,7 @@ data_dict_annotations = {
         1,  # avg temp min
         0.001,  # pressure msl
         1,  # humidity
-        1,  # avg preci
+        1,  # precipitation
         1,  # avg visibility
         1,  # avg wind speed
         1,  # max sustained speed
@@ -89,7 +89,7 @@ data_dict_annotations = {
         "°C",    # avg temp min
         "hPa",   # pressure msl
         "%",     # humidity
-        "mm",    # avg preci
+        "mm",    # precipitation
         "km",    # avg visibility
         "km/h",  # avg wind speed
         "km/h",  # max sustained speed
@@ -106,7 +106,7 @@ data_dict_annotations = {
         "-.",  # avg temp min
         "-.",  # pressure msl
         "-",   # humidity
-        "-",   # avg preci
+        "-",   # precipitation
         "-.",  # avg visibility
         "-",   # avg wind speed
         "-.",  # max sustained speed
@@ -123,7 +123,7 @@ data_dict_annotations = {
         False,  # avg temp min
         False,  # pressure msl
         True,   # humidity
-        True,   # avg preci
+        True,   # precipitation
         False,  # avg visibility
         True,   # avg wind speed
         False,  # max sustained speed
