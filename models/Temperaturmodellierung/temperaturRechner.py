@@ -48,7 +48,7 @@ def erhalteTemperatur(t, h):
     temperatur = temperatur_wetterstation - 0.65 * ( (h-482) / 100 )
     return temperatur
 
-# tag=10250
-# hoehe=482
-# print(berechneJahrTag(tag))
-# print(erhalteTemperatur(tag, hoehe))
+tag=10250
+hoehe=2000
+print(berechneJahrTag(tag))
+print(erhalteTemperatur(tag, hoehe))

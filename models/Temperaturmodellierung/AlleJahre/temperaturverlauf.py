@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
 #Lesen der Daten aus Datei TageslängenDA2025
-file =  open('Temperaturmodellierung/AlleJahre/jahrestemperaturen.csv','r')  # open braucht den genauen Pfad ab working directory
+file =  open('models/Temperaturmodellierung/AlleJahre/jahrestemperaturen.csv','r')  # open braucht den genauen Pfad ab working directory
 Jahre = []   #erzeugt leeren Vektor
 for line in file:
     Jahre.append(line.split(","))   # fügt Liste der Jahresdaten in Jahre ein
