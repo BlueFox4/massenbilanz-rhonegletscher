@@ -141,4 +141,4 @@ sldD.on_changed(update)
 
 ax.grid(True)
 plt.show()
-update()
+update(0)
