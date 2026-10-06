@@ -1,14 +1,10 @@
 #Eingabe: Tage nach 1.1.1999 <--> t=0 und Höhe (Wetterstation bei 482m)
+import math
 import numpy as np
 from datetime import date, timedelta
 
 #Intervall der betrachteten Jahre für zukünftige Prognosen
 BETRACHTETE_JAHRE = [2014, 2024]
-
-def berechneJahrTag(t):
-    tagNull = date(1999, 1, 1)
-    gesuchterTag = tagNull + timedelta(days=t)
-    return ([gesuchterTag.year, int(gesuchterTag.strftime('%j'))-1])
 
 def berechneParameter(jahr):
     if (jahr < 2025):
@@ -41,14 +37,16 @@ def berechneParameter(jahr):
 def f(x, a, b, c , d):
     return a*np.sin(2*np.pi*(x-c)/b)+d
 
+
 def erhalteTemperatur(t, h):
-    [jahr, tag] = berechneJahrTag(t)
-    [a, b, c, d] = berechneParameter(jahr)
+    year = math.floor(t)
+    tag = (t - year) * 366
+    [a, b, c, d] = berechneParameter(year)
     temperatur_wetterstation = f(tag, a, b, c, d)
     temperatur = temperatur_wetterstation - 0.65 * ( (h-482) / 100 )
     return temperatur
 
-tag=10250
-hoehe=2000
-print(berechneJahrTag(tag))
-print(erhalteTemperatur(tag, hoehe))
+if __name__ == "__main__":
+    time=2090+(23/366)
+    hoehe=2000
+    print(erhalteTemperatur(time, hoehe))
