@@ -2,51 +2,23 @@
 import math
 import numpy as np
 from datetime import date, timedelta
-
-#Intervall der betrachteten Jahre für zukünftige Prognosen
-BETRACHTETE_JAHRE = [2014, 2024]
-
-def berechneParameter(jahr):
-    if (jahr < 2025):
-        file =  open(f"models/Temperaturmodellierung/spezifischesJahr/bestenParameter.csv",'r')
-        alleBestenParameter = file.readlines()
-        alleBestenParameter.pop(0)
-        for bestenParameter in alleBestenParameter:
-            bestenParameter = bestenParameter[:-1].split(",")
-            if int(bestenParameter[0]) == jahr:
-                return ([float(bestenParameter[1]), float(bestenParameter[2]), float(bestenParameter[3]), float(bestenParameter[4])])
-        print(f"Konnte das Jahr {jahr} nicht finden, verwendet voriges Jahr ({jahr-1}).")
-        return(berechneParameter(jahr-1))
-    else:
-        #Prognose für nächsten Jahre soll Mittelwert der letzten 5 Jahre sein
-        file =  open(f"models/Temperaturmodellierung/spezifischesJahr/bestenParameter.csv",'r')
-        alleBestenParameter = file.readlines()
-        alleBestenParameter.pop(0)
-        summenParameter = [0, 0, 0, 0]
-        for bestenParameter in alleBestenParameter:
-            bestenParameter = bestenParameter[:-1].split(",")
-            if int(bestenParameter[0]) <= BETRACHTETE_JAHRE[1] and  int(bestenParameter[0]) >= BETRACHTETE_JAHRE[0]:
-                summenParameter[0] += float(bestenParameter[1])
-                summenParameter[1] += float(bestenParameter[2])
-                summenParameter[2] += float(bestenParameter[3])
-                summenParameter[3] += float(bestenParameter[4])
-        anzahl = BETRACHTETE_JAHRE[1]-BETRACHTETE_JAHRE[0]+1
-        return([summenParameter[0]/anzahl, summenParameter[1]/anzahl, summenParameter[2]/anzahl, summenParameter[3]/anzahl])
-
+import spezifischesJahr.besteParameterEntwicklung as params
 
 def f(x, a, b, c , d):
     return a*np.sin(2*np.pi*(x-c)/b)+d
 
-
-def erhalteTemperatur(t, h):
+def erhalteTemperatur(t, h, since):
     year = math.floor(t)
     tag = (t - year) * 366
-    [a, b, c, d] = berechneParameter(year)
-    temperatur_wetterstation = f(tag, a, b, c, d)
+
+    temperatur_wetterstation = f(tag, params.a_func(t, since), params.b_func(t, since), params.c_func(t, since), params.d_func(t, since))
     temperatur = temperatur_wetterstation - 0.65 * ( (h-482) / 100 )
     return temperatur
 
+
 if __name__ == "__main__":
-    time=2090+(23/366)
+    time=1999+(8*31/366)
     hoehe=2000
-    print(erhalteTemperatur(time, hoehe))
+    while time < 2101:
+        print(f"{time}: Model since 1999 {round(erhalteTemperatur(time, hoehe, 1999))}°C | Model since 2014 {round(erhalteTemperatur(time, hoehe, 2014))}°C")
+        time += 1
