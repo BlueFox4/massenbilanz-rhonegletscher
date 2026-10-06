@@ -4,7 +4,7 @@ from datetime import date
 from matplotlib.widgets import CheckButtons, Slider
 
 
-# Get all data and parse it into one beautiful (gigantic) python dictionary
+# Get all data and parse it into one beautiful (gigantic) python list
 with open('data/data_all.csv','r') as f:
     data = f.readlines()[1:]
 

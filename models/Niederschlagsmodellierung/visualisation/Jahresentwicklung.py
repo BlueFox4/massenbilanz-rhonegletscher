@@ -29,6 +29,6 @@ for i in range(len(Jahre)):
         jahresniederschlag.append(y)
     except:
         print(f"Das Jahr {Jahre[i][0]} wurde mit dem Wert {Jahre[i][4]} aussortiert.")
-plt.plot(jahr, jahresniederschlag)
+plt.plot(jahr, jahresniederschlag, "r.")
 
 plt.show()

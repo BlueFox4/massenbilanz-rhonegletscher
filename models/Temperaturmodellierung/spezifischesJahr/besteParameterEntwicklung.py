@@ -25,8 +25,8 @@ plt.title(f"BestenParameter Entwicklung")
 plt.subplots_adjust(left = 0.12, bottom = 0.3)
 plt.xlim(1955, 2025)
 plt.ylim(0, 400)
-plt.xlabel(r"$Wert$")
-plt.ylabel(r"Jahr", rotation = 90)
+plt.xlabel(r"$Jahr$")
+plt.ylabel(r"Wert", rotation = 90)
 
 # Datenpunkte
 a_Graph, = plt.plot(x, a, 'b.', lw=1)
