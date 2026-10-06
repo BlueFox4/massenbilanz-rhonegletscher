@@ -1,0 +1,17 @@
+{
+  "c": 1.4125375446227554e-06,
+  "d": 0.005623413251903491,
+  "f": 3.9810717055349776,
+  "dt_jahre": 0.00273224043715847,
+  "start_jahr": 1955,
+  "end_jahr": 2023,
+  "startmasse_tonnen": 2160111516.0,
+  "endmasse_tonnen": 1752520322.7933722,
+  "rmse_mrd_t": 0.029904526703329784,
+  "stations_hoehe_m": 500.0,
+  "gletscher_min_m": 2200.0,
+  "gletscher_max_m": 3600.0,
+  "hoehen_schritt_m": 100.0,
+  "lapse_rate_C_pro_m": 0.0065,
+  "T0_C": 2.0
+}
