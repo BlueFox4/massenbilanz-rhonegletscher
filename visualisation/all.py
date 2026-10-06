@@ -97,7 +97,7 @@ data_dict_annotations = {
         "",      # rain days
         "",      # snow days
         "",      # thunder days
-        "",       # fog days
+        "",      # fog days
         "",      # days since jan 1, 1955
     ],
     "linestyle": [
