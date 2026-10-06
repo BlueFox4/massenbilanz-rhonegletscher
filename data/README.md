@@ -1,10 +1,17 @@
 # Herkunft der Daten
 
+Die Beschreibung der Daten gibt es auch in einer Datei mit entsprechendem Suffix `.description.csv`.
+
+## Quellen
+
+Für die Herkunft der Daten, s. folgende Untertitel. 
+
+- [Quelle 1](https://de.tutiempo.net/klima/ws-67200.html#google_vignette): Wo `tt` angegeben ist, handelt es sich um die in der Aufgabenstellung gegebenen Quelle. 
+- [Quelle 2](https://naturwissenschaften.ch/snow-glaciers-permafrost-explained/glaciers/mass_balance/rhone): Wo `gl` angegeben ist, handelt es sich um (Gletscher-)Daten von [hier](https://www.glamos.ch/factsheet#/B43-03) (verlinkt aus Q2).
+
 ## data_year.csv
 
 Hierbei handelt es sich um alle Daten, die jahresweise erhoben worden sind.
-
-Für die Herkunft der Daten, s. folgende Tabelle. Wo `tt` angegeben ist, handelt es sich um die in der Aufgabenstellung gegebenen [Quelle 1](https://de.tutiempo.net/klima/ws-67200.html#google_vignette). Steht dort `gl`, handelt es sich um (Gletscher-)Daten von [hier](https://www.glamos.ch/factsheet#/B43-03), verlinkt aus [Quelle 2](https://naturwissenschaften.ch/snow-glaciers-permafrost-explained/glaciers/mass_balance/rhone).
 
 Bei der Herleitung einiger der letzten Werte wurden folgende Annahmen getroffen:
 
@@ -23,10 +30,18 @@ Die Formeln können im Spreadsheet, welches im Repository enthalten ist, nachgel
 
  **Dimension**    | **T**          | **TM**           | **Tm**           | **PP**                 | **V**                                     | **RA**        | **SN**         | **TS**        | **FG**        | **TN**          | **GR**        | **MpA/dt**                    | **L/dt**           | **L**                                                                                       | **A**                              | **M**                                                                                                                                                         
 --------------|------------|--------------|--------------|--------------------|---------------------------------------|-----------|------------|-----------|-----------|-------------|-----------|---------------------------|----------------|---------------------------------------------------------------------------------------------|-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------
- **Einheit**      | °C         | °C           | °C           | mm                 | km/h                                  | -         | -          | -         | -         | -           | -         | mm w.e.                   | m              | m                                                                                           | km²                                     | Mrd. t                                                                                                                                                   
+ **Einheit**      | $°C$         | $°C$           | $°C$           | $mm$                 | $\frac{km}{h}$                                  | -         | -          | -         | -         | -           | -         | $mm\ w.e. = \frac{kg}{m^2}$                   | $m$              | $m$                                                                                           | km²                                     | $Mrd.\ t$                                                                                                                                                   
  **Beschreibung** | Temperatur | Maximaltemp. | Minimaltemp. | Jahresniederschlag | Durchschnittliche Windgeschwindigkeit | Regentage | Schneetage | Sturmtage | Nebeltage | Tornadotage | Hageltage | Massenänderung pro Fläche | Längenänderung | Länge                                                                                       | Fläche                                  | Durchschnittliche Masse                                                                                                                                   
- **Herkunft**     | tt         | tt           | tt           | tt                 | tt                                    | tt        | tt         | tt        | tt        | tt          | tt        | gl                        | gl             | Hergeleitet aus $\frac{L}{dt}$ und gegebener $Länge\ um\ 1999$ in der Aufgabenstellung (dort ohne Quelle) | Berechnet aus $L$ und fest angenommener $B$ | Hergeleitet aus $\frac{MpA}{dt}$ und der $MpA$ um 1999 (diese ist berechnet aus dem in der Aufgabenstellung gegebenem $V$, der durchschnittlichen $Dichte\ \rho\ von\ Eis$ und $A$) 
+ **Herkunft**     | tt (scraped)         | tt (scraped)           | tt (scraped)           | tt (scraped)                 | tt (scraped)                                    | tt (scraped)        | tt (scraped)         | tt (scraped)        | tt (scraped)        | tt (scraped)          | tt (scraped)        | gl (abgeschrieben)                        | gl (abgeschrieben)             | Hergeleitet aus $\frac{L}{dt}$ und gegebener $Länge\ um\ 1999$ in der Aufgabenstellung (dort ohne Quelle) | Berechnet aus $L$ und fest angenommener $B$ | Hergeleitet aus $\frac{MpA}{dt}$ und der $MpA$ um 1999 (diese ist berechnet aus dem in der Aufgabenstellung gegebenem $V$, der durchschnittlichen $Dichte\ \rho\ von\ Eis$ und $A$) 
 
 
+## data_all.csv
 
+Hierbei handelt es sich um tagesweise erhobene Wetterdaten. Es wurden keine Daten aus anderen hergeleitet, dementsprechend ist hier weniger Aufwand vonnöten - schlicht das Scraping wurde durchgeführt mit den in diesem Ordner befindlichen Python-Dateien.
+
+ **Dimension**    | **Y** | **M** | **D** | **T**              | **TM**                      | **Tm**                      | **SLP**                  | **H**            | **PP**       | **VV**                  | **V**      | **VM**                              | **VG**                       | **RA**    | **SN**     | **TS**    | **FG**    
+------------------|-------|-------|-------|--------------------|-----------------------------|-----------------------------|--------------------------|------------------|--------------|-------------------------|------------|-------------------------------------|------------------------------|-----------|------------|-----------|-----------
+ **Einheit**      | -     | -     | -     | $°C$                 | $°C$                          | $°C$                          | $hPa$                      | $%$                | $mm$           | $km$                      | $\frac{km}{h}$       | $\frac{km}{h}$                                | $\frac{km}{h}$                         | -         | -          | -         | -         
+ **Beschreibung** | Jahr  | Monat | Tag   | Durchschnittstemp. | Maximale Durchschnittstemp. | Minimale Durchschnittstemp. | Luftdruck auf Meereshöhe | rel. Luftfeuchte | Niederschlag | Durchschnittliche Sicht | Mittelwind | Durchschnittlicher anhaltender Wind | Maximale Windgeschwindigkeit | Regentage | Schneetage | Sturmtage | Nebeltage 
+ **Herkunft**     | tt (scraped)    | tt (scraped)    | tt (scraped)    | tt (scraped)                 | tt (scraped)                          | tt (scraped)                          | tt (scraped)                       | tt (scraped)               | tt (scraped)           | tt (scraped)                      | tt (scraped)         | tt (scraped)                                  | tt (scraped)                           | tt (scraped)        | tt (scraped)         | tt (scraped)        | tt (scraped)        
 
