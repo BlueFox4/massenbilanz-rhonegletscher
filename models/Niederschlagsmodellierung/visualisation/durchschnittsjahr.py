@@ -146,4 +146,4 @@ data, = plt.plot(x2,durchschnittsTagesniederschlag,'r:',lw = 1)
 
 ax.grid(True)
 plt.show()
-# update(0)
+update(0)
