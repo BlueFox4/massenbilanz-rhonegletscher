@@ -4,9 +4,9 @@ import csv
 
 DATA_ALL_PATH = "data/data_all.csv"
 
-# =======
-# READING
-# =======
+# ======= #
+# READING # 
+# ======= #
 
 print("Parsing document... ", end="", flush=True)
 
@@ -30,9 +30,9 @@ for datum in data:
 print("parsed document.")
 
 
-# ==========
-# Add column
-# ==========
+# ========== # 
+# Add column #
+# ========== #
 
 print("Optimizing Data... ", end="", flush=True)
 
@@ -51,11 +51,12 @@ if "t" not in data_dict.keys():
     print("Done.")
 else:
     print("Data has already been optimized. Skipping.")
+    exit(0)
 
 
-# =============
-# WRITE CHANGES
-# =============
+# ============= #
+# WRITE CHANGES # 
+# ============= #
 
 with open(DATA_ALL_PATH, "w") as f:
     csv_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
@@ -64,6 +65,9 @@ with open(DATA_ALL_PATH, "w") as f:
     for i in range(len(data_dict["Y"])):
         row = []
         for d in data_dict.values():
-            row.append(d[i])
+            datum = d[i]
+            if datum.is_integer():
+                datum = int(datum)
+            row.append(datum)
         csv_writer.writerow(row)
     
