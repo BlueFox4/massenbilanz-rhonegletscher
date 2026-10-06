@@ -27,30 +27,30 @@ for daten in jahre:
         jahresniederschlag.append(float(daten[4]))
     except ValueError:
         jahresniederschlag.append(np.nan)
-        print(
-            f"Das Jahr {daten[0]} wurde mit dem "
-            f"Niederschlagswert {daten[4]} aussortiert."
-        )
+        #print(
+        #    f"Das Jahr {daten[0]} wurde mit dem "
+        #    f"Niederschlagswert {daten[4]} aussortiert."
+        #)
 
     # Regentage
     try:
         jahresregentage.append(float(daten[6]))
     except ValueError:
         jahresregentage.append(np.nan)
-        print(
-            f"Das Jahr {daten[0]} wurde mit dem "
-            f"Regentage-Wert {daten[6]} aussortiert."
-        )
+        #print(
+        #    f"Das Jahr {daten[0]} wurde mit dem "
+        #    f"Regentage-Wert {daten[6]} aussortiert."
+        #)
 
     # Schneetage
     try:
         jahresschneetage.append(float(daten[7]))
     except ValueError:
         jahresschneetage.append(np.nan)
-        print(
-            f"Das Jahr {daten[0]} wurde mit dem "
-            f"Schneetage-Wert {daten[7]} aussortiert."
-        )
+        #print(
+        #    f"Das Jahr {daten[0]} wurde mit dem "
+        #    f"Schneetage-Wert {daten[7]} aussortiert."
+        #)
 
 
 # Regentage und Schneetage zu Niederschlagstagen zusammenfassen
@@ -74,7 +74,7 @@ fit_pp_days = np.polyfit(
     1
 )
 
-print(f"Niederschlagstage - Ausgleichsgeraden-Funktion: y = {fit_pp_days[0]:.6f}x + {fit_pp_days[1]:.6f}")
+#print(f"Niederschlagstage - Ausgleichsgeraden-Funktion: y = {fit_pp_days[0]:.6f}x + {fit_pp_days[1]:.6f}")
 
 
 fit_pp_days_line = np.polyval(
@@ -113,7 +113,7 @@ for i, y in enumerate(years):
 
 # Ausgleichsgerade erstellen
 fit_monthly_pp = np.polyfit(list(cumulated_months_pp.keys()), list(cumulated_months_pp.values()), 1)
-print(f"Monatsniederschlag - Ausgleichsgeraden-Funktion: y = {fit_monthly_pp[0]:.6f}x + {fit_monthly_pp[1]:.6f}")
+#print(f"Monatsniederschlag - Ausgleichsgeraden-Funktion: y = {fit_monthly_pp[0]:.6f}x + {fit_monthly_pp[1]:.6f}")
 fit_monthly_pp_line = np.polyval(fit_monthly_pp, list(cumulated_months_pp.keys()))
 
 
@@ -122,16 +122,17 @@ fit_monthly_pp_line = np.polyval(fit_monthly_pp, list(cumulated_months_pp.keys()
 # --------------------------------------------- #
 
 # Für die Ausgleichsgerade der Niederschlagstage
-def fit_pp_days_func(y, since):
+def fit_pp_days_func(t, since):
     x = jahr_gueltig
     y = niederschlagstage_gueltig
-    return np.polynomial.Polynomial.fit(x[x >= since], y[x >= since], deg=1)(y)
+    return np.polynomial.Polynomial.fit(x[x >= since], y[x >= since], deg=1)(t)
 
 # Für die Ausgleichsgerade der monatlichen Niederschlagshöhe
-def fit_monthly_pp_func(y, since):
-    x = cumulated_months_pp.keys()
+def fit_monthly_pp_func(t, since):
+    x = np.array(list(cumulated_months_pp.keys()))
     y = np.array(list(cumulated_months_pp.values()))
-    return np.polynomial.Polynomial.fit(x[x >= since], y[x >= since], deg=1)(y)
+    return np.polynomial.Polynomial.fit(x[x >= since], y[x >= since], deg=1)(t)
+
 
 # ------------------ # 
 # Diagramm erstellen #
