@@ -8,15 +8,15 @@ Für die Herkunft der Daten, s. folgende Tabelle. Wo `tt` angegeben ist, handelt
 
 Bei der Herleitung einiger der letzten Werte wurden folgende Annahmen getroffen:
 
-- Dichte des Eises (/Alles von Eis über Firn bis Neuschnee) liegt gemittelt bei `ρ_Eis = 918 kg*m−3`
-- Die Breite des Gletschers wird als konstant vereinfacht mit `B = 2 km`
-- Der Gletscher wird für die Massenberechnung stark vereinfacht als Quader mit Grundfläche A (was eigentlich die Oberfläche ist) und Tiefe H
+- Dichte des Eises (/Alles von Eis über Firn bis Neuschnee) liegt gemittelt bei $\rho_{Eis} = 918 \frac{kg}{m^{3}}$
+- Die Breite des Gletschers wird als konstant vereinfacht mit $B = 1,5km$
+- Der Gletscher wird für die Massenberechnung stark vereinfacht als Quader mit Grundfläche A (was eigentlich die obere Oberfläche ist) und Tiefe H
 
 Die Formeln lauten:
 
-- für die Integration der Länge: `L(t-1) + L(t)/dt`
-- für die Berechnnung der Masse um 1999 (Fixpunkt) in Mrd. t: `M = ρ_Eis * (2.23km^3 * 10^9) / 10^12`
-- für die Umrechnung der Massenbilanz pro Fläche auf Masse (diesmal jedoch Dichte von Wasser, da ja Änderung in mm H20 angegeben): `M(t) = M(t-1) + MpA/dt(t)*A(t)` (Einheiten beachten!!)
+- für die Integration der Länge: $\int{L(t)} = L(t-1) + \frac{L(t)}{dt}$
+- für die Berechnnung der Masse um 1999 (Fixpunkt) in Mrd. t: $M = ρ_{Eis} \cdot (2.23km^{3} \cdot 10^{9}) / 10^{12}$
+- für die Umrechnung der Massenbilanz pro Fläche auf Masse (diesmal jedoch Dichte von Wasser, da ja Änderung in $mm\ w.e.$ angegeben): $M(t) = M(t-1) + \frac{MpA}{dt}(t) \cdot A(t)$ (Einheiten beachten!)
 
 Die Formeln können im Spreadsheet, welches im Repository enthalten ist, nachgelesen werden. Die `.csv`-Datei ist schlicht die Ausgabe dieses Spreadsheets.
 
@@ -25,7 +25,7 @@ Die Formeln können im Spreadsheet, welches im Repository enthalten ist, nachgel
 --------------|------------|--------------|--------------|--------------------|---------------------------------------|-----------|------------|-----------|-----------|-------------|-----------|---------------------------|----------------|---------------------------------------------------------------------------------------------|-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------
  **Einheit**      | °C         | °C           | °C           | mm                 | km/h                                  | -         | -          | -         | -         | -           | -         | mm w.e.                   | m              | m                                                                                           | km²                                     | Mrd. t                                                                                                                                                   
  **Beschreibung** | Temperatur | Maximaltemp. | Minimaltemp. | Jahresniederschlag | Durchschnittliche Windgeschwindigkeit | Regentage | Schneetage | Sturmtage | Nebeltage | Tornadotage | Hageltage | Massenänderung pro Fläche | Längenänderung | Länge                                                                                       | Fläche                                  | Durchschnittliche Masse                                                                                                                                   
- **Herkunft**     | tt         | tt           | tt           | tt                 | tt                                    | tt        | tt         | tt        | tt        | tt          | tt        | gl                        | gl             | Hergeleitet aus `L/dt` und gegebener `Länge um 1999` in der Aufgabenstellung (dort ohne Quelle) | Berechnet aus `L` und fest angenommener `B` | Hergeleitet aus `MpA/dt` und der `MpA` um 1999 (diese ist berechnet aus dem in der Aufgabenstellung gegebenem `V`, der durchschnittlichen `Dichte vom Eis` und `A`) 
+ **Herkunft**     | tt         | tt           | tt           | tt                 | tt                                    | tt        | tt         | tt        | tt        | tt          | tt        | gl                        | gl             | Hergeleitet aus $\frac{L}{dt}$ und gegebener $Länge\ um\ 1999$ in der Aufgabenstellung (dort ohne Quelle) | Berechnet aus $L$ und fest angenommener $B$ | Hergeleitet aus $\frac{MpA}{dt}$ und der $MpA$ um 1999 (diese ist berechnet aus dem in der Aufgabenstellung gegebenem $V$, der durchschnittlichen $Dichte\ \rho\ von\ Eis$ und $A$) 
 
 
 
