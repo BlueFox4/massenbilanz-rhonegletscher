@@ -41,9 +41,9 @@ c_Graph, = plt.plot(x, c, 'r.', lw=1)
 d_Graph, = plt.plot(x, d, 'g.', lw=1)
 
 # Ausgleichsgeraden berechnen
-a_fit = np.polyfit(x, a, 21)
-c_fit = np.polyfit(x, c, 21)
-d_fit = np.polyfit(x, d, 21)
+a_fit = np.polyfit(x, a, 1)
+c_fit = np.polyfit(x, c, 1)
+d_fit = np.polyfit(x, d, 1)
 
 def a_func(y, since):
     return np.polynomial.Polynomial.fit(x[x >= since], a[x >= since], deg=1)(y)

@@ -15,38 +15,33 @@ file.close()
 def f(x, a, b, c , d):
     return a*np.sin(2*np.pi*(x-c)/b)+d
 
-def niederschlaegeVonJahrMitMonaten(jahreszahl):
+
+def niederschlaegeVonJahr(jahreszahl):
     #Lesen der Daten aus Datei
-    Tage=[]
+    tage=[]
     for tagesdaten in daten:
         if int(tagesdaten[0]) == jahreszahl:
-            Tage.append(tagesdaten)
-    Monatsniederschlaege = []   #erzeugt leeren Vektor
-    i=0
-    for monatszahl in range(1, 13):
-        summe = 0
-        while int(Tage[i][1]) == monatszahl:
-            try:
-                summe += float(Tage[i][8])
-            except:
-                print(f"Im Jahr {jahreszahl} konnte der Niederschlag des Tages {i} mit dem Wert {Tage[i][8]} nicht zum Monat addiert werden.")
-            i+=1
-            if i+1 >= len(Tage):
-                break
-        Monatsniederschlaege.append(summe)
-    return(Monatsniederschlaege)
+            tage.append(tagesdaten)
+    tagesniederschlaege = []   #erzeugt leeren Vektor
+    for tag in tage:
+        try:
+            y_value = float(tag[8])
+        except:
+            y_value = np.nan
+        tagesniederschlaege.append(y_value)   # fügt den Niederschlagswert des Tages der Liste Tagesniederschlaege hinzu
+    return tagesniederschlaege
 
 
 fig, ax = plt.subplots(figsize = (10, 4))
 plt.title(f"Tagesniederschläge und Modell: " + r"$y = a*sin(2\pi(x-c)/b)+d$")
 plt.subplots_adjust(left = 0.12, bottom = 0.3)
-plt.xlim(1, 12)
-plt.ylim(0, 250)
+plt.xlim(1, 366)
+plt.ylim(-2, 50)
 plt.xlabel(r"$Monat$")
 plt.ylabel(r"Niederschlag in [mm]", rotation = 90)
 
-Monatsniederschlaege = niederschlaegeVonJahrMitMonaten(STARTJAHR)
-x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+Monatsniederschlaege = niederschlaegeVonJahr(STARTJAHR)
+x = np.arange(1, 366, 1)
 data, = plt.plot(x,Monatsniederschlaege,'r:',lw = 1)
 
 
@@ -60,7 +55,7 @@ sldJAHR = Slider(xyA, "Jahr",   1955, 2025, valinit = STARTJAHR, valstep = 1)
 # Slider Update
 def update(val):
     jahr = sldJAHR.val
-    Monatsniederschlaege = niederschlaegeVonJahrMitMonaten(jahr)
+    Monatsniederschlaege = niederschlaegeVonJahr(jahr)
     data.set_data(x,Monatsniederschlaege)
 
 sldJAHR.on_changed(update)
