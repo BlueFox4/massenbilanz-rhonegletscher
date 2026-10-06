@@ -3,7 +3,7 @@ import numpy as np
 from datetime import date, timedelta
 
 #Intervall der betrachteten Jahre für zukünftige Prognosen
-BETRACHTETE_JAHRE = [2020, 2024]
+BETRACHTETE_JAHRE = [2014, 2024]
 
 def berechneJahrTag(t):
     tagNull = date(1999, 1, 1)
