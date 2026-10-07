@@ -12,14 +12,14 @@ def erhalteNiederschlagMonatlicherTrend(t, since):
 
 # Just some testing
 if __name__ == "__main__":
-    time=1996+(8*31/366)
+    time=1994+(8*31/366)
     print("=======================\nZunächst wird sich der Trend der Niederschlagstage pro Jahr angesehen:\n")
     while time < 2101:
-        print(f"{time}: Model since 1999 {round(erhalteNiederschlagstageTrend(time, 1996))} Tage | Model since 2014 {round(erhalteNiederschlagMonatlicherTrend(time, 2014))} Tage")
+        print(f"{time}: Model since 1994 {round(erhalteNiederschlagstageTrend(time, 1994))} Tage | Model since 2014 {round(erhalteNiederschlagMonatlicherTrend(time, 2014))} Tage")
         time += 1
     
-    time=1996+(8*31/366)
+    time=1994+(8*31/366)
     print("\n\n=======================\nNun wird sich der monatliche Niederschlagsmengentrend angesehen:\n")
     while time < 2101:
-        print(f"{time}: Model since 1999 {round(erhalteNiederschlagMonatlicherTrend(time, 1996))}mm | Model since 2014 {round(erhalteNiederschlagMonatlicherTrend(time, 2014))}mm")
+        print(f"{time}: Model since 1994 {round(erhalteNiederschlagMonatlicherTrend(time, 1994))}mm | Model since 2014 {round(erhalteNiederschlagMonatlicherTrend(time, 2014))}mm")
         time += 1
