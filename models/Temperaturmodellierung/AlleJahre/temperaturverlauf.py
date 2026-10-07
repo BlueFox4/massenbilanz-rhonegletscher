@@ -67,22 +67,35 @@ plt.plot(
     jahreszahlen,
     jahresdurchschnittstemperatur,
     "g.",
-    label="Messdaten"
+    label="Messdaten (tatsächliche Jahresmittel)"
 )
 
 
 # Modell berechnen
-y_model = []
+y_model1 = []
 
 for jahreszahl in jahreszahlen:
-    y_model.append(d_func(jahreszahl+1, SINCE))
+    y_model1.append(d_func(jahreszahl+1, 1994))
+# Modell berechnen
+y_model2 = []
+
+for jahreszahl in jahreszahlen:
+    y_model2.append(d_func(jahreszahl+1, 2014))
 
 
 # Modell zeichnen
 plt.plot(
+
+    
     jahreszahlen,
-    y_model,
-    label=f"Modell ab {SINCE}"
+    y_model1,
+    label=f"Modell ab {1994} (Ausgleichsgerade)"
+)
+# Modell zeichnen
+plt.plot(
+    jahreszahlen,
+    y_model2,
+    label=f"Modell ab {2014} (Ausgleichsgerade)"
 )
 
 #Modell Werte (A-Parameter Zeichnen)
@@ -91,7 +104,7 @@ plt.plot(
     x_values,
     d_values,
     "r.",
-    label="Modelldaten"
+    label="Modelldaten (d-Wert bei Sinus-Funktion)"
 )
 
 plt.legend()
