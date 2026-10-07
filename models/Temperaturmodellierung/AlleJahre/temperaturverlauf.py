@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
 from ..spezifischesJahr.besteParameterEntwicklung import d_func
+from ..spezifischesJahr.besteParameterEntwicklung import x as params_x
+from ..spezifischesJahr.besteParameterEntwicklung import d as params_d
 
 SINCE = 2014
 
@@ -84,18 +86,20 @@ for jahreszahl in jahreszahlen:
 
 
 # Modell zeichnen
+mask = params_x >= 1994
+d_fit = np.polyfit(params_x[mask], params_d[mask], 1)
 plt.plot(
-
-    
     jahreszahlen,
     y_model1,
-    label=f"Modell ab {1994} (Ausgleichsgerade)"
+    label=f"Modell ab {1994} (Ausgleichsgerade): y = {d_fit[0]:.6f}x + {d_fit[1]:.6f}"
 )
-# Modell zeichnen
+# und ab 2014
+mask = params_x >= 2014
+d_fit = np.polyfit(params_x[mask], params_d[mask], 1)
 plt.plot(
     jahreszahlen,
     y_model2,
-    label=f"Modell ab {2014} (Ausgleichsgerade)"
+    label=f"Modell ab {2014} (Ausgleichsgerade): y = {d_fit[0]:.6f}x + {d_fit[1]:.6f}"
 )
 
 #Modell Werte (A-Parameter Zeichnen)
