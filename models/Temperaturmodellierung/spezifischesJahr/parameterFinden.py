@@ -5,6 +5,12 @@ import math
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 import csv
+from datenAusJahr import getJahresdaten
+
+START_A = 10.0
+START_B = 365.2425
+START_C = 100.0
+START_D = 10.0
 
 def f(x, a, b, c , d):
     return a*np.sin(2*np.pi*(x-c)/b)+d
@@ -63,22 +69,12 @@ def findeBesteAbweichung(a, b, c, d, y_data, aktuelleAbweichung):
             
 besteWerteAllerJahre = [["Jahr", "a", "b", "c", "d"]]
 for jahr in range(1955, 2026, 1):
-    try:
-        file = open(f"models/Temperaturmodellierung/spezifischesJahr/daten/klimadaten_67200_{jahr}.csv",'r')  # open braucht den genauen Pfad ab working directory
-    except:
-        print(f"Die Datei des Jahres {jahr} konnte nicht geöffnet werden und wird übersprungen.")
-        continue
-    Tage = file.readlines()
+    Tage = getJahresdaten(jahr)
     Tagestemperaturen = []   #erzeugt leeren Vektor
-    Tage.pop(0) # Entferne Beschriftung
     for tag in Tage:
-        try:
-            Tagestemperaturen.append(float(tag.split(";")[4]))   # fügt Tagesdurchschnittstemperatur in Tagestemperaturen ein
-        except:
-            Tagestemperaturen.append(None)
-    file.close()
+        Tagestemperaturen.append(tag[3])   # fügt Tagesdurchschnittstemperatur in Tagestemperaturen ein
 
-    bestenWerte = findeBesteAbweichung(10, 365.25, 100, 10, Tagestemperaturen, berechneAbweichung(10, 365.25, 100, 10, Tagestemperaturen))
+    bestenWerte = findeBesteAbweichung(START_A, START_B, START_C, START_D, Tagestemperaturen, berechneAbweichung(START_A, START_B, START_C, START_D, Tagestemperaturen))
     besteWerteAllerJahre.append([jahr] + bestenWerte)
     print(f"Für das Jahr {jahr} sind die besten Werte: {bestenWerte}")
 
