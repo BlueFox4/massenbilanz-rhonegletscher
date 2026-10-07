@@ -41,6 +41,8 @@ geometry:
 
 Der Rhonegletscher ist ein Gletscher in der Schweiz, von dem bereits seit Mitte des letzten Jahrhunderts Messdaten über Länge, Breite, Höhe (Volumen) sowie über das Wetter, etwa Niederschlagmenge, Regentage, Temperatur sowie Windstärke und -richtung vorliegen. Unser Ziel liegt nun darin, im ersten Schritt ein Modell zu entwickeln, das die Massenveränderung des Gletschers historisch bestmöglich beschreibt, und dann weiter die Wetterdaten auf Basis von Saisonalitäten und Trends so in die Zukunft zu prognostizieren, auf dass man eine begründete Vermutung über die zukünftige Massenveränderung des Gletschers abgeben kann.
 
+\clearpage
+
 
 # Daten
 
@@ -69,6 +71,8 @@ Allerdings ist dieser Umstand vernachlässigbar, da die Station und der Gletsche
 Zudem besitzt der ursprüngliche Datensatz teilweise Lücken, die mit interpolierten Daten ausgefüllt werden mussten.
 
 
+\clearpage
+
 # Modell
 
 ## Allgemeine Annahmen
@@ -88,6 +92,8 @@ Nun werden programmatisch numerisch optimierte Parameter für jedes Jahr gefunde
 $$y = a_{regr}(t) \cdot sin(2 \pi \cdot \frac{(x-c_{regr}(t))}{b_{regr}(t)}) + d_{regr}(t)$$
 
 ![Parameterentwicklung ($b, c = const.$)](assets/temp_params_development.png)
+
+\clearpage
 
 Je nachdem, seit wann man die Regressionsgerade bildet, ergeben sich unterschiedliche Steigungen, wir gehen jedoch von einer 30-jährigen Klimaperiode aus und haben Daten bis 2024 - daraus folgt eine Regression über alle Jahresparameter von 1994 bis 2024.
 
@@ -119,6 +125,8 @@ Wir vernachlässigen die Einflüsse von
 - Wind
 - Hangneigung
 - der konstanten Sublimation
+
+\clearpage
 
 
 # Fazit
