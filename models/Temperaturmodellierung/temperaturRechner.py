@@ -17,7 +17,7 @@ def erhalteTemperatur(t, h, since, factor=1):
 
 
 if __name__ == "__main__":
-    time=1994+(8*31/366)
+    time=1955+(8*31/366)
     hoehe=2000
     while time < 2101:
         print(f"{time}: Model since 1994 {round(erhalteTemperatur(time, hoehe, 1994))}°C | Model since 2014 {round(erhalteTemperatur(time, hoehe, 2014))}°C")
