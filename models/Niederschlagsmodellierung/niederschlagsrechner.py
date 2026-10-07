@@ -10,6 +10,7 @@ def erhalteNiederschlagstageTrend(t, since):
 def erhalteNiederschlagMonatlicherTrend(t, since):
     return calc.fit_monthly_pp_func(t, since)
 
+# Just some testing
 if __name__ == "__main__":
     time=1996+(8*31/366)
     print("=======================\nZunächst wird sich der Trend der Niederschlagstage pro Jahr angesehen:\n")
