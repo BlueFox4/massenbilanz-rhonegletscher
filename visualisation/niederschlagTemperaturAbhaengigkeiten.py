@@ -66,10 +66,15 @@ ax.set_ylim(0, 3)
 
 ax.grid(True)
 
-ax.plot(x, y, "r-", label="Niederschlag bei Temperatur")
-ax.plot(x, y_anzahlen_der_daten_fuer_temperatur, "b-", label="Anzahl der Vorkomnisse bei dieser Temperatur in Tsd.")
+ax.plot(x, y, "r-", label="Durchschnittlicher Niederschlag bei Temperatur")
 
-ax.legend()
+ax2 = ax.twinx()
+ax2.set_ylabel("Anzahl der Vorkommnisse in Tsd.")
+
+ax2.plot(x, y_anzahlen_der_daten_fuer_temperatur, "b-", label="Anzahl der Vorkommnisse bei dieser Temperatur in Tsd.")
+
+ax.legend(frameon=False, loc="upper left")
+ax2.legend(frameon=False, loc="upper right")
 
 plt.subplots_adjust(left=0.12, bottom=0.3)
 plt.show()
