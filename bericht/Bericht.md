@@ -105,3 +105,4 @@ Wir vernachlässigen die Einflüsse von
 
 # Fazit
 
+- ca 100km zwischen Messstation und Gletscher (und einige Höhenmeter)
