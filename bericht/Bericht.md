@@ -20,6 +20,12 @@ footer-left: Gruppe 3
 
 hanging-indent: true
 linestretch: 1.5
+
+geometry:
+  - top=25mm
+  - bottom=25mm
+  - left=25mm
+  - right=25mm
 ---
 
 # tl;dr
@@ -64,11 +70,15 @@ Zunächst wird der jährliche Temperaturverlauf mithilfe einer Sinus-Funktion mo
 
 $$y = a \cdot sin(2 \pi \cdot \frac{(x-c)}{b}) + d$$
 
+![Durchschnittsjahr 1955-2025](assets/temp_avg_all_years.png)
+
 Nun werden programmatisch numerisch optimierte Parameter für jedes Jahr gefunden. 
 
 Über diese vier Parameter $a$, $b$, $c$ und $d$ lässt sich je eine Ausgleichsgerade bilden und damit der zukünftige Verlauf modellieren:
 
 $$y = a_{regr}(t) \cdot sin(2 \pi \cdot \frac{(x-c_{regr}(t))}{b_{regr}(t)}) + d_{regr}(t)$$
+
+![Parameterentwicklung ($b, c = const.$)](assets/temp_params_development.png)
 
 Je nachdem, seit wann man die Regressionsgerade bildet, ergeben sich unterschiedliche Steigungen, wir gehen jedoch von einer 30-jährigen Klimaperiode aus und haben Daten bis 2024 - daraus folgt eine Regression über alle Jahresparameter von 1994 bis 2024.
 
@@ -76,15 +86,14 @@ Je nachdem, seit wann man die Regressionsgerade bildet, ergeben sich unterschied
 ### Niederschlag
 
 
+## Akkumulation
 
-### Akkumulation
-
-Der Gletscher wird näherungsweise als Quader beschrieben, der eine feste Breite ($B=2km$) hat und dessen Verhätnis zwischen Höhe und Länge immer gleich ist. Man geht weiter davon aus, dass der Niederschlag gleichmäßig auf die gesamte sichtbare Oberfläche, d.h. die obere Oberfläche, trifft und all dieser Niederschlag auch gefriert, sofern die Temperaturen auf den entsprechenden Höhen unter $2°C$ liegt. Für die Massenzunahme des Gletschers geht man weiter davon aus, dass die gesamte Flächenzunahme auf der Längenzunahme beruht ($A = l \cdot B, B = konst.$).
+Der Gletscher wird näherungsweise als Quader beschrieben, der eine feste Breite ($B=2km$) hat und dessen Verhätnis zwischen Höhe und Länge immer gleich ist. Man geht weiter davon aus, dass der Niederschlag gleichmäßig auf die gesamte sichtbare Oberfläche, d.h. die obere Oberfläche, trifft und all dieser Niederschlag auch gefriert, sofern die Temperaturen auf den entsprechenden Höhen unter $2°C$ liegt. Für die Massenzunahme des Gletschers geht man weiter davon aus, dass die gesamte Flächenzunahme auf der Längenzunahme beruht ($A = l \cdot B, B = const.$).
 
 $$Z(t) = PP(t) \cdot \rho_{Wasser} \cdot c \cdot B \cdot M(t)$$
 
 
-### Ablation
+## Ablation
 
 Ab einer Temperatur von $2°C$ schmilzt der Gletscher. Wenn die Temperatur $T(t) > 2°C$ und es regnet wird die Schmelze um einen unbekannten Faktor $f$ beschleunigt, da Niederschlag eine bessere Wärmleitung ermöglicht.
 
@@ -105,4 +114,4 @@ Wir vernachlässigen die Einflüsse von
 
 # Fazit
 
-- ca 100km zwischen Messstation und Gletscher (und einige Höhenmeter)
+- ca 90km Luftlinie zwischen Messstation und Gletscher (und einige Höhenmeter)

@@ -13,6 +13,7 @@ Der Bericht wird in Markdown (teilweise mit eingebettetem [LaTeX](https://www.la
 Ist Pandoc ordnungsgemäß installiert, inkl. der PDF-Engine `xelatex` (eben für die LaTeX), tut es folgender Befehl:
 
 ```sh
-pandoc bericht/Bericht.md -o bericht/Bericht.pdf --pdf-engine=xelatex
+cd bericht
+pandoc Bericht.md -o Bericht.pdf --pdf-engine=xelatex
 ```
 
