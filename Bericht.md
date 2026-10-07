@@ -1,0 +1,107 @@
+---
+title: Massenbilanz des Rhonegletschers
+subtitle: Wie können Messdaten genutzt werden, um die zeitliche Veränderung der Masse des Rhonegletschers mathematisch zu beschreiben?
+date: \today
+lang: de
+papersize: a4
+
+numbersections: true
+
+author: 
+- Benjamin Burkhardt
+- Ole Hayn
+- Fabian Lehmann
+- Neo Koidl
+- Jona Jeritslev
+- Magnus Wagner
+
+header-right: MODWO2026 Kassel
+footer-left: Gruppe 3
+
+hanging-indent: true
+linestretch: 1.5
+---
+
+# tl;dr
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+
+# Zielsetzung
+
+Der Rhonegletscher ist ein Gletscher in der Schweiz, von dem bereits seit Mitte des letzten Jahrhunderts Messdaten über Länge, Breite, Höhe (Volumen) sowie über das Wetter, etwa Niederschlagmenge, Regentage, Temperatur sowie Windstärke und -richtung vorliegen. Unser Ziel liegt nun darin, im ersten Schritt ein Modell zu entwickeln, das die Massenveränderung des Gletschers historisch bestmöglich beschreibt, und dann weiter die Wetterdaten auf Basis von Saisonalitäten und Trends so in die Zukunft zu prognostizieren, auf dass man eine begründete Vermutung über die zukünftige Massenveränderung des Gletschers abgeben kann.
+
+
+# Daten
+
+## Herkunft
+
+
+
+## Aufbereitung
+
+
+
+## Visualisierung
+
+
+
+## Schwächen
+
+
+
+# Modell
+
+## Allgemeine Annahmen
+
+### Temperatur
+
+Zunächst wird der jährliche Temperaturverlauf mithilfe einer Sinus-Funktion modelliert.
+
+$$y = a \cdot sin(2 \pi \cdot \frac{(x-c)}{b}) + d$$
+
+Nun werden programmatisch numerisch optimierte Parameter für jedes Jahr gefunden. 
+
+Über diese vier Parameter $a$, $b$, $c$ und $d$ lässt sich je eine Ausgleichsgerade bilden und damit der zukünftige Verlauf modellieren:
+
+$$y = a_{regr}(t) \cdot sin(2 \pi \cdot \frac{(x-c_{regr}(t))}{b_{regr}(t)}) + d_{regr}(t)$$
+
+Je nachdem, seit wann man die Regressionsgerade bildet, ergeben sich unterschiedliche Steigungen, wir gehen jedoch von einer 30-jährigen Klimaperiode aus und haben Daten bis 2024 - daraus folgt eine Regression über alle Jahresparameter von 1994 bis 2024.
+
+
+### Niederschlag
+
+
+
+### Akkumulation
+
+Der Gletscher wird näherungsweise als Quader beschrieben, der eine feste Breite ($B=2km$) hat und dessen Verhätnis zwischen Höhe und Länge immer gleich ist. Man geht weiter davon aus, dass der Niederschlag gleichmäßig auf die gesamte sichtbare Oberfläche, d.h. die obere Oberfläche, trifft und all dieser Niederschlag auch gefriert, sofern die Temperaturen auf den entsprechenden Höhen unter $2°C$ liegt. Für die Massenzunahme des Gletschers geht man weiter davon aus, dass die gesamte Flächenzunahme auf der Längenzunahme beruht ($A = l \cdot B, B = konst.$).
+
+$$Z(t) = PP(t) \cdot \rho_{Wasser} \cdot c \cdot B \cdot M(t)$$
+
+
+### Ablation
+
+Ab einer Temperatur von $2°C$ schmilzt der Gletscher. Wenn die Temperatur $T(t) > 2°C$ und es regnet wird die Schmelze um einen unbekannten Faktor $f$ beschleunigt, da Niederschlag eine bessere Wärmleitung ermöglicht.
+
+$$A(t) = M(t) \cdot d \cdot (T(t) - T_0) + PP(t) \cdot f \cdot M(t) \cdot (T(t) - T_0)$$
+
+
+
+## Vernachlässigung
+
+Wir vernachlässigen die Einflüsse von
+
+- Luftfeuchtigkeit
+- Direkter Sonneneinstrahlung / Albedo
+- Wind
+- Hangneigung
+- der konstanten Sublimation
+
+
+# Fazit
+
