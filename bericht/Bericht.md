@@ -52,6 +52,7 @@ Der Rhonegletscher ist ein Gletscher in der Schweiz, von dem bereits seit Mitte 
 
 ## Schwächen
 
+Die Wetterstation, die die Daten erhoben hat liegt etwa 90km südwestlicher Richtung vom Rhonegletscher entfernt. Dadurch ist eine gewisse Abweichung von den tatsächlichen Wetterverhältnissen am Gletscher zu erwarten. Zudem besitzt der ursprüngliche Datensatz teilweise Lücken, die mit interpolierten Daten ausgefüllt werden mussten.
 
 
 # Modell
