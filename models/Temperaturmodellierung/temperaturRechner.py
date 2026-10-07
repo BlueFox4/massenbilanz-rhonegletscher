@@ -7,13 +7,13 @@ import spezifischesJahr.besteParameterEntwicklung as params
 def f(x, a, b, c , d):
     return a*np.sin(2*np.pi*(x-c)/b)+d
 
-def erhalteTemperatur(t, h, since):
+def erhalteTemperatur(t, h, since, factor=1):
     year = math.floor(t)
     tag = (t - year) * 366
 
     temperatur_wetterstation = f(tag, params.a_func(t, since), params.b_func(t, since), params.c_func(t, since), params.d_func(t, since))
     temperatur = temperatur_wetterstation - 0.65 * ( (h-482) / 100 )
-    return temperatur
+    return temperatur*factor
 
 
 if __name__ == "__main__":
