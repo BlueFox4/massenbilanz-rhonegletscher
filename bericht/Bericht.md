@@ -122,7 +122,7 @@ In der folgenden Abbildung sind die Regressionsgeraden für einen Zeitraum ab 20
 Zusammenfassend kann das Programm zur Berechnung der Massenbilanz nun für jeden beliebigen Zeitpunkt eine modellierte Temperatur bestimmen. Dazu wird zunächst der Zeitpunkt innerhalb des Jahres bestimmt und anschließend mit den für das jeweilige Jahr ermittelten Regressionsparametern die entsprechende Temperatur berechnet. Daraus ergibt sich die folgende Funktion:
 
 $$
-T = a_{\mathrm{regr}}(t) \cdot \sin\left(2\pi \cdot \frac{x-c_{\mathrm{regr}}(t)}{b_{\mathrm{regr}}(t)}\right) + d_{\mathrm{regr}}(t)
+T = a_{regr}(t) \cdot \sin\left(2\pi \cdot \frac{x-c_{regr}(t)}{b_{regr}(t)}\right) + d_{regr}(t)
 $$
 
 Die zugrunde liegenden Messdaten stammen von einer Wetterstation auf einer Höhe von $482,\mathrm{m}$. Der betrachtete Gletscher beginnt jedoch erst auf einer Höhe von etwa $2200,\mathrm{m}$, sodass dort von einer deutlich niedrigeren Temperatur auszugehen ist. Um diesen Höhenunterschied im Modell zu berücksichtigen, wird eine Temperaturabnahme von $0{,}65,^\circ\mathrm{C}$ pro $100,\mathrm{m}$ Höhenzunahme angenommen.
