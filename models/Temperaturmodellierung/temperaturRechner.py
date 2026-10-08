@@ -32,5 +32,5 @@ if __name__ == "__main__":
     time=1955+(8*31/366)
     hoehe=2000
     while time < 2101:
-        print(f"{time}: Model since 1994 {round(erhalteTemperatur(time, hoehe, 1994))}°C | Model since 2014 {round(erhalteTemperatur(time, hoehe, 2014))}°C")
+        print(f"{time}: Model since, factor: 1994, 1.2 {round(erhalteTemperatur(time, hoehe, 1994, factor=1.2))}°C | 1994, 1 {round(erhalteTemperatur(time, hoehe, 1994, factor=1))}°C | 2014, 1.2 {round(erhalteTemperatur(time, hoehe, 2014, factor=1.2))}°C | 2014, 1 {round(erhalteTemperatur(time, hoehe, 2014, factor=1))}°C")
         time += 1
