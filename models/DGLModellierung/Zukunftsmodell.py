@@ -1249,9 +1249,12 @@ else:
 # DIAGRAMM
 # ============================================================
 
+
+plt.style.use("dark_background")
 fig, ax_masse = plt.subplots(
     figsize=(20, 11)
 )
+
 
 fig.canvas.manager.set_window_title(
     "Gletschermodell Rhonegletscher"
@@ -1403,7 +1406,7 @@ messpunkte = ax_masse.scatter(
     mess_datum,
     mess_masse,
     s=45,
-    color="black",
+    color="white",
     zorder=2,
     label="Gemessene Masse"
 )
@@ -1637,8 +1640,13 @@ ax_reset = plt.axes([
 
 button_reset = Button(
     ax_reset,
-    "Berechnete Modellwerte"
+    "Berechnete Modellwerte",
+    color="0.35",
+    hovercolor="0.50"
 )
+
+button_reset.label.set_color("white")
+button_reset.label.set_fontweight("bold")
 
 ax_save = plt.axes([
     0.89,
@@ -1647,10 +1655,16 @@ ax_save = plt.axes([
     0.05
 ])
 
+
 button_save = Button(
     ax_save,
-    "CSV speichern"
+    "CSV speichern",
+    color="0.35",
+    hovercolor="0.50"
 )
+
+button_save.label.set_color("white")
+button_save.label.set_fontweight("bold")
 
 
 # ============================================================
@@ -1692,6 +1706,29 @@ check_graphen = CheckButtons(
     ]
 )
 
+ax_graphen.set_facecolor("0.92")
+
+for spine in ax_graphen.spines.values():
+    spine.set_visible(True)
+    spine.set_color("0.35")
+    spine.set_linewidth(1.2)
+
+for label in check_graphen.labels:
+    label.set_color("black")
+    label.set_fontsize(10)
+
+if hasattr(check_graphen, "set_frame_props"):
+    check_graphen.set_frame_props({
+        "edgecolor": "black",
+        "facecolor": "white",
+        "linewidth": 1.4
+    })
+
+if hasattr(check_graphen, "set_check_props"):
+    check_graphen.set_check_props({
+        "color": "black",
+        "linewidth": 2.0
+    })
 
 # ============================================================
 # UPDATE
