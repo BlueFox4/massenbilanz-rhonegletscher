@@ -12,20 +12,25 @@ DATA_YEAR_PATH = "../../data/data_year.csv"
 def Massen(temp, pp, mass, c, d, f, change_velocity):
     new_mass = mass
     snow = 0    #falls es schneit wird akkumuliert: 1
-    not_freeze = 0  #falls es nicht friert schmilzt etwas: 1
+    not_freeze_1 = 0  #falls es nicht friert schmilzt immer etwas: 1
+    not_freeze_2 = 0 #falls es über 2 grad ist beschleunigt niederschlag die Schmelze
     pp = pp / 1000
     for hoehe in range(14):
         temp = temp  - 0.65
         if temp < 2:
             snow = 1
-            not_freeze = 0
+            not_freeze_2 = 0
         elif temp > 2:
             snow = 0
-            not_freeze = 1
+            not_freeze_2 = 1
         else:
             snow = 0
-            not_freeze = 0
-        new_mass = new_mass + change_velocity * (1 / 14) * (new_mass * (snow * pp * c - (not_freeze * temp * (d + pp * f))))
+            not_freeze_2 = 0
+        if temp <= 0:
+            not_freeze_1 = 1
+        else:
+            not_freeze_1 = 0
+        new_mass = new_mass + change_velocity * (1 / 14) * (new_mass * (snow * pp * c - (not_freeze_1 * temp * d + not_freeze_2 * temp * pp * f)))
 
     return new_mass
 
@@ -95,10 +100,10 @@ d_slidax = plt.axes([0.1, 0.05, 0.8, 0.05])
 f_slidax = plt.axes([0.1, 0.1, 0.8, 0.05])
 ch_vel_slidax = plt.axes([0.1, 0.15, 0.8, 0.05])
 
-c_slider = Slider(c_slidax, "c", 0, 0.000001, valinit=5.012 * (10 ** -7))
-d_slider = Slider(d_slidax, "d", 0, 0.0001, valinit=0.00005)
-f_slider = Slider(f_slidax, "f", 0, 0.1, valinit=3.162 * (10 ** -3))
-ch_vel_slider = Slider(ch_vel_slidax, "vel", 0.001, 0.5)
+c_slider = Slider(c_slidax, "c", 0, 0.000001, valinit=0.707 * (10 ** -6))
+d_slider = Slider(d_slidax, "d", 0, 0.0001, valinit=0.00000075)
+f_slider = Slider(f_slidax, "f", 0, 0.1, valinit=0.0008)
+ch_vel_slider = Slider(ch_vel_slidax, "vel", 0.001, 0.5, valinit=0.126)
 
 graph, = ax.plot(masse)
 x_vals = []
