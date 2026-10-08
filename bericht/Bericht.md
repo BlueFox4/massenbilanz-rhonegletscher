@@ -54,7 +54,7 @@ Der Rhonegletscher ist ein Gletscher in der Südschweiz, von dem bereits seit Mi
 
 Die historischen Daten über die Gletschermassen und -längenänderung stammen von „scnat wissen”, dem Webportal der schweizer Akademie der Wissenschaften, aus einem Bericht der ETH Zürich [@bilanzen]. Die Daten reichen bis 1900 zurück und wurden jährlich erhoben. Zur Überprüfung unserer Modellierung haben wir uns allerdings auf den Erhebungszeitraum zwischen 1955 und 2024 beschränkt.
 
-Mittels eines Web-Scraping-Algorithmus wurden die tagesbezogenen Wetterdaten von einer Wetterstation in Sitten (franz. Sion) [@wetterdaten], einer Stadt im Tal des Gletschers, ermittelt. Sie liegen mehr oder minder kontinuierlich seit dem 1. Januar 1955 vor.
+Mittels eines Web-Scraping-Algorithmus in Python, der die Bibliotheken `requests` und `BeautifulSoup` nutzt, wurden die tagesbezogenen Wetterdaten von einer Wetterstation in Sitten (franz. Sion), einer Stadt im Tal des Gletschers, ermittelt. Sie liegen mehr oder minder kontinuierlich seit dem 1. Januar 1955 vor [@wetterdaten].
 
 ## Jahresdaten
 
@@ -118,7 +118,6 @@ $$\text{Massenzunahme in kg} = \text{Massenbilanz in } \frac{kg}{m^2} \cdot B(t)
 
 Damit kann man nun wiederum rekursiv alle Massen von einem absoluten Startwert aus berechnen. Dieser wurde bestimmt aus dem Volumen $V_{1999} = 2.23km^3$ aus der Aufgabenstellung und der durchschnittlichen Dichte $\rho \approx 918 \frac{kg}{m^3}$ von Wasser.
 
-
 ## Schwächen
 
 Die Wetterstation, die die Daten erhoben hat, liegt etwa 90km südwestlicher Richtung vom Rhonegletscher entfernt. Dadurch ist eine gewisse Abweichung von den tatsächlichen Wetterverhältnissen am Gletscher zu erwarten.
@@ -131,6 +130,11 @@ Allerdings ist dieser Umstand vernachlässigbar, da die Station und der Gletsche
 
 Zudem besitzt der ursprüngliche Datensatz teilweise Lücken, die mit interpolierten Daten ausgefüllt werden mussten.
 
+## Visualisierung
+
+Die Abbildung \ref{fig:all_data} zeigt verschiedene der jährlich erhobenen Daten, welche durch Aufbereitung um die Masse erweitert wurden. Hier zeigen sich auch die Datenlücken.
+
+![Ausschnitt der wichtigsten, aufbereiteten jährlichen Daten](assets/wichtigste_daten.png){#fig:all_data}
 
 \clearpage
 
@@ -275,7 +279,22 @@ Die Niederschlagsmodellierung, die vorrangig für die Prognostion der zukünftig
 
 # Fazit
 
-- ca 90km Luftlinie zwischen Messstation und Gletscher (und einige Höhenmeter)
+## Implementierung
 
+Mithilfe der Python-Libraries `matplotlib`, `numpy` und `scipy` wurde nun eine Codebasis geschaffen, die die Differentialgleichung (im Folgenden DGL genannt) modelliert. Hierbei können die Parameter $c$, $d$, und $f$ über Schieberegler variiert werden. Auf diese Weise lässt sich die Gleichung numerisch lösen.
+
+Zudem wurde noch ein Algorithmus implementiert, welcher die optimalisierte Kombination aller drei Parameter berechnet, um eine möglichst geringe Varianz des Modells zur Messung zu erhalten. Das Resultat lässt sich in Abbildung \ref{fig:modell_screenshot}
+
+![Bildschirmfoto des laufenden Programms mit optimierten Parametern im regulären Zukunftsszenario]{#fig:modell_screenshot}
+
+Zudem gibt es einen Faktor, mit dem die Steigung der Mittellinie der angenäherten Temperatur-Sinuskurve in der Zukunft multipliziert wird. Damit kann man verschiedene zukünftige Szenarien modellieren, wie schon in der Einleitung erwähnt.
+
+## Validierung
+
+Aufgrund von Zeitmangel konnte keine vollständige Validierung des Modells der Daten durch Anwendung der einen Datenhälfte auf das Modell mit für diese optimierten Parametern und anschließende Überprüfung der vorhergesagten Daten mit der anderen Datenhälfte durchgeführt werden. 
+
+Jedoch wurde als Maß für die Modellgüte der RMSE (engl. für root mean squared error) verwendet, welcher die Abweichung zwischen Modell und Messwerten zusammenfasst. Die Modellparameter $c$, $d$ und $f$ wurden im Rahmen der Kalibrierung so bestimmt, dass dieser Fehler möglichst gering ausfällt. Der Vergleich zeigt, dass das Modell den langfristigen Verlauf der Gletschermasse grundsätzlich abbilden kann, kurzfristige Schwankungen jedoch nur eingeschränkt erfasst werden. Dies ist darauf zurückzuführen, dass das Modell eine vereinfachte Darstellung des realen Gletschersystems ist und nicht alle physikalischen Einflussgrößen berücksichtigt. Die Zukunftsergebnisse bis 2100 sind daher als Szenarien unter den verschiedenen Temperaturentwicklungen zu verstehen.
+
+\newpage
 
 # Quellenverzeichnis
