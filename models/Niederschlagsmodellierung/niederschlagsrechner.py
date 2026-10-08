@@ -1,4 +1,4 @@
-import visualisation.Jahresentwicklung as calc
+from models.Niederschlagsmodellierung.visualisation import Jahresentwicklung as calc
 
 # Needs to get t as a float where the whole number is the year, and the decimals are 1/366 of the day in the year
 # since is simply the year since when the trend should be generated

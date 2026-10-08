@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
+import numpy
+from models.Temperaturmodellierung import temperaturRechner
+from models.Niederschlagsmodellierung import niederschlagsrechner
 
-DATA_ALL_PATH = ""
-DATA_YEAR_PATH = ""
+DATA_ALL_PATH = "../../data/data_all.csv"
+DATA_YEAR_PATH = "../../data/data_year.csv"
 
 
 def Massen(temp, pp, mass, c, d, f, change_velocity):
@@ -21,7 +24,7 @@ def Massen(temp, pp, mass, c, d, f, change_velocity):
         else:
             snow = 0
             not_freeze = 0
-        new_mass = new_mass + change_velocity * (1 / 14) * (new_mass * (new_mass * snow * pp * c - (not_freeze * temp * (d + pp * f))))
+        new_mass = new_mass + change_velocity * (1 / 14) * (new_mass * (snow * pp * c - (not_freeze * temp * (d + pp * f))))
         print(new_mass)
 
     return new_mass
@@ -34,24 +37,35 @@ avg_temp = []
 avg_pp = []
 tats_masse = []
 
-with open("data_all.csv") as file:
+with open(DATA_ALL_PATH) as file:
+    counter = 0
     for i, line in enumerate(file.readlines()):
         if i == 0:
             continue
         else:
-            datum.append((int(line.split(",")[0]), int(line.split(",")[1]), int(line.split(",")[2])))
-            #print(datum[i-1])
-            try:
-                avg_temp.append(float(line.split(",")[3]))
-            except ValueError:
-                avg_temp.append(avg_temp[i - 2])
+            if 2023 >= int(line.split(",")[0]) >= 1999:
 
-            try:
-                avg_pp.append(float(line.split(",")[8]))
-            except ValueError:
-                avg_pp.append(avg_temp[i - 2])
+                datum.append((int(line.split(",")[0]), int(line.split(",")[1]), int(line.split(",")[2])))
+                #print(datum[i-1])
 
-with open("data_year.csv") as file:
+                if numpy.isnan(float(line.split(",")[3])):
+                    avg_temp.append(avg_temp[counter - 1])
+                else:
+                    try:
+                       avg_temp.append(float(line.split(",")[3]))
+                    except ValueError:
+                        avg_temp.append(avg_temp[counter - 1])
+                if numpy.isnan(float(line.split(",")[8])):
+                    avg_pp.append(avg_pp[counter - 1])
+                else:
+                    try:
+                        avg_pp.append(float(line.split(",")[8]))
+                    except ValueError:
+                        avg_pp.append(avg_pp[counter - 1])
+                counter = counter + 1
+print(avg_pp)
+print(avg_temp)
+with open(DATA_YEAR_PATH) as file:
     for i, line in enumerate(file.readlines()):
         if i > 0:
             if int(line.strip().split(",")[0]) >= 1999 and float(line.strip().split(",")[0]) <= 2023:
@@ -59,16 +73,19 @@ with open("data_year.csv") as file:
 
 def calc(c, d, f, ch_vel):
     masse.clear()
-    for i, day in enumerate(datum):
+    datenum = 1999.0
+    for i, day in enumerate(range((366 * 100))):
         if i == 0:
             aktuelle_masse = Startmasse
 
-        aktuelle_masse = Massen(avg_temp[i], avg_pp[i], aktuelle_masse, c, d, f, ch_vel)
+        # nach gemessenen DAten: aktuelle_masse = Massen(avg_temp[i], avg_pp[i], aktuelle_masse, c, d, f, ch_vel)
+        aktuelle_masse = Massen(temperaturRechner.erhalteTemperatur(datenum, 2200, 1994, 1), niederschlagsrechner.erhalteNiederschlagstageTrend(datenum, 1994), aktuelle_masse, c, d, f, ch_vel)
         masse.append(aktuelle_masse)
+        datenum = datenum + (1 / 366)
         print(i, aktuelle_masse)
 
 
-calc(5.012 * (10 ** -7), 3.162 * (10 ** -3), 0.1, 0.1)
+calc(0.707 * (10 ** -6), 0.0000007, 0.0008, 0.126)
 #print(masse)
 fig, ax = plt.subplots()
 c_slidax = plt.axes([0.1, 0, 0.8, 0.05])
@@ -77,9 +94,9 @@ f_slidax = plt.axes([0.1, 0.1, 0.8, 0.05])
 ch_vel_slidax = plt.axes([0.1, 0.15, 0.8, 0.05])
 
 c_slider = Slider(c_slidax, "c", 0, 0.000001, valinit=5.012 * (10 ** -7))
-d_slider = Slider(d_slidax, "d", 0, 0.01, valinit=0.002)
+d_slider = Slider(d_slidax, "d", 0, 0.0001, valinit=0.00005)
 f_slider = Slider(f_slidax, "f", 0, 0.1, valinit=3.162 * (10 ** -3))
-ch_vel_slider = Slider(ch_vel_slidax, "vel", 0.001, 0.1)
+ch_vel_slider = Slider(ch_vel_slidax, "vel", 0.001, 0.5)
 
 graph, = ax.plot(masse)
 x_vals = []

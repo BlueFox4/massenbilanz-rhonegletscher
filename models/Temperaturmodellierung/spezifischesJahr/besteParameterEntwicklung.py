@@ -3,7 +3,7 @@ import math
 import matplotlib.pyplot as plt
 
 #Lesen der Daten aus Datei bestenParameter.csv
-file =  open(f"models/Temperaturmodellierung/spezifischesJahr/bestenParameter.csv",'r')  # open braucht den genauen Pfad ab working directory
+file =  open("../Temperaturmodellierung/spezifischesJahr/bestenParameter.csv",'r')  # open braucht den genauen Pfad ab working directory
 Jahre = file.readlines()
 Jahre.pop(0) # Entferne Beschriftung
 x = []
@@ -26,6 +26,20 @@ b = np.array(b)
 c = np.array(c)
 d = np.array(d)
 
+fig, ax = plt.subplots(figsize = (10, 4))
+plt.title(f"BestenParameter Entwicklung")
+plt.subplots_adjust(left = 0.12, bottom = 0.3)
+plt.xlim(1955, 2025)
+plt.ylim(0, 400)
+plt.xlabel(r"$Jahr$")
+plt.ylabel(r"Wert", rotation = 90)
+
+# Datenpunkte
+a_Graph, = plt.plot(x, a, 'b.', lw=1)
+b_Graph, = plt.plot(x, b, 'y-', lw=1, label="Periode")
+c_Graph, = plt.plot(x, c, 'r.', lw=1)
+d_Graph, = plt.plot(x, d, 'g.', lw=1)
+
 # Ausgleichsgeraden berechnen
 a_fit = np.polyfit(x, a, 1)
 c_fit = np.polyfit(x, c, 1)
@@ -41,20 +55,6 @@ def d_func(y, since):
     return np.polynomial.Polynomial.fit(x[x >= since], d[x >= since], deg=1)(y)
 
 if __name__ == "__main__":
-    fig, ax = plt.subplots(figsize = (10, 4))
-    plt.title(f"BestenParameter Entwicklung")
-    plt.subplots_adjust(left = 0.12, bottom = 0.3)
-    plt.xlim(1955, 2025)
-    plt.ylim(0, 400)
-    plt.xlabel(r"$Jahr$")
-    plt.ylabel(r"Wert", rotation = 90)
-    
-    # Datenpunkte
-    a_Graph, = plt.plot(x, a, 'b.', lw=1)
-    b_Graph, = plt.plot(x, b, 'y-', lw=1, label="Periode")
-    c_Graph, = plt.plot(x, c, 'r.', lw=1)
-    d_Graph, = plt.plot(x, d, 'g.', lw=1)
-
     # Gleichungen in Konsole ausgeben
     print(f"Amplitude: y = {a_fit[0]:.6f}x + {a_fit[1]:.6f}")
     print(f"Phasenverschiebung: y = {c_fit[0]:.6f}x + {c_fit[1]:.6f}")
