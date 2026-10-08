@@ -216,7 +216,19 @@ Da die Niederschlagsmenge jedoch die richtige Einheit besitzt und somit genauer 
 
 ## Akkumulation
 
-Der Gletscher wird näherungsweise als Quader beschrieben, der eine feste Breite ($B = 1,5km$) hat und dessen Verhältnis zwischen Höhe und Länge immer gleich ist. Man geht weiter davon aus, dass der Niederschlag gleichmäßig auf die gesamte sichtbare Oberfläche, d.h. die obere Oberfläche, trifft und all dieser Niederschlag auch gefriert, sofern die Temperaturen auf den entsprechenden Höhen unter $T_0 = 2^{\circ}C$ liegt. Für die Massenzunahme des Gletschers geht man weiter davon aus, dass die gesamte Flächenzunahme auf der Längenzunahme beruht ($\frac{\text{Fläche}}{dt} = l \cdot B \text{, } B = const.$).
+Der Gletscher wird näherungsweise als Quader beschrieben, der eine feste Breite ($B = 1,5km$) hat und dessen Verhältnis zwischen Höhe und Länge immer gleich ist. Man geht weiter davon aus, dass der Niederschlag gleichmäßig auf die gesamte sichtbare Oberfläche, trifft und all dieser Niederschlag auch gefriert, sofern die Temperaturen auf den entsprechenden Höhen unter $T_0 = 2^{\circ}C$ liegt. Für die Massenzunahme des Gletschers geht man weiter davon aus, dass die gesamte Flächenzunahme auf der Längenzunahme beruht ($\frac{\text{Fläche}}{dt} = l \cdot B \text{, } B = const.$). 
+
+Daraus lässt sich nun mithilfe des Niederschlags $PP(t)$ in der Einheit $\frac{l}{m^2} = mm$ und der sichtbaren Oberfläche des Gletschers ein Volumen berechnen. Dieses kann man nun mit der Dichte $\rho = 1000 \frac{kg}{m^2}$ von Wasser verrechnen und erhält eine Masse:
+
+$$
+M = \rho \cdot PP(t) \cdot \text{Fläche}
+$$
+
+Wie oben gesagt, nehmen wir eine konstantes Verhältnis zwischen Gletscherhöhe und Gletscherlänge an, welches zunächst von $c$ dargestellt wird. Die Fläche lässt sich aufgrund der Annahme $L \sim M$ folgendermaßen darstellen.
+
+$$\text{Fläche} = B \cdot L(t) \approx c \cdot B \cdot M(t)$$
+
+ Nun lässt sich die Formel für die Zunahmefunktion herleiten.
 
 $$ 
 Z(t) =
@@ -224,6 +236,8 @@ Z(t) =
     0 & \text{für } T(t) \ge T_0 \\
     PP(t) \cdot \rho_{Wasser} \cdot c \cdot B \cdot M(t) & \text{für } T(t) < T_0
 \end{cases}$$
+
+Alle weiteren konstanten Einflüsse auf die Akkumulation fließen logischerweise - wenn auch ungewollt - mit in den im folgenden optimierten Parameter c in der Einheit $\frac{1}{mm \cdot Jahr}$ mit ein.
 
 
 ## Ablation
