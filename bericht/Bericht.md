@@ -152,7 +152,7 @@ $$Z(t) = PP(t) \cdot \rho_{Wasser} \cdot c \cdot B \cdot M(t)$$
 
 ## Ablation
 
-Ab einer Temperatur von $2°C$ schmilzt der Gletscher. Wenn die Temperatur $T(t) > 2°C$ und es regnet wird die Schmelze um einen unbekannten Faktor $f$ beschleunigt, da Niederschlag eine bessere Wärmleitung ermöglicht.
+Ab einer Temperatur von $2°C$ schmilzt der Gletscher. Wenn die Temperatur $T(t) > 2°C$ und es regnet wird die Schmelze um einen unbekannten Faktor $f$ beschleunigt, da Niederschlag eine bessere Wärmleitung ermöglicht. Beide Effekte sind direkt proportional zur Gletschermasse, da diese, unter unseren Annahmen, wiederum zur Gletscheroberfläche proportional ist und der Niederschlagseffekt auf der gesamten Oberfläche stattfindet. Der allgemeine Temperaturschmelzeffekt ist direkt massenabhängig, da Schmelze idealisiert für jedes Kilo Gletschereis gleichmäßig stattfindet. Der Temperaturgradient des Eises innerhalb des Gletschers, also der geringere Einfluss der Außentemperatur auf Eis, das nicht an der Luft liegt, wird als annähernd linear angenommen und fließt demnach in die Schmelzkonstante $d$ ein.
 
 $$A(t) = M(t) \cdot d \cdot (T(t) - T_0) + PP(t) \cdot f \cdot M(t) \cdot (T(t) - T_0)$$
 
