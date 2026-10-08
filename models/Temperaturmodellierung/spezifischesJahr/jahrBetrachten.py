@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 from datenAusJahr import getJahresdaten
 
-STARTJAHR = 1965
+STARTJAHR = 2023
 
 def leseBesteParameter(jahr):
     file =  open(f"models/Temperaturmodellierung/spezifischesJahr/bestenParameter.csv",'r')
@@ -30,7 +30,7 @@ def leseJahresdaten(jahreszahl):
 tagestemperaturen = leseJahresdaten(STARTJAHR)
 
 fig, ax = plt.subplots(figsize = (10, 4))
-plt.title(f"Tagesdurchschnitttemperaturen und Modell: " + r"$y = a*sin(2\pi(x-c)/b)+d$")
+plt.title(f"Tagesdurchschnittstemperaturen und Modell: " + r"$y = a \cdot \sin\left(2\pi\frac{x-c}{b}\right) + d$")
 plt.subplots_adjust(left = 0.12, bottom = 0.3)
 plt.xlim(1, 366)
 plt.ylim(-10, 30)
@@ -39,9 +39,24 @@ plt.ylabel(r"Temperatur in [°C]", rotation = 90)
 
 [optimales_a, optimales_b, optimales_c, optimales_d] = leseBesteParameter(STARTJAHR)
 x = np.arange(0, 366, 0.1)
-y, = plt.plot(x, f(x, optimales_a, optimales_b, optimales_c, optimales_d), 'b-', lw = 1)
+y, = ax.plot(
+    x,
+    f(x, optimales_a, optimales_b, optimales_c, optimales_d),
+    'b-',
+    lw=1,
+    label=f"Modell: a={optimales_a:.2f}, b={optimales_b:.2f}, c={optimales_c:.2f}, d={optimales_d:.2f}"
+)
+
 x2 = np.arange(0, len(tagestemperaturen), 1)
-data, = plt.plot(x2,tagestemperaturen,'r:',lw = 1)
+data, = ax.plot(
+    x2,
+    tagestemperaturen,
+    'r:',
+    lw=1,
+    label="Gemessene Temperatur"
+)
+
+legende = ax.legend()
 
 
 # x- und y-Position, Länge und Höhe der Slider im Plot festlegen
