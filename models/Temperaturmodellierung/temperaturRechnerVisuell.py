@@ -36,4 +36,6 @@ plt.plot(
     label="Modellierter Temperaturverlauf"
 )
 
+plt.legend()
+
 plt.show()

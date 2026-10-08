@@ -1417,7 +1417,9 @@ ax_masse.text(
 # ============================================================
 
 ax_masse.set_title(
-    "Gletschermodell 1955–2100\nM'(t) = M(t)*(PP(t)*c - (T(t) - T_0)(d+PP(t)*f))",
+    r"Gletschermodell 1955–2100"
+    "\n"
+    r"$M'(t)=M(t)\,\left[PP(t)\,c-\left(T(t)-T_0\right)\left(d+PP(t)\,f\right)\right]$",
     fontsize=19
 )
 
