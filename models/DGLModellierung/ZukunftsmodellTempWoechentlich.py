@@ -537,6 +537,22 @@ plot_datum_jahr = pd.to_datetime(
     ]
 )
 
+
+# ============================================================
+# WÖCHENTLICHE ZEITACHSE FÜR DAS TEMPERATURMODELL
+# ============================================================
+
+temp_modell_plot_daten = pd.date_range(
+    f"{START_JAHR}-01-01",
+    f"{END_JAHR}-12-31",
+    freq="7D"
+)
+
+temp_modell_plot_t = (
+    temp_modell_plot_daten.year.to_numpy()
+    + (temp_modell_plot_daten.dayofyear.to_numpy() - 1) / 366.0
+)
+
 # Modell
 pp_modell_jahr = []
 
@@ -664,7 +680,7 @@ temp_mess_jahr = np.array(
 
 T_station_dgl = None
 T_baender_dgl = None
-TEMP_MODELL_JAHR = None
+TEMP_MODELL_WOCHE = None
 
 A_TERM = None
 D_TERM = None
@@ -692,7 +708,7 @@ def berechne_temperatur_und_terme(faktor):
 
     global T_station_dgl
     global T_baender_dgl
-    global TEMP_MODELL_JAHR
+    global TEMP_MODELL_WOCHE
 
     global A_TERM
     global D_TERM
@@ -787,57 +803,24 @@ def berechne_temperatur_und_terme(faktor):
     )
 
     # --------------------------------------------------------
-    # 4. Jahreskurve des Temperaturmodells auf 2900 m
+    # 4. Wöchentliche Temperaturkurve auf 2900 m
     #
-    # Für die Darstellung genügen 12 repräsentative
-    # Monatswerte pro Jahr.
+    # Ca. 52 Werte pro Jahr: dadurch wird die saisonale
+    # Sinusfunktion sichtbar.
     # --------------------------------------------------------
 
-    temp_jahreswerte = []
+    temp_wochenwerte = np.empty(
+        len(temp_modell_plot_t),
+        dtype=float
+    )
 
-    for jahr in jahre_plot:
-
-        monatswerte = []
-
-        for monat in range(
-            1,
-            13
-        ):
-
-            tage_monat = calendar.monthrange(
-                int(jahr),
-                monat
-            )[1]
-
-            datum = pd.Timestamp(
-                int(jahr),
-                monat,
-                min(15, tage_monat)
-            )
-
-            t = (
-                jahr
-                + (
-                    datum.dayofyear - 1
-                ) / 366.0
-            )
-
-            T_2900 = TR.erhalteTemperatur(
-                float(t),
-                2900.0,
-                TEMPERATUR_SINCE,
-                TEMPERATUR_UNTIL,
-                faktor
-            )
-
-            monatswerte.append(
-                T_2900
-            )
-
-        temp_jahreswerte.append(
-            np.mean(
-                monatswerte
-            )
+    for i, t in enumerate(temp_modell_plot_t):
+        temp_wochenwerte[i] = TR.erhalteTemperatur(
+            float(t),
+            2900.0,
+            TEMPERATUR_SINCE,
+            TEMPERATUR_UNTIL,
+            faktor
         )
 
     # --------------------------------------------------------
@@ -851,10 +834,7 @@ def berechne_temperatur_und_terme(faktor):
     D_TERM = neues_D
     F_TERM = neues_F
 
-    TEMP_MODELL_JAHR = np.array(
-        temp_jahreswerte,
-        dtype=float
-    )
+    TEMP_MODELL_WOCHE = temp_wochenwerte
 
     AKTUELLER_TEMP_FAKTOR = faktor
 
@@ -1342,9 +1322,9 @@ linie_bilanz_zukunft, = ax_bilanz.plot(
 
 # ============================================================
 # TEMPERATUR
-# Messung = durchgezogen
-# Modell  = überall gestrichelt
-# gleiche Farbe
+# Messung = Jahresmittel, durchgezogen
+# Modell  = wöchentlich, gestrichelt
+# Dadurch ist die saisonale Sinusform sichtbar.
 # ============================================================
 
 linie_temp_mess, = ax_temp.plot(
@@ -1357,10 +1337,10 @@ linie_temp_mess, = ax_temp.plot(
 )
 
 linie_temp_modell, = ax_temp.plot(
-    plot_datum_jahr,
-    TEMP_MODELL_JAHR,
+    temp_modell_plot_daten,
+    TEMP_MODELL_WOCHE,
     color=FARBE_TEMP,
-    linewidth=2.0,
+    linewidth=1.2,
     linestyle="--",
     label="Temperatur Modell"
 )
@@ -1901,8 +1881,9 @@ def faktor_losgelassen(
         neuer_faktor
     )
 
-    linie_temp_modell.set_ydata(
-        TEMP_MODELL_JAHR
+    linie_temp_modell.set_data(
+        temp_modell_plot_daten,
+        TEMP_MODELL_WOCHE
     )
 
     # Danach Masse und Massenbilanz mit den neuen
@@ -2080,7 +2061,7 @@ def reset(
         )
 
         linie_temp_modell.set_ydata(
-            TEMP_MODELL_JAHR
+            TEMP_MODELL_WOCHE
         )
 
     aktualisieren()

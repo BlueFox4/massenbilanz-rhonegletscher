@@ -34,8 +34,6 @@ geometry:
 
 \tableofcontents
 
-\newpage
-
 
 # Zielsetzung
 
@@ -79,29 +77,69 @@ Zudem besitzt der ursprüngliche Datensatz teilweise Lücken, die mit interpolie
 
 ### Temperatur
 
-Zunächst wird der jährliche Temperaturverlauf mithilfe einer Sinus-Funktion modelliert.
+Betrachtet man den durchschnittlichen jährlichen Temperaturverlauf, also die durchschnittliche Temperatur für einen bestimmten Tag im Jahresverlauf, lässt sich dieser gut durch eine Sinusfunktion modellieren:
 
-$$y = a \cdot sin(2 \pi \cdot \frac{(x-c)}{b}) + d$$
+$$
+y = a \cdot \sin\left(2\pi \cdot \frac{x-c}{b}\right) + d
+$$
 
-![Durchschnittsjahr 1955-2025](assets/temp_avg_all_years.png){width=70%}
+![Durchschnittsjahr 1955–2025](assets/temp_avg_all_years.png){width=70%}
 
-Nun werden programmatisch numerisch optimierte Parameter für jedes Jahr gefunden. 
+Die einzelnen Parameter können dabei wie folgt interpretiert werden:
 
-Über diese vier Parameter $a$, $b$, $c$ und $d$ lässt sich je eine Ausgleichsgerade bilden und damit der zukünftige Verlauf modellieren:
+- $a$ bezeichnet die **Amplitude** in $^\circ\mathrm{C}$ und beschreibt, wie stark die Temperaturen im Jahresverlauf schwanken.
+- $b$ bezeichnet die **Periodendauer** in Tagen. Dieser Wert wird sinnvollerweise auf $365{,}2524$ Tage festgelegt.
+- $c$ bezeichnet die **Phasenverschiebung** in Tagen und gibt an, um welchen Betrag der Temperaturverlauf entlang der Zeitachse verschoben ist. Damit lässt sich insbesondere der Zeitpunkt des kältesten bzw. wärmsten Tages bestimmen.
+- $d$ bezeichnet den **Temperaturmittelwert** in $^\circ\mathrm{C}$ und entspricht der vertikalen Verschiebung der Sinuskurve.
 
-$$y = a_{regr}(t) \cdot sin(2 \pi \cdot \frac{(x-c_{regr}(t))}{b_{regr}(t)}) + d_{regr}(t)$$
+Statt den gesamten Messzeitraum durch eine einzige Sinuskurve zu beschreiben, werden die Parameter $a$, $c$ und $d$ nun für jedes Jahr separat bestimmt. Dadurch kann ihre zeitliche Entwicklung analysiert und für die Modellierung zukünftiger Jahre berücksichtigt werden. Die jeweils optimalen Parameter werden dabei programmatisch für jedes Jahr ermittelt und gespeichert.
 
-![Parameterentwicklung ($b, c = const.$)](assets/temp_params_development.png){width=70%}
+Beispielhaft sind im Folgenden die ermittelten Parameter und die daraus resultierenden Sinuskurven für die Jahre 1994 und 2023 dargestellt:
 
-\clearpage
+![Temperatur-Sinuskurve für 1994](assets/temperaturmodell_1994.png){width=70%}
 
-Je nachdem, seit wann man die Regressionsgerade bildet, ergeben sich unterschiedliche Steigungen, wir gehen jedoch von einer 30-jährigen Klimaperiode aus und haben Daten bis 2024 - daraus folgt eine Regression über alle Jahresparameter von 1994 bis 2024.
+![Temperatur-Sinuskurve für 2023](assets/temperaturmodell_2023.png){width=70%}
+
+Auf Grundlage der Parameter $a$, $b$, $c$ und $d$ lässt sich anschließend jeweils eine Regressionsgerade bestimmen. Diese beschreibt die zeitliche Entwicklung der einzelnen Parameter und kann verwendet werden, um den Temperaturverlauf zukünftiger Jahre zu modellieren:
+
+![Entwicklung der Parameter $a$, $b$, $c$ und $d$](assets/temp_params_development.png){width=70%}
+
+Die Entwicklung der Parameter lässt sich unter Berücksichtigung ihrer jeweiligen Bedeutung wie folgt interpretieren:
+
+- Die **Amplitude $a$** steigt leicht an. Dies könnte darauf hindeuten, dass die jahreszeitlichen Temperaturschwankungen im betrachteten Zeitraum zunehmen. Ein möglicher Zusammenhang besteht mit zunehmenden Wetterextremen infolge des Klimawandels.
+- Die **Periodendauer $b$** wurde bei der Berechnung der Parameter auf den festen Wert $365{,}2524$ Tage gesetzt und bleibt daher konstant.
+- Die **Phasenverschiebung $c$** verändert sich nur geringfügig. Dies deutet darauf hin, dass sich der Zeitpunkt der jahreszeitlichen Temperaturminima und -maxima im betrachteten Zeitraum nur wenig verschoben hat. Allerdings ist dieser Zeitpunkt von verschiedenen meteorologischen und klimatischen Faktoren abhängig.
+- Beim **Temperaturmittelwert $d$** ist hingegen ein deutlicher Anstieg von etwa $3\,^\circ\mathrm{C}$ über den betrachteten Messzeitraum zu erkennen. Dieser Anstieg steht im Einklang mit der allgemeinen Erwärmung im Zuge des Klimawandels.
+
+Um die Genauigkeit der ermittelten Parameter zu bewerten, kann insbesondere der Parameter $d$, der den mittleren Temperaturwert eines Jahres beschreibt, mit den tatsächlich gemessenen Jahresmitteltemperaturen verglichen werden. In der unteren Abbildung stellt man fest, dass die tatsächlichen Werte nahezu identisch zu den modellierten Werten des Paramters $d$ sind.
+
+Darüber hinaus stellt sich die Frage, welcher Zeitraum für die Bestimmung der Regressionsgeraden verwendet werden sollte. Wird der gesamte Messzeitraum betrachtet, ergibt sich eine geringere Steigung der Temperaturentwicklung. Dadurch könnte die aktuelle Erwärmung weniger deutlich abgebildet werden. Ein kürzerer Zeitraum reagiert dagegen stärker auf aktuelle Veränderungen, ist jedoch anfälliger für kurzfristige Schwankungen und einzelne ungewöhnlich warme oder kalte Jahre.
+
+In der folgenden Abbildung sind die Regressionsgeraden für einen Zeitraum ab 2014 sowie für eine 30-jährige Klimaperiode von 1994 bis 2023 dargestellt. Wir haben uns bewusst gegen den kürzeren Zeitraum ab 2014 entschieden, da eine 30-jährige Periode besser geeignet ist, langfristige klimatische Entwicklungen abzubilden und den Einfluss kurzfristiger Schwankungen zu reduzieren.
 
 ![Modellierte Temperaturentwicklung mit Daten seit 1994 und 2014](assets/temp_modelled_twice.png){width=70%}
 
+Zusammenfassend kann das Programm zur Berechnung der Massenbilanz nun für jeden beliebigen Zeitpunkt eine modellierte Temperatur bestimmen. Dazu wird zunächst der Zeitpunkt innerhalb des Jahres bestimmt und anschließend mit den für das jeweilige Jahr ermittelten Regressionsparametern die entsprechende Temperatur berechnet. Daraus ergibt sich die folgende Funktion:
+
+$$
+T = a_{\mathrm{regr}}(t) \cdot \sin\left(2\pi \cdot \frac{x-c_{\mathrm{regr}}(t)}{b_{\mathrm{regr}}(t)}\right) + d_{\mathrm{regr}}(t)
+$$
+
+Die zugrunde liegenden Messdaten stammen von einer Wetterstation auf einer Höhe von $482,\mathrm{m}$. Der betrachtete Gletscher beginnt jedoch erst auf einer Höhe von etwa $2200,\mathrm{m}$, sodass dort von einer deutlich niedrigeren Temperatur auszugehen ist. Um diesen Höhenunterschied im Modell zu berücksichtigen, wird eine Temperaturabnahme von $0{,}65,^\circ\mathrm{C}$ pro $100,\mathrm{m}$ Höhenzunahme angenommen.
+
+Damit kann aus den Messdaten der Wetterstation eine modellierte Temperaturentwicklung für die Höhe des Gletschers abgeleitet werden. Diese dient anschließend als Grundlage für die weitere Berechnung der Massenbilanz.
 
 ### Niederschlag
 
+Beim Niederschlag lässt sich - betrachtet man die Jahresverläufe - zunächst keine Regelmäßigkeit ausmachen.
+
+![Gegenüberstellung der Tagesniederschläge 1994 und 2014](assets/pp_gegenueberstellung-1994-2014.png){width=70%}
+
+Kumuliert man jedoch die Tageswerte monatlich und zeichnet eine Ausgleichsgerade durch diese, erhält man eine Funktion, die den Niederschlag pro Monat in $\frac{mm}{Monat}$ annähert. Da die Daten eine hohe Streuung haben, ist dies für den einzelnen Zeitpunkt jedoch ungenau. Um zu validieren, dass zumindest die Steigung stimmt, kumuliert man nun die Regentage jährlich (da diese eine deutlich geringere Streuung aufweisen) und zeichnet auch hier eine Regressionsgerade, zeigt sich ein ähnliches Bild.
+
+![Jährliche Regentagsanzahl, Monatliche Niederschläge und die Ausgleichsgeraden](assets/pp_modelliert.png){width=70%}
+
+\clearpage
 
 ## Akkumulation
 
