@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from datetime import date
 import matplotlib.pyplot as plt
 
 #Lesen der Daten aus Datei bestenParameter.csv
@@ -36,47 +37,68 @@ d_fit = np.polyfit(x, d, 1)
 # ===========
 
 last_fit_since = 0
+last_fit_until = date.today().year
+last_fit_mask = (last_fit_until >= x) & (x >= last_fit_since)
 last_d_factor = 1
-a_func_polynomial = np.polynomial.Polynomial.fit(x[x >= last_fit_since], a[x >= last_fit_since], deg=1)
-b_func_polynomial = np.polynomial.Polynomial.fit(x[x >= last_fit_since], b[x >= last_fit_since], deg=1)
-c_func_polynomial = np.polynomial.Polynomial.fit(x[x >= last_fit_since], c[x >= last_fit_since], deg=1)
-d_func_polynomial = np.polynomial.Polynomial.fit(x[x >= last_fit_since], d[x >= last_fit_since], deg=1)
+a_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], a[last_fit_mask], deg=1)
+b_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], b[last_fit_mask], deg=1)
+c_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], c[last_fit_mask], deg=1)
+d_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], d[last_fit_mask], deg=1)
 t, m = d_func_polynomial.convert().coef
 d_func_polynomial_scaled = np.polynomial.Polynomial([t, m*last_d_factor])
 
-def a_func(y, since):
+def a_func(y, since, until):
     global a_func_polynomial
     global last_fit_since
-    if last_fit_since != since:
-        a_func_polynomial = np.polynomial.Polynomial.fit(x[x >= since], a[x >= since], deg=1)
+    global last_fit_until
+    global last_fit_mask
+    if last_fit_since != since or last_fit_until != until:
         last_fit_since = since
+        last_fit_until = until
+        last_fit_mask = (last_fit_until >= x) & (x >= last_fit_since)
+        a_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], a[last_fit_mask], deg=1)
     return a_func_polynomial(y)
-def b_func(y, since):
+def b_func(y, since, until):
     global b_func_polynomial
     global last_fit_since
-    if last_fit_since != since:
-        b_func_polynomial = np.polynomial.Polynomial.fit(x[x >= since], b[x >= since], deg=1)
+    global last_fit_until
+    global last_fit_mask
+    if last_fit_since != since or last_fit_until != until:
         last_fit_since = since
+        last_fit_until = until
+        last_fit_mask = (last_fit_until >= x) & (x >= last_fit_since)
+        b_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], b[last_fit_mask], deg=1)
     return b_func_polynomial(y)
-def c_func(y, since):
+def c_func(y, since, until):
     global c_func_polynomial
     global last_fit_since
-    if last_fit_since != since:
-        c_func_polynomial = np.polynomial.Polynomial.fit(x[x >= since], c[x >= since], deg=1)
+    global last_fit_until
+    global last_fit_mask
+    if last_fit_since != since or last_fit_until != until:
         last_fit_since = since
+        last_fit_until = until
+        last_fit_mask = (last_fit_until >= x) & (x >= last_fit_since)
+        c_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], c[last_fit_mask], deg=1)
     return c_func_polynomial(y)
-def d_func(y, since, factor=1):
+def d_func(y, since, until, factor=1):
     global d_func_polynomial
     global d_func_polynomial_scaled
     global last_fit_since
+    global last_fit_until
+    global last_fit_mask
     global last_d_factor
-    if last_fit_since != since and last_d_factor != factor:
-        d_func_polynomial = np.polynomial.Polynomial.fit(x[x >= since], d[x >= since], deg=1)
+    if last_fit_since != since or last_fit_until != until  or last_d_factor != factor:
+        last_fit_since = since
+        last_fit_until = until
+        last_fit_mask = (last_fit_until >= x) & (x >= last_fit_since)
+        last_d_factor = factor
+        d_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], d[last_fit_mask], deg=1)
         t, m = d_func_polynomial.convert().coef
         d_func_polynomial_scaled = np.polynomial.Polynomial([t, m*factor])
-        last_fit_since = since
-        last_d_factor = factor
-    return d_func_polynomial_scaled(y)
+    if y > until:  # use factor to scale the temperature when trying to predict the future
+        return d_func_polynomial_scaled(y)
+    else:  # simply return the approximated factor
+        return d_func_polynomial(y)
 
 
 # =======
