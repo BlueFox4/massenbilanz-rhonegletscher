@@ -34,7 +34,7 @@ geometry:
 
 # tl;dr
 
-Im Zuge der Modellierungswoche 2026, einem Projekt des Zentrums für Mathematik, wurde ein Modell entwickelt, welches auf Basis von historischen Wetterdaten einerseits näherungsweise die historische Massenveränderung des Rhonegletschers im Kanton Wallis in der Schweiz nachstellt und im zweiten Schritt mit Prognosen für die zukünfitgen klimatischen Bedingungen auch die zukünftige Massenveränderung des Gletschers aufzeigt. Vorrangig wurde dabei eine Funktion für die Massenveränderung aufgestellt, welche gleich der Differenz der Massenakkumulation (Massenzunahme) des Gletschers und der Massenablation (Massenabnahme) des Gletschers an einem gewissen Zeitpunkt ist. Dabei sind Massenakkumulation und Massenablation Funktionen, die von Niederschlag und Temperatur zu eben diesem Zeitpunkt abhängig sind. Niederschlag und Temperatur sind ihrerseits Funktionen, die sich aus Wetterdatensätzen der letzten 30 Jahre speißen. Zur optimalen Bestimmung der Modellparameter dienten Daten über die tatsächliche historische Massenbilanz des Gletschers. Man fand dabei für die meisten denkbaren Annahmen für das zukünftige klimatischen Verhalten ein Sterben des Gletschers bis zum Ende des Jahrhunderts. 
+Im Zuge der Modellierungswoche 2026, einem Projekt des Zentrums für Mathematik, wurde ein Modell entwickelt, welches auf Basis von historischen Wetterdaten einerseits näherungsweise die historische Massenveränderung des Rhonegletschers im Kanton Wallis in der Schweiz nachstellt und im zweiten Schritt mit Prognosen für die zukünfitgen klimatischen Bedingungen auch die zukünftige Massenveränderung des Gletschers aufzeigt. Vorrangig wurde dabei eine Funktion für die Massenveränderung aufgestellt, welche gleich der Differenz der Massenakkumulation (Massenzunahme) des Gletschers und der Massenablation (Massenabnahme) des Gletschers an einem gewissen Zeitpunkt ist. Dabei sind Massenakkumulation und Massenablation Funktionen, die von Niederschlag und Temperatur zu eben diesem Zeitpunkt abhängig sind. Niederschlag und Temperatur sind ihrerseits Funktionen, die sich aus Wetterdatensätzen der letzten 30 Jahre speißen. Zur optimalen Bestimmung der Modellparameter dienten Daten über die tatsächliche historische Massenbilanz des Gletschers. Man fand dabei für die meisten denkbaren Annahmen für das zukünftige klimatische Verhalten ein Sterben des Gletschers bis zum Ende des Jahrhunderts. 
 
 \newpage
 
@@ -124,11 +124,15 @@ Die Wetterstation, die die Daten erhoben hat, liegt etwa 90km südwestlicher Ric
 
 ![Das Problem mit der Entfernung [@luftlinie]](assets/luftlinie_klimastation_sion_rhonegletscher.png){width=70%}
 
-Allerdings ist dieser Umstand vernachlässigbar, da die Station und der Gletscher im gleichen Tal liegen und somit den gleichen Wetterphänomenen ausgesetzt sind. 
+Allerdings ist dieser Umstand vernachlässigbar, da die Station und der Gletscher im gleichen Tal liegen und somit etwa den gleichen klimatischen Phänomenen ausgesetzt sind. 
 
 ![Die Entfernung ist jedoch im gleichen Tal [@temperatur-rhonetal]](assets/meteoblue.com-2026-10-07_11-38_-_wetterkarte-im-tal.png){width=70%}
 
 Zudem besitzt der ursprüngliche Datensatz teilweise Lücken, die mit interpolierten Daten ausgefüllt werden mussten.
+
+Es ist denkbar, dass eine Annäherung mittels eines metereologischen Modells eines renomierten Instituts bessere Daten liefen würde, als durch die durchaus weit entfernte Wetterstation.
+
+Es ist denkbar, dass eine Annäherung mittels eines metereologischen Modells eines renommierten Instituts bessere Daten liefen würde, als durch die durchaus weit entfernte Wetterstation.
 
 ## Visualisierung
 
@@ -263,7 +267,7 @@ $$
 
 ## Vernachlässigung
 
-In die derzetige Modellierung fließen bis dato nur die Temperatur und der Niederschlag ein. Dies scheint zwar eine soweit suffiziente Modellierung herzubieten, aber es ist davon auszugehen, dass der Einbezug weiterer Faktoren an dieser Stelle doch eine bessere Abbildung der Realität ermöglichen würde:
+In die derzetige Modellierung fließen bis dato nur die Temperatur und der Niederschlag ein. Dies scheint zwar eine soweit suffiziente Modellierung herzubieten, aber es ist davon auszugehen, dass der Einbezug weiterer Faktoren an dieser Stelle doch eine bessere Abbildung der Realität ermöglichen würde.
 
 So gehen wir wie oben beschrieben von einem geometrischen Ideal des Gletschers aus, in dem die Breite wegen der Berge konstant und ebenso das Verhältnis von Höhe zu Länge des Gletschers konstant ist, was es uns weiter erlaubt eine direkte Proportionalität von Masse und Oberfläche anzunehmen. Dabei werden die realen Gegebenheiten vernachlässigt, eine Ungenauigkeit, die allerdings zumindest im Ansatz durch unsere optimierten Vorfaktoren abgedeckt wird.
 
