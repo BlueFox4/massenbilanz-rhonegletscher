@@ -4,6 +4,7 @@ import numpy
 from models.Temperaturmodellierung import temperaturRechner
 from models.Niederschlagsmodellierung import niederschlagsrechner
 
+
 DATA_ALL_PATH = "../../data/data_all.csv"
 DATA_YEAR_PATH = "../../data/data_year.csv"
 
