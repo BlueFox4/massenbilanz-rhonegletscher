@@ -56,6 +56,54 @@ Die historischen Daten über die Gletschermassen und -längenänderung stammen v
 
 Mittels eines Web-Scraping-Algorithmus wurden die tagesbezogenen Wetterdaten von einer Wetterstation in Sitten (franz. Sion) [@wetterdaten], einer Stadt im Tal des Gletschers, ermittelt. Sie liegen mehr oder minder kontinuierlich seit dem 1. Januar 1955 vor.
 
+## Jahresdaten
+
+Hierbei handelt es sich um alle Daten, die jahresweise erhoben worden sind. Folgende Tabelle zeigt die 
+
+| **Dimension** | **Einheit**                 | **Beschreibung**                      | **Herkunft**                                                                                                                                                                        |
+|-----------------|--------------------------|--------------------------------------------------------------|--------------------------------------------|
+| **T**         | $^{\circ}C$                        | Temperatur                            | tt (scraped)                                                                                                                                                                        |
+| **TM**        | $^{\circ}C$                        | Maximaltemp.                          | tt (scraped)                                                                                                                                                                        |
+| **Tm**        | $^{\circ}C$                        | Minimaltemp.                          | tt (scraped)                                                                                                                                                                        |
+| **PP**        | $mm$                        | Jahresniederschlag                    | tt (scraped)                                                                                                                                                                        |
+| **V**         | $\frac{km}{h}$              | Durchschnittliche Windgeschwindigkeit | tt (scraped)                                                                                                                                                                        |
+| **RA**        | -                           | Regentage                             | tt (scraped)                                                                                                                                                                        |
+| **SN**        | -                           | Schneetage                            | tt (scraped)                                                                                                                                                                        |
+| **TS**        | -                           | Sturmtage                             | tt (scraped)                                                                                                                                                                        |
+| **FG**        | -                           | Nebeltage                             | tt (scraped)                                                                                                                                                                        |
+| **TN**        | -                           | Tornadotage                           | tt (scraped)                                                                                                                                                                        |
+| **GR**        | -                           | Hageltage                             | tt (scraped)                                                                                                                                                                        |
+| **MpA/dt**    | $mm\ w.e. = \frac{kg}{m^2}$ | Massenänderung pro Fläche             | na (abgeschrieben)                                                                                                                                                                  |
+| **L/dt**      | $m$                         | Längenänderung                        | na (abgeschrieben)                                                                                                                                                                  |
+| **L**         | $m$                         | Länge                                 | Hergeleitet aus $\frac{L}{dt}$ und gegebener $Länge\ um\ 1999$ in der Aufgabenstellung (dort ohne Quelle)                                                                           |
+| **A**         | km²                         | Fläche                                | Berechnet aus $L$ und fest angenommener $B$                                                                                                                                         |
+| **M**         | $Mrd.\ t$                   | Durchschnittliche Masse               | Hergeleitet aus $\frac{MpA}{dt}$ und der $MpA$ um 1999 (diese ist berechnet aus dem in der Aufgabenstellung gegebenem $V$, der durchschnittlichen $Dichte\ \rho\ von\ Eis$ und $A$) |
+
+## Tagesdaten
+
+Hierbei handelt es sich um tagesweise erhobene Wetterdaten. Es wurden keine Daten aus anderen hergeleitet, dementsprechend ist hier weniger Aufwand vonnöten - schlicht das Scraping wurde durchgeführt mit den in diesem Ordner befindlichen Python-Dateien.
+
+| **Dimension** | **Einheit**    | **Beschreibung**                                                            | **Herkunft**          |
+|---------------|----------------|-----------------------------------------------------------------------------|-----------------------|
+| **Y**         | -              | Jahr                                                                        | tt (scraped)          |
+| **M**         | -              | Monat                                                                       | tt (scraped)          |
+| **D**         | -              | Tag                                                                         | tt (scraped)          |
+| **T**         | $^{\circ}C$           | Durchschnittstemp.                                                          | tt (scraped)          |
+| **TM**        | $^{\circ}C$           | Maximale Durchschnittstemp.                                                 | tt (scraped)          |
+| **Tm**        | $^{\circ}C$           | Minimale Durchschnittstemp.                                                 | tt (scraped)          |
+| **SLP**       | $hPa$          | Luftdruck auf Meereshöhe                                                    | tt (scraped)          |
+| **H**         | -            | rel. Luftfeuchte                                                            | tt (scraped)          |
+| **PP**        | $mm$           | Niederschlag                                                                | tt (scraped)          |
+| **VV**        | $km$           | Durchschnittliche Sicht                                                     | tt (scraped)          |
+| **V**         | $\frac{km}{h}$ | Mittelwind                                                                  | tt (scraped)          |
+| **VM**        | $\frac{km}{h}$ | Durchschnittlicher anhaltender Wind                                         | tt (scraped)          |
+| **VG**        | $\frac{km}{h}$ | Maximale Windgeschwindigkeit                                                | tt (scraped)          |
+| **RA**        | -              | Regentage                                                                   | tt (scraped)          |
+| **SN**        | -              | Schneetage                                                                  | tt (scraped)          |
+| **TS**        | -              | Sturmtage                                                                   | tt (scraped)          |
+| **FG**        | -              | Nebeltage                                                                   | tt (scraped)          |
+| **t**         | -              | Jahr seit 1955 addiert zur Gleitkommazahl mit Tagen als Quotient durch 366. | Berechnet aus Y, M, D |
+
 ## Aufbereitung
 
 Diese Daten müssen nun noch aufbereitet werden. Letztendlich muss hier die Masse für jedes Jahr berechnet werden. Hierfür sind die Massenbilanzen jedes Jahrs in $\text{mm w.e.}=\frac{kg}{m^2}$ gegeben, jedoch fehlt ein Ausgangswert, um absolute Daten aus diesen relativen zu bestimmen.
@@ -146,7 +194,7 @@ $$
 T(t) = a_{regr}(t) \cdot \sin\left(2\pi \cdot \frac{x-c_{regr}(t)}{b_{regr}(t)}\right) + d_{regr}(t)
 $$
 
-Die zugrunde liegenden Messdaten stammen von einer Wetterstation auf einer Höhe von $482m$. Der betrachtete Gletscher beginnt jedoch erst auf einer Höhe von etwa $2200m$, sodass dort von einer deutlich niedrigeren Temperatur auszugehen ist. Um diesen Höhenunterschied im Modell zu berücksichtigen, wird eine Temperaturabnahme von $0{,}65^{\circ}C$ pro $100m$ Höhenzunahme angenommen.
+Die zugrunde liegenden Messdaten stammen von einer Wetterstation auf einer Höhe von $482m$. Der betrachtete Gletscher beginnt jedoch erst auf einer Höhe von etwa $2200m$, sodass dort von einer deutlich niedrigeren Temperatur auszugehen ist. Um diesen Höhenunterschied im Modell zu berücksichtigen, wird eine Temperaturabnahme von $0{,}65^{\circ}C$ pro $100m$ Höhenzunahme gemäß des Modells der Standardatmosphäre angenommen.
 
 Damit kann aus den Messdaten der Wetterstation eine modellierte Temperaturentwicklung für die Höhe des Gletschers abgeleitet werden. Diese dient anschließend als Grundlage für die weitere Berechnung der Massenbilanz. Abschließen sieht man in der folgenden Abbildung unsere modellierte Temperatur und die tatsächlichen monatlichen Durchschnittwerte.
 
