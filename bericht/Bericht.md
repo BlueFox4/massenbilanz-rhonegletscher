@@ -173,8 +173,8 @@ A(t) =
 \begin{cases}
     PP(t) \cdot f \cdot M(t) \cdot (T(t) - T_0)
     + M(t) \cdot d \cdot (T(t)) 
-    & \text{für } T(t) \ge T_0 \\
-    PP(t) \cdot f \cdot M(t) \cdot (T(t) - T_0) & \text{für } T(t) < T_0
+    & \text{für } T(t) > 0 \\
+    PP(t) \cdot f \cdot M(t) \cdot (T(t) - T_0) & \text{für } T(t) \le 0
 \end{cases}
 $$
 
