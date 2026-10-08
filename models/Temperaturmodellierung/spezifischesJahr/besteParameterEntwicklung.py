@@ -40,63 +40,64 @@ last_fit_since = 0
 last_fit_until = date.today().year
 last_fit_mask = (last_fit_until >= x) & (x >= last_fit_since)
 last_d_factor = 1
-a_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], a[last_fit_mask], deg=1)
-b_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], b[last_fit_mask], deg=1)
-c_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], c[last_fit_mask], deg=1)
-d_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], d[last_fit_mask], deg=1)
-t, m = d_func_polynomial.convert().coef
-d_func_polynomial_scaled = np.polynomial.Polynomial([t, m*last_d_factor])
 
-def a_func(y, since, until):
-    global a_func_polynomial
-    global last_fit_since
-    global last_fit_until
-    global last_fit_mask
-    if last_fit_since != since or last_fit_until != until:
-        last_fit_since = since
-        last_fit_until = until
-        last_fit_mask = (last_fit_until >= x) & (x >= last_fit_since)
-        a_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], a[last_fit_mask], deg=1)
-    return a_func_polynomial(y)
-def b_func(y, since, until):
-    global b_func_polynomial
-    global last_fit_since
-    global last_fit_until
-    global last_fit_mask
-    if last_fit_since != since or last_fit_until != until:
-        last_fit_since = since
-        last_fit_until = until
-        last_fit_mask = (last_fit_until >= x) & (x >= last_fit_since)
-        b_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], b[last_fit_mask], deg=1)
-    return b_func_polynomial(y)
-def c_func(y, since, until):
-    global c_func_polynomial
-    global last_fit_since
-    global last_fit_until
-    global last_fit_mask
-    if last_fit_since != since or last_fit_until != until:
-        last_fit_since = since
-        last_fit_until = until
-        last_fit_mask = (last_fit_until >= x) & (x >= last_fit_since)
-        c_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], c[last_fit_mask], deg=1)
-    return c_func_polynomial(y)
-def d_func(y, since, until, factor=1):
-    global d_func_polynomial
-    global d_func_polynomial_scaled
+# function that recalculates the parameter functions
+def update_funcs(since, until, factor):
     global last_fit_since
     global last_fit_until
     global last_fit_mask
     global last_d_factor
+
+    # recalculate if something has changed
     if last_fit_since != since or last_fit_until != until or last_d_factor != factor:
+        # Get the global functions
+        global a_func_polynomial
+        global b_func_polynomial
+        global c_func_polynomial
+        global d_func_polynomial
+        global d_func_polynomial_scaled
+
+        # Set the new variables
         last_fit_since = since
         last_fit_until = until
         last_fit_mask = (last_fit_until >= x) & (x >= last_fit_since)
         last_d_factor = factor
+
+        # Recalculate all fits
+        a_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], a[last_fit_mask], deg=1)
+        b_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], b[last_fit_mask], deg=1)
+        c_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], c[last_fit_mask], deg=1)
         d_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], d[last_fit_mask], deg=1)
+
+        # Recalculate the future temperature factor
         t, m = d_func_polynomial.convert().coef
         m = m * factor  # multiply the slope by the factor
         t = t + (d_func_polynomial(last_fit_until) - np.polynomial.Polynomial([t, m])(last_fit_until))
         d_func_polynomial_scaled = np.polynomial.Polynomial([t, m])
+
+# Generate the functions initially
+update_funcs(last_fit_since, last_fit_until, last_d_factor)
+
+def a_func(y, since, until):
+    global a_func_polynomial
+    global last_d_factor
+    update_funcs(since, until, last_d_factor)
+    return a_func_polynomial(y)
+def b_func(y, since, until):
+    global b_func_polynomial
+    global last_d_factor
+    update_funcs(since, until, last_d_factor)
+    return b_func_polynomial(y)
+def c_func(y, since, until):
+    global c_func_polynomial
+    global last_d_factor
+    update_funcs(since, until, last_d_factor)
+    return c_func_polynomial(y)
+def d_func(y, since, until, factor=1):
+    global d_func_polynomial
+    global d_func_polynomial_scaled
+    update_funcs(since, until, factor)
+        
     if y > until:  # use factor to scale the temperature when trying to predict the future
         return d_func_polynomial_scaled(y)
     else:  # simply return the approximated factor
