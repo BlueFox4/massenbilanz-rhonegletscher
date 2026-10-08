@@ -11,7 +11,7 @@ def erhalteTemperatur(t, h, since, factor=1):
     year = math.floor(t)
     tag = (t - year) * 366
 
-    temperatur_wetterstation = f(tag, params.a_func(t, since), params.b_func(t, since), params.c_func(t, since), params.d_func(t, since))
+    temperatur_wetterstation = f(tag, params.a_func(t, since), params.b_func(t, since), params.c_func(t, since), params.d_func(t, since, factor))
     temperatur = temperatur_wetterstation - 0.65 * ( (h-482) / 100 )
     return temperatur*factor
 
