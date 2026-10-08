@@ -87,14 +87,14 @@ def d_func(y, since, until, factor=1):
     global last_fit_until
     global last_fit_mask
     global last_d_factor
-    if last_fit_since != since or last_fit_until != until  or last_d_factor != factor:
+    if last_fit_since != since or last_fit_until != until or last_d_factor != factor:
         last_fit_since = since
         last_fit_until = until
         last_fit_mask = (last_fit_until >= x) & (x >= last_fit_since)
         last_d_factor = factor
         d_func_polynomial = np.polynomial.Polynomial.fit(x[last_fit_mask], d[last_fit_mask], deg=1)
         t, m = d_func_polynomial.convert().coef
-        m = m*factor  # multiply the slope by the factor
+        m = m * factor  # multiply the slope by the factor
         t = t + (d_func_polynomial(last_fit_until) - np.polynomial.Polynomial([t, m])(last_fit_until))
         d_func_polynomial_scaled = np.polynomial.Polynomial([t, m])
     if y > until:  # use factor to scale the temperature when trying to predict the future
