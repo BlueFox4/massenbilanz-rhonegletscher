@@ -25,7 +25,7 @@ def erhalteTemperatur(t, h, since, until=date.today().year, factor=1):
     d = params.d_func(t, since, until, factor)
     temperatur_wetterstation = f(tag, a, b, c, d)
     temperatur = temperatur_wetterstation - 0.65 * ( (h-482) / 100 )
-    return temperatur*factor
+    return temperatur
 
 
 if __name__ == "__main__":
