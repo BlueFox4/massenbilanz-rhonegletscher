@@ -31,14 +31,57 @@ a_fit = np.polyfit(x, a, 1)
 c_fit = np.polyfit(x, c, 1)
 d_fit = np.polyfit(x, d, 1)
 
+# ===========
+# Funktionen für Import als Modul
+# ===========
+
+last_fit_since = 0
+last_d_factor = 1
+a_func_polynomial = np.polynomial.Polynomial.fit(x[x >= last_fit_since], a[x >= last_fit_since], deg=1)
+b_func_polynomial = np.polynomial.Polynomial.fit(x[x >= last_fit_since], b[x >= last_fit_since], deg=1)
+c_func_polynomial = np.polynomial.Polynomial.fit(x[x >= last_fit_since], c[x >= last_fit_since], deg=1)
+d_func_polynomial = np.polynomial.Polynomial.fit(x[x >= last_fit_since], d[x >= last_fit_since], deg=1)
+t, m = d_func_polynomial.convert().coef
+d_func_polynomial_scaled = np.polynomial.Polynomial([t, m*last_d_factor])
+
 def a_func(y, since):
-    return np.polynomial.Polynomial.fit(x[x >= since], a[x >= since], deg=1)(y)
+    global a_func_polynomial
+    global last_fit_since
+    if last_fit_since != since:
+        a_func_polynomial = np.polynomial.Polynomial.fit(x[x >= since], a[x >= since], deg=1)
+        last_fit_since = since
+    return a_func_polynomial(y)
 def b_func(y, since):
-    return np.polynomial.Polynomial.fit(x[x >= since], b[x >= since], deg=1)(y)
+    global b_func_polynomial
+    global last_fit_since
+    if last_fit_since != since:
+        b_func_polynomial = np.polynomial.Polynomial.fit(x[x >= since], b[x >= since], deg=1)
+        last_fit_since = since
+    return b_func_polynomial(y)
 def c_func(y, since):
-    return np.polynomial.Polynomial.fit(x[x >= since], c[x >= since], deg=1)(y)
-def d_func(y, since):
-    return np.polynomial.Polynomial.fit(x[x >= since], d[x >= since], deg=1)(y)
+    global c_func_polynomial
+    global last_fit_since
+    if last_fit_since != since:
+        c_func_polynomial = np.polynomial.Polynomial.fit(x[x >= since], c[x >= since], deg=1)
+        last_fit_since = since
+    return c_func_polynomial(y)
+def d_func(y, since, factor=1):
+    global d_func_polynomial
+    global d_func_polynomial_scaled
+    global last_fit_since
+    global last_d_factor
+    if last_fit_since != since and last_d_factor != factor:
+        d_func_polynomial = np.polynomial.Polynomial.fit(x[x >= since], d[x >= since], deg=1)
+        t, m = d_func_polynomial.convert().coef
+        d_func_polynomial_scaled = np.polynomial.Polynomial([t, m*factor])
+        last_fit_since = since
+        last_d_factor = factor
+    return d_func_polynomial_scaled(y)
+
+
+# =======
+# Visuelle Darstellung, wenn direkt aufgerufen
+# =======
 
 if __name__ == "__main__":
     fig, ax = plt.subplots(figsize=(10, 4))
