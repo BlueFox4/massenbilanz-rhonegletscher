@@ -45,5 +45,26 @@ def getAlleJahreTemperatur():
 
     return alleJahreTemperatur
 
+def getAlleMonate():
+    alleJahre = getAlleJahre()
+    alleMonate = []
+    for jahr in alleJahre:
+        jahreszahl = int(jahr[0][0])
+        monatszahl=1
+        tagestemperaturen = []
+        for tageszahl in range(len(jahr)):
+            if int(jahr[tageszahl][1]) == monatszahl:
+                if not np.isnan(jahr[tageszahl][3]):
+                    tagestemperaturen.append(jahr[tageszahl][3])
+            else:
+                alleMonate.append([jahreszahl+(monatszahl-0.5)/12, np.mean(tagestemperaturen)])
+                # print(f"Im {monatszahl}. Monat wurden {len(tagestemperaturen)} Tageswerte festgestellt.")
+                tagestemperaturen = []
+                tagestemperaturen.append(jahr[tageszahl][3])
+                monatszahl = int(jahr[tageszahl][1])
+        alleMonate.append([jahreszahl+(monatszahl-0.5)/12, np.mean(tagestemperaturen)]) # Letzter Monat
+        # print(f"Im {monatszahl}. Monat wurden {len(tagestemperaturen)} Tageswerte festgestellt.")
+    return(alleMonate)
+
 if __name__ == "__main__":
-    getAlleJahreTemperatur()
+    print(getAlleMonate())
