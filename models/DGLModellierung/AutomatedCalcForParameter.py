@@ -23,6 +23,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider, Button
+from scipy.optimize import differential_evolution
 
 # ============================================================
 # GLETSCHERMODELL – VERGANGENHEIT (SCHNELLE VERSION)
@@ -63,6 +64,11 @@ HOEHEN = np.arange(
 LAPSE_RATE = 0.0065  # °C / m
 T0 = 2.0
 
+# Temperaturmodell wie im Zukunftsmodell
+TEMPERATUR_SINCE = 1994
+TEMPERATUR_UNTIL = 2024
+TEMP_FAKTOR_KALIBRIERUNG = 1.0
+
 # 1000 * 2000 aus eurer DGL
 K_AKK = 1000.0 * 2000.0
 
@@ -77,8 +83,7 @@ PLOT_STEP = 7
 # Startwerte Parameter
 # ------------------------------------------------------------
 
-# Nach Korrektur von dt müssen d/c deutlich größer sein als
-# bei der alten dt=1-Version.
+# Startwerte nur als Ausgangspunkt fuer die Kalibrierung.
 C_START = 5e-7
 D_START = 3e-3
 F_START = 1e-1
@@ -322,10 +327,30 @@ def vorbereiten(df):
             "Keine Daten im Modellzeitraum vorhanden."
         )
 
-    T_station = (
-        daten["T_modell"]
-        .to_numpy(dtype=float)
+    # --------------------------------------------------------
+    # Temperatur:
+    # exakt dieselbe Temperaturfunktion wie im Zukunftsmodell.
+    # Dadurch werden die Parameter auch wirklich fuer dasselbe
+    # Temperaturmodell kalibriert.
+    # --------------------------------------------------------
+
+    jahre = daten["Datum"].dt.year.to_numpy()
+    tage = daten["Datum"].dt.dayofyear.to_numpy() - 1
+    t_werte = jahre + tage / 366.0
+
+    T_station = np.empty(
+        len(daten),
+        dtype=float
     )
+
+    for i, t in enumerate(t_werte):
+        T_station[i] = temperaturRechner.erhalteTemperatur(
+            float(t),
+            STATIONS_HOEHE,
+            TEMPERATUR_SINCE,
+            TEMPERATUR_UNTIL,
+            TEMP_FAKTOR_KALIBRIERUNG
+        )
 
     PP_m = (
         daten["PP_modell"]
@@ -337,21 +362,21 @@ def vorbereiten(df):
     # Zeilen = Tage
     # Spalten = Höhenbänder
     T_baender = (
-        T_station[:, None] - LAPSE_RATE * (HOEHEN[None, :] - STATIONS_HOEHE)
+        T_station[:, None]
+        - LAPSE_RATE
+        * (HOEHEN[None, :] - STATIONS_HOEHE)
     )
 
     # --------------------------------------------------------
     # Akkumulation
     # --------------------------------------------------------
 
-    # Anteil der Höhenbänder, in denen T <= 0 ist.
+    # Schnee/Akkumulation nur bis 0 °C.
     schnee_anteil = np.mean(
-        T_baender <= T0,
+        T_baender <= 0.0,
         axis=1
     )
 
-    # Der c-Anteil der DGL kann vollständig vorab berechnet werden:
-    #
     # c * [1000*2000*PP*Schneeanteil]
     akk_c_koeff = (
         K_AKK
@@ -360,27 +385,38 @@ def vorbereiten(df):
     )
 
     # --------------------------------------------------------
-    # Ablation
+    # Ablation nach der neuen Formel
+    #
+    # T <= 0:
+    #   0
+    #
+    # 0 < T < T0:
+    #   d*T
+    #
+    # T >= T0:
+    #   d*T + PP*f*(T-T0)
     # --------------------------------------------------------
 
-    positive_temp = np.maximum(
+    positive_temp_d = np.maximum(
+        T_baender,
+        0.0
+    )
+
+    abl_d_koeff = np.mean(
+        positive_temp_d,
+        axis=1
+    )
+
+    positive_temp_f = np.maximum(
         T_baender - T0,
         0.0
     )
 
-    # Mittel der positiven Temperatur über ALLE Höhenbänder.
-    # Bereiche ohne Schmelze tragen 0 bei.
-    schmelz_temp = np.mean(
-        positive_temp,
-        axis=1
-    )
-
-    # d-Anteil:
-    abl_d_koeff = schmelz_temp
-
-    # f-Anteil:
     abl_f_koeff = (
-        schmelz_temp
+        np.mean(
+            positive_temp_f,
+            axis=1
+        )
         * PP_m
     )
 
@@ -503,7 +539,7 @@ def messdaten():
     )
 
     datumswerte = pd.to_datetime(
-        [f"{j}-01-01" for j in jahre]
+        [f"{j}-07-01" for j in jahre]
     )
 
     return (
@@ -591,14 +627,87 @@ print(
 )
 
 
+
+# ============================================================
+# AUTOMATISCHE PARAMETERKALIBRIERUNG
+# ============================================================
+
+def ziel_funktion_log10(x):
+    """
+    x enthaelt log10(c), log10(d), log10(f).
+    Minimiert wird der RMSE zu den gemessenen Gletschermassen.
+    """
+
+    c = 10 ** float(x[0])
+    d = 10 ** float(x[1])
+    f = 10 ** float(x[2])
+
+    masse_test, _, _, _ = simuliere(
+        c,
+        d,
+        f
+    )
+
+    return rmse_messwerte(
+        masse_test
+    )
+
+
+print()
+print("Starte automatische Kalibrierung von c, d und f ...")
+
+optimierung = differential_evolution(
+    ziel_funktion_log10,
+    bounds=[
+        (-10.0, -4.0),   # log10(c)
+        (-6.0, -0.5),    # log10(d)
+        (-5.0,  1.0)     # log10(f)
+    ],
+    tol=1e-7,
+    polish=True,
+    seed=42,
+    workers=1
+)
+
+C_OPT = 10 ** float(
+    optimierung.x[0]
+)
+
+D_OPT = 10 ** float(
+    optimierung.x[1]
+)
+
+F_OPT = 10 ** float(
+    optimierung.x[2]
+)
+
+RMSE_OPT = float(
+    optimierung.fun
+)
+
+print()
+print("Optimale Parameter:")
+print(
+    f"c = {C_OPT:.12e}"
+)
+print(
+    f"d = {D_OPT:.12e}"
+)
+print(
+    f"f = {F_OPT:.12e}"
+)
+print(
+    f"RMSE = {RMSE_OPT:.6f} Mrd. t"
+)
+
 # ============================================================
 # ERSTE BERECHNUNG
 # ============================================================
 
 masse, bilanz, delta_tag, rate = simuliere(
-    C_START,
-    D_START,
-    F_START
+    C_OPT,
+    D_OPT,
+    F_OPT
 )
 
 # Plot wird bewusst ausgedünnt.
@@ -745,7 +854,7 @@ slider_c = Slider(
     "log10(c)",
     -10,
     -4,
-    valinit=np.log10(C_START),
+    valinit=np.log10(C_OPT),
     valstep=0.05
 )
 
@@ -754,7 +863,7 @@ slider_d = Slider(
     "log10(d)",
     -6,
     -0.5,
-    valinit=np.log10(D_START),
+    valinit=np.log10(D_OPT),
     valstep=0.05
 )
 
@@ -763,7 +872,7 @@ slider_f = Slider(
     "log10(f)",
     -5,
     1,
-    valinit=np.log10(F_START),
+    valinit=np.log10(F_OPT),
     valstep=0.05
 )
 
@@ -917,6 +1026,7 @@ def speichern(_):
         ),
 
         "rmse_mrd_t": fehler,
+        "rmse_optimierung_mrd_t": RMSE_OPT,
 
         "stations_hoehe_m": STATIONS_HOEHE,
         "gletscher_min_m": GLETSCHER_MIN,
@@ -976,15 +1086,15 @@ def speichern(_):
 def reset(_):
 
     slider_c.set_val(
-        np.log10(C_START)
+        np.log10(C_OPT)
     )
 
     slider_d.set_val(
-        np.log10(D_START)
+        np.log10(D_OPT)
     )
 
     slider_f.set_val(
-        np.log10(F_START)
+        np.log10(F_OPT)
     )
 
 
@@ -1009,5 +1119,12 @@ button_reset.on_clicked(
 )
 
 aktualisieren()
+
+print()
+print("Kalibrierung abgeschlossen.")
+print("Diese Werte kannst du direkt in das Zukunftsmodell uebernehmen:")
+print(f"C_STANDARD = {C_OPT:.16e}")
+print(f"D_STANDARD = {D_OPT:.16e}")
+print(f"F_STANDARD = {F_OPT:.16e}")
 
 plt.show()
