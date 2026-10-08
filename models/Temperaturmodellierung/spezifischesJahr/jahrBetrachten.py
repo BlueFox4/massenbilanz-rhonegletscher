@@ -66,16 +66,33 @@ xyA = plt.axes([0.1, 0.17, 0.8, 0.03])
 # Slidername=Slider()
 sldJAHR = Slider(xyA, "Jahr",   1955, 2025, valinit = STARTJAHR, valstep = 1)
 
-# Slider Update
 def update(val):
-    jahr = sldJAHR.val
+    jahr = int(sldJAHR.val)
+
     [optimales_a, optimales_b, optimales_c, optimales_d] = leseBesteParameter(jahr)
-    print([optimales_a, optimales_b, optimales_c, optimales_d])
-    y.set_data(x, f(x, optimales_a, optimales_b, optimales_c, optimales_d))
+
+    # Modell aktualisieren
+    y.set_data(
+        x,
+        f(x, optimales_a, optimales_b, optimales_c, optimales_d)
+    )
+
+    # Temperaturdaten aktualisieren
     tagestemperaturen = leseJahresdaten(jahr)
     x2 = np.arange(0, len(tagestemperaturen), 1)
-    data.set_data(x2,tagestemperaturen)
-    print(jahr)
+    data.set_data(x2, tagestemperaturen)
+
+    # Legende mit aktuellen Parametern aktualisieren
+    y.set_label(
+        f"Modell: a={optimales_a:.2f}, "
+        f"b={optimales_b:.2f}, "
+        f"c={optimales_c:.2f}, "
+        f"d={optimales_d:.2f}"
+    )
+
+    ax.legend()
+
+    fig.canvas.draw_idle()
 
 sldJAHR.on_changed(update)
 
