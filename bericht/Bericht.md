@@ -30,6 +30,8 @@ geometry:
 
 # tl;dr
 
+Im Zuge der Modellierungswoche 2026, einem Projekt des Zentrums für Mathematik, wurde ein Modell entwickelt, welches auf Basis von historischen Wetterdaten einerseits näherungsweise die historische Massenveränderung des Rhonegletschers im Kanton Wallis in der Schweiz nachstellen und im zweiten Schritt mit Prognosen für die zukünfitgen klimatischen Bedingungen auch die zukünftige Massenveränderung des Gletschers aufzeigen soll.
+
 \newpage
 
 \tableofcontents
@@ -52,9 +54,6 @@ Mittels eines Web-Scraping-Algorithmus wurden die tagesbezogenen Wetterdaten von
 
 ## Aufbereitung
 
-
-
-## Visualisierung
 
 
 
@@ -179,8 +178,9 @@ $$
 
 ## Vernachlässigung
 
-Wir vernachlässigen die Einflüsse von
+In die derzetige Modellierung fließen bis dato nur die Temperatur und der Niederschlag ein. Dies scheint zwar eine soweit suffiziente Modellierung herzubieten, aber es ist davon auszugehen, dass der Einbezug weiterer Faktoren an dieser Stelle doch eine bessere Abbildung der Realität ermöglichen würde:
 
+TODO:
 - Luftfeuchtigkeit
 - Direkter Sonneneinstrahlung / Albedo
 - Wind

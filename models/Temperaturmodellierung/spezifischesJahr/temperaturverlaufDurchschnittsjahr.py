@@ -22,17 +22,17 @@ for tageszahl in range(0, 366, 1):
     durchschnittsTagestemperatur.append(summe/anzahl)
 
 fig, ax = plt.subplots(figsize = (10, 4))
-plt.title(f"Durchschnitt der Jahre 1955 bis 2025  " + r"$y = a*sin(2\pi(x-c)/b)+d$")
+plt.title(f"Durchschnitt der Jahre 1955 bis 2025 bei Messstation (482m)" + r"$y = a*sin(2\pi(x-c)/b)+d$") #  
 plt.subplots_adjust(left = 0.12, bottom = 0.3)
 plt.xlim(1, 365)
 plt.ylim(-10, 30)
 plt.xlabel(r"$Tag$")
 plt.ylabel(r"Temperatur in [°C]", rotation = 90)
 
-x = np.arange(0, 366, 0.1)
-y, = plt.plot(x, f(x, 10, 365.25, 100, 10), 'b-', lw = 1)
 x2 = np.arange(0, 366, 1)
-data, = plt.plot(x2,durchschnittsTagestemperatur,'r:',lw = 1)
+data, = plt.plot(x2,durchschnittsTagestemperatur,'r-',lw = 1.5)
+x = np.arange(0, 366, 0.1)
+y, = plt.plot(x, f(x, 10, 365.25, 100, 10), 'b-', lw = 1.5)
 
 # x- und y-Position, Länge und Höhe der Slider im Plot festlegen
 xyA = plt.axes([0.1, 0.17, 0.8, 0.03])
@@ -63,4 +63,3 @@ sldD.on_changed(update)
 
 ax.grid(True)
 plt.show()
-update()

@@ -48,6 +48,7 @@ C_STANDARD = 1.4125375446227554e-06
 D_STANDARD = 0.005623413251903491
 F_STANDARD = 4.4668359215096345
 
+
 T0 = 2.0
 
 
@@ -88,7 +89,6 @@ STATIONS_HOEHE = 482.0
 GLETSCHER_MIN = 2200.0
 GLETSCHER_MAX = 3600.0
 
-# HIER könnt ihr die Auflösung ändern:
 HOEHEN_SCHRITT_M = 100.0
 
 LAPSE_RATE = 0.0065
@@ -1249,9 +1249,12 @@ else:
 # DIAGRAMM
 # ============================================================
 
+
+plt.style.use("dark_background")
 fig, ax_masse = plt.subplots(
     figsize=(20, 11)
 )
+
 
 fig.canvas.manager.set_window_title(
     "Gletschermodell Rhonegletscher"
@@ -1403,8 +1406,8 @@ messpunkte = ax_masse.scatter(
     mess_datum,
     mess_masse,
     s=45,
-    color="black",
-    zorder=10,
+    color="white",
+    zorder=2,
     label="Gemessene Masse"
 )
 
@@ -1513,7 +1516,7 @@ ax_bilanz.axhline(
 # LEGENDE
 # ============================================================
 
-ax_masse.legend(
+legende = ax_masse.legend(
     [
         linie_masse_hist,
         linie_bilanz_hist,
@@ -1535,6 +1538,8 @@ ax_masse.legend(
     loc="upper left",
     fontsize=9
 )
+
+legende.set_zorder(100)
 
 
 # ============================================================
@@ -1635,8 +1640,13 @@ ax_reset = plt.axes([
 
 button_reset = Button(
     ax_reset,
-    "Berechnete Modellwerte"
+    "Berechnete Modellwerte",
+    color="0.35",
+    hovercolor="0.50"
 )
+
+button_reset.label.set_color("white")
+button_reset.label.set_fontweight("bold")
 
 ax_save = plt.axes([
     0.89,
@@ -1645,10 +1655,16 @@ ax_save = plt.axes([
     0.05
 ])
 
+
 button_save = Button(
     ax_save,
-    "CSV speichern"
+    "CSV speichern",
+    color="0.35",
+    hovercolor="0.50"
 )
+
+button_save.label.set_color("white")
+button_save.label.set_fontweight("bold")
 
 
 # ============================================================
@@ -1690,6 +1706,29 @@ check_graphen = CheckButtons(
     ]
 )
 
+ax_graphen.set_facecolor("0.92")
+
+for spine in ax_graphen.spines.values():
+    spine.set_visible(True)
+    spine.set_color("0.35")
+    spine.set_linewidth(1.2)
+
+for label in check_graphen.labels:
+    label.set_color("black")
+    label.set_fontsize(10)
+
+if hasattr(check_graphen, "set_frame_props"):
+    check_graphen.set_frame_props({
+        "edgecolor": "black",
+        "facecolor": "white",
+        "linewidth": 1.4
+    })
+
+if hasattr(check_graphen, "set_check_props"):
+    check_graphen.set_check_props({
+        "color": "black",
+        "linewidth": 2.0
+    })
 
 # ============================================================
 # UPDATE

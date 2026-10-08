@@ -77,12 +77,12 @@ plt.plot(
 y_model1 = []
 
 for jahreszahl in jahreszahlen:
-    y_model1.append(d_func(jahreszahl+1, 1994))
+    y_model1.append(d_func(jahreszahl+1, since=1994, until=2025, factor=1))
 # Modell berechnen
 y_model2 = []
 
 for jahreszahl in jahreszahlen:
-    y_model2.append(d_func(jahreszahl+1, 2014))
+    y_model2.append(d_func(jahreszahl+1, since=2014, until=2025, factor=1))
 
 
 # Modell zeichnen
