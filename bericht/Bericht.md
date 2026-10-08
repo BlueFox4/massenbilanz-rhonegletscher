@@ -18,6 +18,10 @@ author:
 header-right: MODWO2026 Kassel
 footer-left: Gruppe 3
 
+bibliography: references.bib
+csl: harvard-cite-them-right-10th-edition-adapted.csl
+link-bibliography: true
+link-citations: true
 hanging-indent: true
 linestretch: 1.5
 
@@ -48,24 +52,34 @@ Der Rhonegletscher ist ein Gletscher in der Südschweiz, von dem bereits seit Mi
 
 ## Herkunft
 
-Die historischen Daten über die Gletschermasse und -länge stammen von ["scnat wissen", dem Webportal der schweizer Akademie der Wissenschaften, aus einem Bericht der ETH Zürich](https://naturwissenschaften.ch/snow-glaciers-permafrost-explained/glaciers/mass_balance/rhone). Sie reichen bis 1900 zurück und wurden jährlich erhoben. Zur Überprüfung unserer Modellierung haben wir uns allerdings auf den Erhebungszeitraum zwischen 1955 und 2024 beschränkt.
+Die historischen Daten über die Gletschermassen und -längenänderung stammen von „scnat wissen”, dem Webportal der schweizer Akademie der Wissenschaften, aus einem Bericht der ETH Zürich [@bilanzen]. Die Daten reichen bis 1900 zurück und wurden jährlich erhoben. Zur Überprüfung unserer Modellierung haben wir uns allerdings auf den Erhebungszeitraum zwischen 1955 und 2024 beschränkt.
 
-Mittels eines Web-Scraping-Algorithmus wurden die tagesbezogenen Wetterdaten von einer Wetterstation in Sitten (franz. Sion), einer Stadt im Tal des Gletschers ermittelt. Sie liegen mehr oder minder kontinuierlich seit dem 1. Januar 1955 vor.
+Mittels eines Web-Scraping-Algorithmus wurden die tagesbezogenen Wetterdaten von einer Wetterstation in Sitten (franz. Sion) [@wetterdaten], einer Stadt im Tal des Gletschers, ermittelt. Sie liegen mehr oder minder kontinuierlich seit dem 1. Januar 1955 vor.
 
 ## Aufbereitung
 
+Diese Daten müssen nun noch aufbereitet werden. Letztendlich muss hier die Masse für jedes Jahr berechnet werden. Hierfür sind die Massenbilanzen jedes Jahrs in $\text{mm w.e.}=\frac{kg}{m^2}$ gegeben, jedoch fehlt ein Ausgangswert, um absolute Daten aus diesen relativen zu bestimmen.
 
+Ein absoluter Datenpunkt muss also zunächst bestimmt werden. Hierfür benötigt man in unserem vereinfachten Quader-Modell wiederum die Länge, wofür wir die Längenbilanzen $\frac{L(t)}{dt}$ in $m$ gegeben haben. Ausgehend von $9830m$ Länge um das Jahr 1999 in der Aufgabenstellung lassen sich nun rekursiv alle anderen Werte berechnen.
+
+$$L(t+1) = L(t) + \frac{L(t+1)}{dt}$$
+
+Als nächstes berechnet man die Fläche. Gemäß der [Annahmen](#annahmen) ist diese also abhängig von einer Breite $B = const.$ und der Länge $L(t)$. Laut „glamos.ch” betrug die Fläche 2023 rund $13.58km^2$ [@factsheet]. Hieraus lässt sich eine Breite von ca. $1500m$ ableiten, die auch den Rest des Datensatzes recht gut abbildet (wobei bei weiterer zeitlicher Entfernung vom Ausgangspunkt mit absolut verfügbaren Daten die Abweichung größer wird und eine Annäherung mit einer linearen Funktion naheliegt). Nun kann man die Massenbilanz (in $\frac{kg}{m^2}$) in eine tatsächliche Massenzunahme (in $kg$) umwandeln:
+
+$$\text{Massenzunahme in kg} = \text{Massenbilanz in } \frac{kg}{m^2} \cdot B(t) \cdot L(t)$$
+
+Damit kann man nun wiederum rekursiv alle Massen von einem absoluten Startwert aus berechnen. Dieser wurde bestimmt aus dem Volumen $V_{1999} = 2.23km^3$ aus der Aufgabenstellung und der durchschnittlichen Dichte $\rho \approx 918 \frac{kg}{m^3}$ von Wasser.
 
 
 ## Schwächen
 
 Die Wetterstation, die die Daten erhoben hat, liegt etwa 90km südwestlicher Richtung vom Rhonegletscher entfernt. Dadurch ist eine gewisse Abweichung von den tatsächlichen Wetterverhältnissen am Gletscher zu erwarten.
 
-![Das Problem mit der Entfernung](assets/luftlinie_klimastation_sion_rhonegletscher.png){width=70%}
+![Das Problem mit der Entfernung [@luftlinie]](assets/luftlinie_klimastation_sion_rhonegletscher.png){width=70%}
 
 Allerdings ist dieser Umstand vernachlässigbar, da die Station und der Gletscher im gleichen Tal liegen und somit den gleichen Wetterphänomenen ausgesetzt sind. 
 
-![Die Entfernung ist jedoch im gleichen Tal](assets/meteoblue.com-2026-10-07_11-38_-_wetterkarte-im-tal.png){width=70%}
+![Die Entfernung ist jedoch im gleichen Tal [@temperatur-rhonetal]](assets/meteoblue.com-2026-10-07_11-38_-_wetterkarte-im-tal.png){width=70%}
 
 Zudem besitzt der ursprüngliche Datensatz teilweise Lücken, die mit interpolierten Daten ausgefüllt werden mussten.
 
@@ -74,13 +88,13 @@ Zudem besitzt der ursprüngliche Datensatz teilweise Lücken, die mit interpolie
 
 # Modell
 
-## Annahmen
+## Annahmen {#annahmen}
 
-Zunächst nehmen wir den Gletscher als Quader mit fixer Breite $B = 1,5km$ an. Daraus folgt eine Abhängigkeit von der Länge $L$ für die Oberfläche $O(t) \propto L(t)$ und die Masse $M(t) \propto L(t)$ des Gletschers. Die Temperatur in der für unser Modell gewählten Standardatmosphäre nimmt alle $100m$ um $0,65^{\circ}\mathrm{C}$ ab.
+Zunächst nehmen wir den Gletscher als Quader mit fixer Breite $B = 1,5km$ an. Daraus folgt eine Abhängigkeit von der Länge $L$ für die Oberfläche $O(t) \propto L(t)$ und die Masse $M(t) \propto L(t)$ des Gletschers. Die Temperatur in der für unser Modell gewählten Standardatmosphäre nimmt alle $100m$ um $0,65^{\circ}C$ ab.
 
-Für die Akkumulation wird davon ausgegangen, dass Niederschlag ab einer Temperatur $T(t) < 2^{\circ}\mathrm{C}$ als der Gletschermasse zuträglich gewertet wird. 
+Für die Akkumulation wird davon ausgegangen, dass Niederschlag ab einer Temperatur $T(t) < 2^{\circ}C$ als der Gletschermasse zuträglich gewertet wird. 
 
-Gleichzeitig wird Niederschlag ab einer Temperatur $T(t) > 2^{\circ}\mathrm{C}$ als der Masse abträglich (Ablation) gewertet. Dann kann man von einer Temperaturabhängigkeit sprechen: $A(t) \sim T(t)$
+Gleichzeitig wird Niederschlag ab einer Temperatur $T(t) > 2^{\circ}C$ als der Masse abträglich (Ablation) gewertet. Dann kann man von einer Temperaturabhängigkeit respektive Temperaturähnlichkeit $A(t) \sim T(t)$ sprechen.
 
 ## Temperatur
 
@@ -94,10 +108,10 @@ $$
 
 Die einzelnen Parameter können dabei wie folgt interpretiert werden:
 
-- $a$ bezeichnet die **Amplitude** in $^{\circ}\mathrm{C}$ und beschreibt, wie stark die Temperaturen im Jahresverlauf schwanken.
+- $a$ bezeichnet die **Amplitude** in $^{\circ}C$ und beschreibt, wie stark die Temperaturen im Jahresverlauf schwanken.
 - $b$ bezeichnet die **Periodendauer** in Tagen. Dieser Wert wird sinnvollerweise auf $365{,}2524$ Tage festgelegt.
 - $c$ bezeichnet die **Phasenverschiebung** in Tagen und gibt an, um welchen Betrag der Temperaturverlauf entlang der Zeitachse verschoben ist. Damit lässt sich insbesondere der Zeitpunkt des kältesten bzw. wärmsten Tages bestimmen.
-- $d$ bezeichnet den **Temperaturmittelwert** in $^{\circ}\mathrm{C}$ und entspricht der vertikalen Verschiebung der Sinuskurve.
+- $d$ bezeichnet den **Temperaturmittelwert** in $^{\circ}C$ und entspricht der vertikalen Verschiebung der Sinuskurve.
 
 Statt den gesamten Messzeitraum durch eine einzige Sinuskurve zu beschreiben, werden die Parameter $a$, $c$ und $d$ nun für jedes Jahr separat bestimmt. Dadurch kann ihre zeitliche Entwicklung analysiert und für die Modellierung zukünftiger Jahre berücksichtigt werden. Die jeweils optimalen Parameter werden dabei programmatisch für jedes Jahr ermittelt und gespeichert.
 
@@ -116,7 +130,7 @@ Die Entwicklung der Parameter lässt sich unter Berücksichtigung ihrer jeweilig
 - Die **Amplitude $a$** steigt leicht an. Dies könnte darauf hindeuten, dass die jahreszeitlichen Temperaturschwankungen im betrachteten Zeitraum zunehmen. Ein möglicher Zusammenhang besteht mit zunehmenden Wetterextremen infolge des Klimawandels.
 - Die **Periodendauer $b$** wurde bei der Berechnung der Parameter auf den festen Wert $365{,}2524$ Tage gesetzt und bleibt daher konstant.
 - Die **Phasenverschiebung $c$** verändert sich nur geringfügig. Dies deutet darauf hin, dass sich der Zeitpunkt der jahreszeitlichen Temperaturminima und -maxima im betrachteten Zeitraum nur wenig verschoben hat. Allerdings ist dieser Zeitpunkt von verschiedenen meteorologischen und klimatischen Faktoren abhängig.
-- Beim **Temperaturmittelwert $d$** ist hingegen ein deutlicher Anstieg von etwa $3^{\circ}\mathrm{C}$ über den betrachteten Messzeitraum zu erkennen. Dieser Anstieg steht im Einklang mit der allgemeinen Erwärmung im Zuge des Klimawandels.
+- Beim **Temperaturmittelwert $d$** ist hingegen ein deutlicher Anstieg von etwa $3^{\circ}C$ über den betrachteten Messzeitraum zu erkennen. Dieser Anstieg steht im Einklang mit der allgemeinen Erwärmung im Zuge des Klimawandels.
 
 Um die Genauigkeit der ermittelten Parameter zu bewerten, kann insbesondere der Parameter $d$, der den mittleren Temperaturwert eines Jahres beschreibt, mit den tatsächlich gemessenen Jahresmitteltemperaturen verglichen werden. In der unteren Abbildung stellt man fest, dass die tatsächlichen Werte nahezu identisch zu den modellierten Werten des Paramters $d$ sind.
 
@@ -132,7 +146,7 @@ $$
 T(t) = a_{regr}(t) \cdot \sin\left(2\pi \cdot \frac{x-c_{regr}(t)}{b_{regr}(t)}\right) + d_{regr}(t)
 $$
 
-Die zugrunde liegenden Messdaten stammen von einer Wetterstation auf einer Höhe von $482,\mathrm{m}$. Der betrachtete Gletscher beginnt jedoch erst auf einer Höhe von etwa $2200,\mathrm{m}$, sodass dort von einer deutlich niedrigeren Temperatur auszugehen ist. Um diesen Höhenunterschied im Modell zu berücksichtigen, wird eine Temperaturabnahme von $0{,}65,^\circ\mathrm{C}$ pro $100,\mathrm{m}$ Höhenzunahme angenommen.
+Die zugrunde liegenden Messdaten stammen von einer Wetterstation auf einer Höhe von $482m$. Der betrachtete Gletscher beginnt jedoch erst auf einer Höhe von etwa $2200m$, sodass dort von einer deutlich niedrigeren Temperatur auszugehen ist. Um diesen Höhenunterschied im Modell zu berücksichtigen, wird eine Temperaturabnahme von $0{,}65^{\circ}C$ pro $100m$ Höhenzunahme angenommen.
 
 Damit kann aus den Messdaten der Wetterstation eine modellierte Temperaturentwicklung für die Höhe des Gletschers abgeleitet werden. Diese dient anschließend als Grundlage für die weitere Berechnung der Massenbilanz. Abschließen sieht man in der folgenden Abbildung unsere modellierte Temperatur und die tatsächlichen monatlichen Durchschnittwerte.
 
@@ -146,7 +160,7 @@ Beim Niederschlag lässt sich - betrachtet man die Jahresverläufe - zunächst k
 
 Kumuliert man jedoch die Tageswerte monatlich und zeichnet eine Ausgleichsgerade durch diese, erhält man eine Funktion, die den Niederschlag pro Monat in $\frac{mm}{Monat}$ annähert. Da die Daten eine hohe Streuung haben, ist dies für den einzelnen Zeitpunkt jedoch ungenau. Um zu validieren, dass zumindest die Steigung stimmt, kumuliert man nun die Regentage jährlich (da diese eine deutlich geringere Streuung aufweisen) und zeichnet auch hier eine Regressionsgerade. Es zeigt sich eine ähnliche Steigung.
 
-![Jährliche Regentagsanzahl, Monatliche Niederschläge und die Ausgleichsgeraden](assets/pp_modelliert.png){width=70% #fig:pp_modelliert}
+![Jährliche Regentagsanzahl, monatliche Niederschläge und die Ausgleichsgeraden](assets/pp_modelliert.png){width=70% #fig:pp_modelliert}
 
 Da die Niederschlagsmenge jedoch die richtige Einheit besitzt und somit genauer ist, fließt diese - wie die pinke Linie in Abbildung \ref{fig:pp_modelliert} zeigt - in unser tatsächliches Modell ein.
 
@@ -154,7 +168,7 @@ Da die Niederschlagsmenge jedoch die richtige Einheit besitzt und somit genauer 
 
 ## Akkumulation
 
-Der Gletscher wird näherungsweise als Quader beschrieben, der eine feste Breite ($B = 1,5km$) hat und dessen Verhältnis zwischen Höhe und Länge immer gleich ist. Man geht weiter davon aus, dass der Niederschlag gleichmäßig auf die gesamte sichtbare Oberfläche, d.h. die obere Oberfläche, trifft und all dieser Niederschlag auch gefriert, sofern die Temperaturen auf den entsprechenden Höhen unter $T_0 = 2^{\circ}\mathrm{C}$ liegt. Für die Massenzunahme des Gletschers geht man weiter davon aus, dass die gesamte Flächenzunahme auf der Längenzunahme beruht ($\frac{\text{Fläche}}{dt} = l \cdot B \text{, } B = const.$).
+Der Gletscher wird näherungsweise als Quader beschrieben, der eine feste Breite ($B = 1,5km$) hat und dessen Verhältnis zwischen Höhe und Länge immer gleich ist. Man geht weiter davon aus, dass der Niederschlag gleichmäßig auf die gesamte sichtbare Oberfläche, d.h. die obere Oberfläche, trifft und all dieser Niederschlag auch gefriert, sofern die Temperaturen auf den entsprechenden Höhen unter $T_0 = 2^{\circ}C$ liegt. Für die Massenzunahme des Gletschers geht man weiter davon aus, dass die gesamte Flächenzunahme auf der Längenzunahme beruht ($\frac{\text{Fläche}}{dt} = l \cdot B \text{, } B = const.$).
 
 $$ 
 Z(t) =
@@ -166,7 +180,7 @@ Z(t) =
 
 ## Ablation
 
-Ab einer Temperatur $T_0 = 2^{\circ}\mathrm{C}$ schmilzt der Gletscher. Wenn die Temperatur $T(t) > 2^{\circ}\mathrm{C}$ und es regnet, wird die Schmelze um einen unbekannten Faktor $f$ beschleunigt, da Niederschlag eine bessere Wärmleitung ermöglicht. Beide Effekte sind direkt proportional zur Gletschermasse, da diese, unter unseren Annahmen, wiederum zur Gletscheroberfläche proportional ist und der Niederschlagseffekt auf der gesamten Oberfläche stattfindet. Der allgemeine Temperaturschmelzeffekt ist direkt massenabhängig, da Schmelze idealisiert für jedes Kilo Gletschereis gleichmäßig stattfindet. Der Temperaturgradient des Eises innerhalb des Gletschers, also der geringere Einfluss der Außentemperatur auf Eis, das nicht an der Luft liegt, wird als annähernd linear angenommen und fließt demnach in die Schmelzkonstante $d$ ein.
+Ab einer Temperatur $T_0 = 2^{\circ}C$ schmilzt der Gletscher. Wenn die Temperatur $T(t) > 2^{\circ}C$ und es regnet, wird die Schmelze um einen unbekannten Faktor $f$ beschleunigt, da Niederschlag eine bessere Wärmleitung ermöglicht. Beide Effekte sind direkt proportional zur Gletschermasse, da diese, unter unseren Annahmen, wiederum zur Gletscheroberfläche proportional ist und der Niederschlagseffekt auf der gesamten Oberfläche stattfindet. Der allgemeine Temperaturschmelzeffekt ist direkt massenabhängig, da Schmelze idealisiert für jedes Kilo Gletschereis gleichmäßig stattfindet. Der Temperaturgradient des Eises innerhalb des Gletschers, also der geringere Einfluss der Außentemperatur auf Eis, das nicht an der Luft liegt, wird als annähernd linear angenommen und fließt demnach in die Schmelzkonstante $d$ ein.
 
 $$
 A(t) = 
@@ -199,3 +213,6 @@ TODO:
 # Fazit
 
 - ca 90km Luftlinie zwischen Messstation und Gletscher (und einige Höhenmeter)
+
+
+# Quellenverzeichnis
