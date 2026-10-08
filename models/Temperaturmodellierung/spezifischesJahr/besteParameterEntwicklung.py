@@ -4,7 +4,7 @@ from datetime import date
 import matplotlib.pyplot as plt
 
 #Lesen der Daten aus Datei bestenParameter.csv
-file =  open(f"models/Temperaturmodellierung/spezifischesJahr/bestenParameter.csv",'r')  # open braucht den genauen Pfad ab working directory
+file =  open(f"../Temperaturmodellierung/spezifischesJahr/bestenParameter.csv",'r')  # open braucht den genauen Pfad ab working directory
 Jahre = file.readlines()
 Jahre.pop(0) # Entferne Beschriftung
 x = []
