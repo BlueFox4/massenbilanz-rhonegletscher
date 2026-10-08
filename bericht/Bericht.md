@@ -285,13 +285,17 @@ Die Niederschlagsmodellierung, die vorrangig für die Prognostion der zukünftig
 
 ## Implementierung
 
-Mithilfe der Python-Libraries `matplotlib`, `numpy` und `scipy` wurde nun eine Codebasis geschaffen, die die Differentialgleichung (im Folgenden DGL genannt) modelliert. Hierbei können die Parameter $c$, $d$, und $f$ über Schieberegler variiert werden. Auf diese Weise lässt sich die Gleichung numerisch lösen.
+Mithilfe der Python-Libraries `matplotlib`, `numpy` und `scipy` wurde nun eine Codebasis geschaffen, die die Differentialgleichung (im Folgenden DGL genannt) modelliert. Hierbei können die Parameter $c$, $d$, und $f$ über Schieberegler variiert werden. Auf diese Weise lässt sich die Gleichung numerisch lösen [@git-repo].
 
-Zudem wurde noch ein Algorithmus implementiert, welcher die optimalisierte Kombination aller drei Parameter berechnet, um eine möglichst geringe Varianz des Modells zur Messung zu erhalten. Das Resultat lässt sich in Abbildung \ref{fig:modell_screenshot}
+Zudem wurde noch ein Algorithmus implementiert, welcher die optimalisierte Kombination aller drei Parameter berechnet, um eine möglichst geringe Varianz des Modells zur Messung zu erhalten. Das Resultat lässt sich in Abbildung \ref{fig:modell_screenshot} begutachten.
 
-![Bildschirmfoto des laufenden Programms mit optimierten Parametern im regulären Zukunftsszenario]{#fig:modell_screenshot}
+![Bildschirmfoto des laufenden Programms mit optimierten Parametern im regulären Zukunftsszenario](assets/modell_screenshot_factor1.png){#fig:modell_screenshot}
 
-Zudem gibt es einen Faktor, mit dem die Steigung der Mittellinie der angenäherten Temperatur-Sinuskurve in der Zukunft multipliziert wird. Damit kann man verschiedene zukünftige Szenarien modellieren, wie schon in der Einleitung erwähnt.
+Zudem gibt es einen Faktor, mit dem die Steigung der Mittellinie der angenäherten Temperatur-Sinuskurve in der Zukunft multipliziert wird. Damit kann man verschiedene zukünftige Szenarien modellieren, wie schon in der Einleitung erwähnt. Dies wird in Abbildung \ref{fig:modell_screenshot_factor2} demonstriert.
+
+![Bildschirmfoto des laufenden Programms mit optimierten Parametern im Zukunftsszenario mit Faktor 2](assets/modell_screenshot_factor2.png){#fig:modell_screenshot_factor2}
+
+\clearpage
 
 ## Validierung
 
