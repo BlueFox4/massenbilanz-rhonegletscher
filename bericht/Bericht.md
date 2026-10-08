@@ -34,8 +34,6 @@ geometry:
 
 \tableofcontents
 
-\newpage
-
 
 # Zielsetzung
 
@@ -133,6 +131,15 @@ Damit kann aus den Messdaten der Wetterstation eine modellierte Temperaturentwic
 
 ### Niederschlag
 
+Beim Niederschlag lässt sich - betrachtet man die Jahresverläufe - zunächst keine Regelmäßigkeit ausmachen.
+
+![Gegenüberstellung der Tagesniederschläge 1994 und 2014](assets/pp_gegenueberstellung-1994-2014.png){width=70%}
+
+Kumuliert man jedoch die Tageswerte monatlich und zeichnet eine Ausgleichsgerade durch diese, erhält man eine Funktion, die den Niederschlag pro Monat in $\frac{mm}{Monat}$ annähert. Da die Daten eine hohe Streuung haben, ist dies für den einzelnen Zeitpunkt jedoch ungenau. Um zu validieren, dass zumindest die Steigung stimmt, kumuliert man nun die Regentage jährlich (da diese eine deutlich geringere Streuung aufweisen) und zeichnet auch hier eine Regressionsgerade, zeigt sich ein ähnliches Bild.
+
+![Jährliche Regentagsanzahl, Monatliche Niederschläge und die Ausgleichsgeraden](assets/pp_modelliert.png){width=70%}
+
+\clearpage
 
 ## Akkumulation
 
