@@ -6,6 +6,21 @@
 - [Zum Abgleich Modell-Wirklichkeit](https://naturwissenschaften.ch/snow-glaciers-permafrost-explained/glaciers/mass_balance/rhone)
 
 
+## Visualisierung des Modells
+
+Um das Modell auszuführen, muss schlicht folgender Code im Wurzelverzeichnis des Repositories ausgeführt werden:
+
+Vorraussetzung ist schlicht das Vorhandensein der Bibliotheken `numpy`, `matplotlib` und `scipy`, welches durch folgenden Befehl sichergestellt wird.
+
+```sh
+python3 -m pip install numpy matplotlib scipy
+```
+
+```sh
+python3 models/DGLModellierung/Zukunftsmodell.py
+```
+
+
 ## Bericht
 
 Der Bericht wird in Markdown (teilweise mit eingebettetem [LaTeX](https://www.latex-project.org/)) geschrieben und anschließend mit [Pandoc](https://pandoc.org/) in eine PDF umgewandelt.
