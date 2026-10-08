@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # --------------------------------------------------------------------------------------------- #
 
 # Daten aus CSV-Datei einlesen
-with open("data/data_year.csv", "r") as file:
+with open("../../data/data_year.csv", "r") as file:
     jahre = [line.strip().split(",") for line in file]
 
 # Kopfzeile entfernen
@@ -90,7 +90,7 @@ fit_pp_days_line = np.polyval(
 
 
 days = []
-with open("data/data_all.csv") as file:
+with open("../../data/data_all.csv") as file:
     entries = file.readlines()
     for entry in entries:
         days.append([e.strip() for e in entry.split(",")])
