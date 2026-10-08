@@ -8,10 +8,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider, Button, CheckButtons
 
-
-# ============================================================
 # EIGENE DATEIEN IMPORTIEREN
-# ============================================================
 
 aktuelle_datei = Path(__file__).resolve()
 ueberordner = aktuelle_datei.parent.parent
@@ -24,7 +21,6 @@ if str(temperatur_ordner) not in sys.path:
 
 import temperaturRechner as TR
 
-
 # Niederschlagsmodell
 niederschlag_ordner = ueberordner / "Niederschlagsmodellierung"
 
@@ -33,37 +29,24 @@ if str(niederschlag_ordner) not in sys.path:
 
 import niederschlagsrechner as pp_calc
 
-
-# ============================================================
 # DATEI
-# ============================================================
 
 CSV_DATEI = aktuelle_datei.parent / "../../data/data_all.csv"
 
-
-# ============================================================
 # KALIBRIERTE STANDARDWERTE
-# ============================================================
 
 C_STANDARD = 1.4125375446227554e-06
 D_STANDARD = 0.005623413251903491
 F_STANDARD = 4.4668359215096345
 
-T0 = 2.0
+T0 = 2.0    #Gletscherschmelze bzw. Schneeakkumulation (Temperatur)
 
-
-# ============================================================
 # TEMPERATURFAKTOR
-# ============================================================
-
 TEMP_FAKTOR_STANDARD = 1.0
 TEMP_FAKTOR_MIN = 0.0
 TEMP_FAKTOR_MAX = 2.0
 
-
-# ============================================================
 # ZEITRAUM
-# ============================================================
 
 START_JAHR = 1955
 LETZTES_HISTORISCHES_JAHR = 2023
@@ -78,17 +61,14 @@ DT = 1.0 / 366.0
 TEMPERATUR_SINCE = 1999
 NIEDERSCHLAG_SINCE = 1999
 
-
-# ============================================================
 # HÖHENMODELL
-# ============================================================
 
 STATIONS_HOEHE = 482.0
 
 GLETSCHER_MIN = 2200.0
 GLETSCHER_MAX = 3600.0
 
-# HIER könnt ihr die Auflösung ändern:
+#! Veränderung der Höhenschritte
 HOEHEN_SCHRITT_M = 100.0
 
 LAPSE_RATE = 0.0065
@@ -118,14 +98,10 @@ def erstelle_hoehen():
 
     return hoehen
 
-
 HOEHEN = erstelle_hoehen()
 
-
-# ============================================================
 # GEMESSENE GLETSCHERMASSEN
 # Mrd. Tonnen
-# ============================================================
 
 GEMESSENE_MASSE_MRD_T = {
     1955: 2.16011516,
@@ -148,10 +124,7 @@ GEMESSENE_MASSE_MRD_T = {
     2020: 1.809869211
 }
 
-
-# ============================================================
 # CSV EINLESEN
-# ============================================================
 
 def lade_rohdaten():
 
@@ -161,8 +134,7 @@ def lade_rohdaten():
         )
 
     df = pd.read_csv(
-        CSV_DATEI,
-        na_values=["-", "", "NA", "NaN"]
+        CSV_DATEI, na_values=["-", "", "NA", "NaN"]
     )
 
     benoetigt = [
@@ -215,17 +187,12 @@ def lade_rohdaten():
 
 rohdaten = lade_rohdaten()
 
-
-# ============================================================
 # HISTORISCHE DGL-DATEN
-#
 # GANZ WICHTIG:
 # Hier werden NUR die tatsächlich vorhandenen CSV-Tage benutzt.
 # Komplett fehlende Jahre werden NICHT künstlich ergänzt.
-#
 # Genau so bleibt die Rechnung mit den kalibrierten Parametern
 # vergleichbar.
-# ============================================================
 
 hist_df = rohdaten[
     (rohdaten["Datum"] >= pd.Timestamp(f"{START_JAHR}-01-01"))
@@ -239,10 +206,7 @@ hist_df = (
            .reset_index(drop=True)
 )
 
-
-# ============================================================
 # EINZELNE FEHLENDE PP-WERTE AUF VORHANDENEN TAGEN ERGÄNZEN
-# ============================================================
 
 hist_df["MonatTag"] = (
     hist_df["Datum"].dt.strftime("%m-%d")
@@ -301,10 +265,7 @@ print(
     f"{fehlende_pp} einzelne PP-Lücken ergänzt."
 )
 
-
-# ============================================================
 # ZUKUNFTSACHSE
-# ============================================================
 
 future_dates = pd.date_range(
     f"{ERSTES_ZUKUNFTSJAHR}-01-01",
@@ -312,13 +273,9 @@ future_dates = pd.date_range(
     freq="D"
 )
 
-
-# ============================================================
 # DGL-ZEITACHSE:
-#
 # Vergangenheit = nur vorhandene CSV-Tage
 # Zukunft      = jeder Kalendertag
-# ============================================================
 
 dgl_dates = pd.DatetimeIndex(
     list(hist_df["Datum"])
@@ -344,10 +301,8 @@ dgl_hist_maske = np.arange(
 dgl_future_maske = ~dgl_hist_maske
 
 
-# ============================================================
 # NIEDERSCHLAGSMODELL 1955–2100 FÜR DEN VERGLEICHSGRAPHEN
 # UND FÜR DIE ZUKUNFT DER DGL
-# ============================================================
 
 alle_tage = pd.date_range(
     f"{START_JAHR}-01-01",
@@ -439,13 +394,10 @@ print(
     f"{time.time() - start_zeit:.2f} s"
 )
 
-
-# ============================================================
 # DGL-NIEDERSCHLAG
 #
 # Historie: echte CSV-Werte
 # Zukunft: Modell
-# ============================================================
 
 PP_DGL_m = np.empty(
     n_dgl,
@@ -471,10 +423,7 @@ PP_DGL_m[
     future_mask_alle
 ]
 
-
-# ============================================================
 # JAHRESWERTE NIEDERSCHLAG
-# ============================================================
 
 jahre_plot = np.arange(
     START_JAHR,
@@ -510,7 +459,6 @@ pp_modell_jahr = np.array(
     pp_modell_jahr
 )
 
-
 # Messung
 pp_mess_jahr = np.full(
     len(jahre_plot),
@@ -536,10 +484,7 @@ for i, jahr in enumerate(
             gruppe["PP"].sum()
         )
 
-
-# ============================================================
 # GEMESSENE TEMPERATUR AUF 2900 m
-# ============================================================
 
 temp_mess_datum = []
 temp_mess_jahr = []
@@ -586,10 +531,7 @@ temp_mess_jahr = np.array(
     dtype=float
 )
 
-
-# ============================================================
 # TEMPERATURMODELL + DGL-TERME
-# ============================================================
 
 T_station_dgl = None
 T_baender_dgl = None
@@ -624,10 +566,7 @@ def berechne_temperatur_und_terme(
 
     start = time.time()
 
-
-    # --------------------------------------------------------
     # 1. Temperatur nur für die DGL-Tage
-    # --------------------------------------------------------
 
     station_dgl = np.empty(
         n_dgl,
@@ -642,9 +581,8 @@ def berechne_temperatur_und_terme(
             float(t),
             STATIONS_HOEHE,
             TEMPERATUR_SINCE,
-            # float(faktor)
+            float(faktor)
         )
-
 
     hoehenkorrektur = (
         LAPSE_RATE
@@ -659,10 +597,7 @@ def berechne_temperatur_und_terme(
         - hoehenkorrektur[None, :]
     )
 
-
-    # --------------------------------------------------------
     # 2. DGL-Terme
-    # --------------------------------------------------------
 
     schnee_anteil = np.mean(
         baender_dgl <= T0,
@@ -694,14 +629,11 @@ def berechne_temperatur_und_terme(
         * PP_DGL_m
     )
 
-
-    # --------------------------------------------------------
     # 3. Temperaturmodell für Jahresgraph
     #
     # Nur 12 repräsentative Monatspunkte pro Jahr statt
     # 53.000 zusätzliche Funktionsaufrufe.
     # Das macht Faktor-Änderungen deutlich schneller.
-    # --------------------------------------------------------
 
     temp_jahreswerte = []
 
@@ -735,7 +667,7 @@ def berechne_temperatur_und_terme(
                 float(t),
                 STATIONS_HOEHE,
                 TEMPERATUR_SINCE,
-                # float(faktor)
+                float(faktor)
             )
 
             T_2900 = (
@@ -756,7 +688,6 @@ def berechne_temperatur_und_terme(
                 monatswerte
             )
         )
-
 
     T_station_dgl = station_dgl
     T_baender_dgl = baender_dgl
@@ -784,15 +715,9 @@ berechne_temperatur_und_terme(
     TEMP_FAKTOR_STANDARD
 )
 
-
-# ============================================================
 # MASSENSIMULATION
 #
 # Ein Euler-Schritt PRO VORHANDENER HISTORISCHER CSV-ZEILE.
-#
-# Genau dadurch werden komplett fehlende Jahre nicht
-# künstlich in die historische Kalibrierung hineingerechnet.
-# ============================================================
 
 def simuliere(
     c,
@@ -839,10 +764,7 @@ def simuliere(
         delta_tag
     )
 
-
-# ============================================================
 # MASSENWERTE PRO JAHR FÜR RMSE / AUSGABE
-# ============================================================
 
 def jahresendmassen(
     masse
@@ -902,10 +824,7 @@ def jahresendmassen(
 
     return werte
 
-
-# ============================================================
 # RMSE
-# ============================================================
 
 mess_jahre = np.array(
     sorted(
@@ -994,10 +913,7 @@ def berechne_rmse(
         )
     )
 
-
-# ============================================================
 # ERSTE SIMULATION
-# ============================================================
 
 masse, bilanz, delta_tag = simuliere(
     C_STANDARD,
@@ -1006,12 +922,9 @@ masse, bilanz, delta_tag = simuliere(
 )
 
 
-# ============================================================
 # PLOT-DATEN DER MASSE
-#
 # Wieder feiner statt nur 1 Punkt/Jahr.
 # Jeder 7. Berechnungsschritt reicht für eine glatte Darstellung.
-# ============================================================
 
 PLOT_SCHRITT = 7
 
@@ -1038,10 +951,7 @@ future_plot_idx = (
     )
 )
 
-
-# ============================================================
 # JÄHRLICHE MASSENBILANZ
-# ============================================================
 
 def bilanz_jahr_werte(
     delta_tag
@@ -1117,7 +1027,6 @@ def bilanz_jahr_werte(
         )
     )
 
-
 bilanz_jahre, bilanz_jahr = (
     bilanz_jahr_werte(
         delta_tag
@@ -1159,10 +1068,7 @@ else:
         >= ERSTES_ZUKUNFTSJAHR
     )[0]
 
-
-# ============================================================
 # DIAGRAMM
-# ============================================================
 
 fig, ax_masse = plt.subplots(
     figsize=(20, 11)
@@ -1187,20 +1093,14 @@ ax_pp.spines["right"].set_position(
     ("axes", 1.21)
 )
 
-
-# ============================================================
 # FARBEN
-# ============================================================
 
 FARBE_MASSE = "tab:blue"
 FARBE_BILANZ = "tab:red"
 FARBE_TEMP = "tab:orange"
 FARBE_PP = "tab:green"
 
-
-# ============================================================
 # MASSE: FEIN AUFGELÖST
-# ============================================================
 
 linie_masse_hist, = ax_masse.plot(
     hist_plot_dates,
@@ -1223,10 +1123,7 @@ linie_masse_zukunft, = ax_masse.plot(
     linestyle="--"
 )
 
-
-# ============================================================
 # BILANZ
-# ============================================================
 
 linie_bilanz_hist, = ax_bilanz.plot(
     bilanz_plot_dates[
@@ -1253,13 +1150,10 @@ linie_bilanz_zukunft, = ax_bilanz.plot(
     linestyle="--"
 )
 
-
-# ============================================================
 # TEMPERATUR
 # Messung = durchgezogen
 # Modell  = überall gestrichelt
 # gleiche Farbe
-# ============================================================
 
 linie_temp_mess, = ax_temp.plot(
     temp_mess_datum,
@@ -1279,13 +1173,10 @@ linie_temp_modell, = ax_temp.plot(
     label="Temperatur Modell"
 )
 
-
-# ============================================================
 # NIEDERSCHLAG
 # Messung = durchgezogen
 # Modell  = überall gestrichelt
 # gleiche Farbe
-# ============================================================
 
 linie_pp_mess, = ax_pp.plot(
     plot_datum_jahr,
@@ -1305,10 +1196,7 @@ linie_pp_modell, = ax_pp.plot(
     label="Niederschlag Modell"
 )
 
-
-# ============================================================
 # GEMESSENE MASSE
-# ============================================================
 
 messpunkte = ax_masse.scatter(
     mess_datum,
@@ -1319,10 +1207,7 @@ messpunkte = ax_masse.scatter(
     label="Gemessene Masse"
 )
 
-
-# ============================================================
 # ZUKUNFTSGRENZE
-# ============================================================
 
 grenze = pd.Timestamp(
     "2024-01-01"
@@ -1345,10 +1230,7 @@ ax_masse.text(
     fontsize=10
 )
 
-
-# ============================================================
 # ACHSEN
-# ============================================================
 
 ax_masse.set_title(
     "Gletschermodell 1955–2100",
@@ -1417,10 +1299,7 @@ ax_bilanz.axhline(
     alpha=0.5
 )
 
-
-# ============================================================
 # LEGENDE
-# ============================================================
 
 ax_masse.legend(
     [
@@ -1445,10 +1324,7 @@ ax_masse.legend(
     fontsize=9
 )
 
-
-# ============================================================
 # INFOTEXT
-# ============================================================
 
 info_text = ax_masse.text(
     0.01,
@@ -1459,10 +1335,7 @@ info_text = ax_masse.text(
     verticalalignment="bottom"
 )
 
-
-# ============================================================
 # SLIDER
-# ============================================================
 
 ax_c = plt.axes([
     0.10,
@@ -1532,10 +1405,7 @@ slider_temp_faktor = Slider(
     valfmt="%.2f"
 )
 
-
-# ============================================================
 # BUTTONS
-# ============================================================
 
 ax_reset = plt.axes([
     0.72,
@@ -1561,10 +1431,7 @@ button_save = Button(
     "CSV speichern"
 )
 
-
-# ============================================================
 # GRAPHEN-AUSWAHL
-# ============================================================
 
 ax_graphen = plt.axes([
     0.72,
@@ -1601,10 +1468,7 @@ check_graphen = CheckButtons(
     ]
 )
 
-
-# ============================================================
 # UPDATE
-# ============================================================
 
 def aktualisieren(
     _=None
@@ -1788,10 +1652,7 @@ def aktualisieren(
 
     fig.canvas.draw_idle()
 
-
-# ============================================================
 # TEMPERATURFAKTOR NUR BEIM LOSLASSEN NEU RECHNEN
-# ============================================================
 
 def faktor_losgelassen(
     event
@@ -1823,10 +1684,7 @@ fig.canvas.mpl_connect(
     faktor_losgelassen
 )
 
-
-# ============================================================
 # CHECKBOXEN
-# ============================================================
 
 def aktualisiere_achsen():
 
@@ -1953,10 +1811,7 @@ check_graphen.on_clicked(
     graph_sichtbarkeit
 )
 
-
-# ============================================================
 # RESET
-# ============================================================
 
 def reset(
     _
@@ -1993,10 +1848,7 @@ def reset(
 
     aktualisieren()
 
-
-# ============================================================
 # CSV SPEICHERN
-# ============================================================
 
 def speichern(
     _
@@ -2027,10 +1879,7 @@ def speichern(
         "CSV gespeichert."
     )
 
-
-# ============================================================
 # EVENTS
-# ============================================================
 
 slider_c.on_changed(
     aktualisieren
@@ -2052,10 +1901,7 @@ button_save.on_clicked(
     speichern
 )
 
-
-# ============================================================
 # START
-# ============================================================
 
 aktualisieren()
 
