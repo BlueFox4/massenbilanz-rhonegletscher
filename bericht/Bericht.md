@@ -170,10 +170,13 @@ Ab einer Temperatur $T_0 = 2^{\circ}\mathrm{C}$ schmilzt der Gletscher. Wenn die
 
 $$
 A(t) = 
-M(t) \cdot d \cdot (T(t) - T_0) 
-+ PP(t) \cdot f \cdot M(t) \cdot (T(t) - T_0)
+\begin{cases}
+    PP(t) \cdot f \cdot M(t) \cdot (T(t) - T_0)
+    + M(t) \cdot d \cdot (T(t)) 
+    & \text{für } T(t) \ge T_0 \\
+    PP(t) \cdot f \cdot M(t) \cdot (T(t) - T_0) & \text{für } T(t) < T_0
+\end{cases}
 $$
-
 
 
 ## Vernachlässigung
