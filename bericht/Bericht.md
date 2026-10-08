@@ -41,6 +41,8 @@ geometry:
 
 Der Rhonegletscher ist ein Gletscher in der Schweiz, von dem bereits seit Mitte des letzten Jahrhunderts Messdaten über Länge, Breite, Höhe (Volumen) sowie über das Wetter, etwa Niederschlagmenge, Regentage, Temperatur sowie Windstärke und -richtung vorliegen. Unser Ziel liegt nun darin, im ersten Schritt ein Modell zu entwickeln, das die Massenveränderung des Gletschers historisch bestmöglich beschreibt, und dann weiter die Wetterdaten auf Basis von Saisonalitäten und Trends so in die Zukunft zu prognostizieren, auf dass man eine begründete Vermutung über die zukünftige Massenveränderung des Gletschers abgeben kann.
 
+\clearpage
+
 
 # Daten
 
@@ -60,14 +62,16 @@ Der Rhonegletscher ist ein Gletscher in der Schweiz, von dem bereits seit Mitte 
 
 Die Wetterstation, die die Daten erhoben hat, liegt etwa 90km südwestlicher Richtung vom Rhonegletscher entfernt. Dadurch ist eine gewisse Abweichung von den tatsächlichen Wetterverhältnissen am Gletscher zu erwarten.
 
-![Das Problem mit der Entfernung](assets/luftlinie_klimastation_sion_rhonegletscher.png)
+![Das Problem mit der Entfernung](assets/luftlinie_klimastation_sion_rhonegletscher.png){width=70%}
 
 Allerdings ist dieser Umstand vernachlässigbar, da die Station und der Gletscher im gleichen Tal liegen und somit den gleichen Wetterphänomenen ausgesetzt sind. 
 
-![Die Entfernung ist jedoch im gleichen Tal](assets/meteoblue.com-2026-10-07_11-38_-_wetterkarte-im-tal.png)
+![Die Entfernung ist jedoch im gleichen Tal](assets/meteoblue.com-2026-10-07_11-38_-_wetterkarte-im-tal.png){width=70%}
 
 Zudem besitzt der ursprüngliche Datensatz teilweise Lücken, die mit interpolierten Daten ausgefüllt werden mussten.
 
+
+\clearpage
 
 # Modell
 
@@ -79,7 +83,7 @@ Zunächst wird der jährliche Temperaturverlauf mithilfe einer Sinus-Funktion mo
 
 $$y = a \cdot sin(2 \pi \cdot \frac{(x-c)}{b}) + d$$
 
-![Durchschnittsjahr 1955-2025](assets/temp_avg_all_years.png)
+![Durchschnittsjahr 1955-2025](assets/temp_avg_all_years.png){width=70%}
 
 Nun werden programmatisch numerisch optimierte Parameter für jedes Jahr gefunden. 
 
@@ -87,9 +91,13 @@ Nun werden programmatisch numerisch optimierte Parameter für jedes Jahr gefunde
 
 $$y = a_{regr}(t) \cdot sin(2 \pi \cdot \frac{(x-c_{regr}(t))}{b_{regr}(t)}) + d_{regr}(t)$$
 
-![Parameterentwicklung ($b, c = const.$)](assets/temp_params_development.png)
+![Parameterentwicklung ($b, c = const.$)](assets/temp_params_development.png){width=70%}
+
+\clearpage
 
 Je nachdem, seit wann man die Regressionsgerade bildet, ergeben sich unterschiedliche Steigungen, wir gehen jedoch von einer 30-jährigen Klimaperiode aus und haben Daten bis 2024 - daraus folgt eine Regression über alle Jahresparameter von 1994 bis 2024.
+
+![Modellierte Temperaturentwicklung mit Daten seit 1994 und 2014](assets/temp_modelled_twice.png){width=70%}
 
 
 ### Niederschlag
@@ -119,6 +127,8 @@ Wir vernachlässigen die Einflüsse von
 - Wind
 - Hangneigung
 - der konstanten Sublimation
+
+\clearpage
 
 
 # Fazit
