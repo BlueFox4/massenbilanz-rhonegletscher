@@ -104,10 +104,6 @@ Beispielhaft sind im Folgenden die ermittelten Parameter und die daraus resultie
 
 Auf Grundlage der Parameter $a$, $b$, $c$ und $d$ lässt sich anschließend jeweils eine Regressionsgerade bestimmen. Diese beschreibt die zeitliche Entwicklung der einzelnen Parameter und kann verwendet werden, um den Temperaturverlauf zukünftiger Jahre zu modellieren:
 
-$$
-y = a_{\mathrm{regr}}(t) \cdot \sin\left(2\pi \cdot \frac{x-c_{\mathrm{regr}}(t)}{b_{\mathrm{regr}}(t)}\right) + d_{\mathrm{regr}}(t)
-$$
-
 ![Entwicklung der Parameter $a$, $b$, $c$ und $d$](assets/temp_params_development.png){width=70%}
 
 Die Entwicklung der Parameter lässt sich unter Berücksichtigung ihrer jeweiligen Bedeutung wie folgt interpretieren:
@@ -125,6 +121,15 @@ In der folgenden Abbildung sind die Regressionsgeraden für einen Zeitraum ab 20
 
 ![Modellierte Temperaturentwicklung mit Daten seit 1994 und 2014](assets/temp_modelled_twice.png){width=70%}
 
+Zusammenfassend kann das Programm zur Berechnung der Massenbilanz nun für jeden beliebigen Zeitpunkt eine modellierte Temperatur bestimmen. Dazu wird zunächst der Zeitpunkt innerhalb des Jahres bestimmt und anschließend mit den für das jeweilige Jahr ermittelten Regressionsparametern die entsprechende Temperatur berechnet. Daraus ergibt sich die folgende Funktion:
+
+$$
+T = a_{\mathrm{regr}}(t) \cdot \sin\left(2\pi \cdot \frac{x-c_{\mathrm{regr}}(t)}{b_{\mathrm{regr}}(t)}\right) + d_{\mathrm{regr}}(t)
+$$
+
+Die zugrunde liegenden Messdaten stammen von einer Wetterstation auf einer Höhe von $482,\mathrm{m}$. Der betrachtete Gletscher beginnt jedoch erst auf einer Höhe von etwa $2200,\mathrm{m}$, sodass dort von einer deutlich niedrigeren Temperatur auszugehen ist. Um diesen Höhenunterschied im Modell zu berücksichtigen, wird eine Temperaturabnahme von $0{,}65,^\circ\mathrm{C}$ pro $100,\mathrm{m}$ Höhenzunahme angenommen.
+
+Damit kann aus den Messdaten der Wetterstation eine modellierte Temperaturentwicklung für die Höhe des Gletschers abgeleitet werden. Diese dient anschließend als Grundlage für die weitere Berechnung der Massenbilanz.
 
 ### Niederschlag
 
