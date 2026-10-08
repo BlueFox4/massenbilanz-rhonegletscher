@@ -1,5 +1,4 @@
 import json
-from pathlib import Path
 
 import sys
 from pathlib import Path
@@ -13,7 +12,7 @@ ueberordner = aktuelle_datei.parent.parent
 
 # 3. Den Pfad zum Zielordner zusammensetzen
 ziel_ordner_pfad = ueberordner / "Temperaturmodellierung"
-
+print(ziel_ordner_pfad)
 # 4. Den Zielordner zu den Python-Suchpfaden hinzufügen
 sys.path.append(str(ziel_ordner_pfad))
 

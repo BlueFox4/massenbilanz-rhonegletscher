@@ -2,7 +2,7 @@
 import math
 import numpy as np
 from datetime import date, timedelta
-import spezifischesJahr.besteParameterEntwicklung as params
+from spezifischesJahr import besteParameterEntwicklung as params
 
 def f(x, a, b, c , d):
     return a*np.sin(2*np.pi*(x-c)/b)+d
