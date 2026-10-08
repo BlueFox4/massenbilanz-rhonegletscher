@@ -26,7 +26,6 @@ def Massen(temp, pp, mass, c, d, f, change_velocity):
             snow = 0
             not_freeze = 0
         new_mass = new_mass + change_velocity * (1 / 14) * (new_mass * (snow * pp * c - (not_freeze * temp * (d + pp * f))))
-        print(new_mass)
 
     return new_mass
 
@@ -80,8 +79,10 @@ def calc(c, d, f, ch_vel):
             aktuelle_masse = Startmasse
 
         # nach gemessenen DAten: aktuelle_masse = Massen(avg_temp[i], avg_pp[i], aktuelle_masse, c, d, f, ch_vel)
-        aktuelle_masse = Massen(temperaturRechner.erhalteTemperatur(datenum, 2200, 1994, 1), niederschlagsrechner.erhalteNiederschlagstageTrend(datenum, 1994), aktuelle_masse, c, d, f, ch_vel)
+        aktuelle_masse = Massen(temperaturRechner.erhalteTemperatur(datenum, 2200, 1994, factor=1), niederschlagsrechner.erhalteNiederschlagstageTrend(datenum, 1994), aktuelle_masse, c, d, f, ch_vel)
         masse.append(aktuelle_masse)
+
+        print(temperaturRechner.erhalteTemperatur(datenum, 2200, 1994, factor=1))
         datenum = datenum + (1 / 366)
         print(i, aktuelle_masse)
 
@@ -104,9 +105,15 @@ x_vals = []
 for i in range(365, 9132, 365):
     x_vals.append(i)
 compare, = ax.plot(x_vals, tats_masse, marker="x")
+
 rain_data =[]
+
+
+
 for i in avg_pp:
     rain_data.append(i * 10000)
+
+
 rain, = ax.plot(rain_data, marker="o", linestyle="none")
 
 fig.subplots_adjust(bottom=0.2)
