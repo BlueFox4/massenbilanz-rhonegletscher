@@ -185,13 +185,14 @@ $$
 
 In die derzetige Modellierung fließen bis dato nur die Temperatur und der Niederschlag ein. Dies scheint zwar eine soweit suffiziente Modellierung herzubieten, aber es ist davon auszugehen, dass der Einbezug weiterer Faktoren an dieser Stelle doch eine bessere Abbildung der Realität ermöglichen würde:
 
-TODO:
-- Breite nicht wirklich konstant
-- Luftfeuchtigkeit
-- Direkter Sonneneinstrahlung / Albedo
-- Wind
-- Hangneigung
-- der konstanten Sublimation
+So gehen wir wie oben beschrieben von einem geometrischen Ideal des Gletschers aus, in dem die Breite wegen der Berge konstant und ebenso das Verhältnis von Höhe zu Länge des Gletschers konstant ist, was es uns weiter erlaubt eine direkte Proportionalität von Masse und Oberfläche anzunehmen. Dabei werden die realen Gegebenheiten vernachlässigt, eine Ungenauigkeit, die allerdings zumindest im Ansatz durch unsere optimierten Vorfaktoren abgedeckt wird.
+
+Weiter wird nur der Einfluss der Umgebungstemperatur auf den Schmelzvorgang berücksichtigt, nicht aber der Einfluss der direkten Sonneneinstrahlung, welche durch die thermische Absorption des Schnees den Schmelzvorgang weiter beschleunigen und weiter wohl zur Sublimation, also dem direkten Übergang von Eis zu Wasserdampf, durch das Auflösen etwaiger Wasserstoffbrücken führen würde. Der Vorfaktor der Umgebungstemperatur spiegelt diesen Umstand nur bediengt wieder.
+
+Durch Wind und andere Faktoren wie etwa Lawinen werden Schneemassen, die nicht direkt durch Schneefall auf dem Gletscher entstehen, auf diesen verschoben, aber auch von diesem entfernt. Unter der Erwartung, dass die Verschiebung auf den Gletscher nicht nennenswert größer ist als die Verschiebung von dem Gletscher ab. Vernachlässigt dieses Modell diesen Umstand insofern, dass kein eigener Term dafür auftaucht. Eine Näherung gelingt auch hier vorrangig durch die optimierten Vorfaktoren.
+
+Die Niederschlagsmodellierung, die vorrangig für die Prognostion der zukünftigen Masse des Gletschers nötig ist, nimmt eine Unabhängigkeit von der Temperatur an. Tatsächlich ist allerdings eine proportionale Relation zwischen Temperatur und Niederschlag bekannt, die somit vernachlässigt wird. Somit fließt zwar der grobe Trend, nicht aber die innerjährliche Fluktuation in das Modell ein und auch dieser [der Trend] nur in indirekter Berücksichtigung der veränderlichen Temperaturprognose.
+
 
 \clearpage
 
