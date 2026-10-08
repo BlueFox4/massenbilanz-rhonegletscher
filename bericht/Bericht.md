@@ -125,11 +125,13 @@ Die Wetterstation, die die Daten erhoben hat, liegt etwa 90km südwestlicher Ric
 
 ![Das Problem mit der Entfernung [@luftlinie]](assets/luftlinie_klimastation_sion_rhonegletscher.png){width=70%}
 
-Allerdings ist dieser Umstand vernachlässigbar, da die Station und der Gletscher im gleichen Tal liegen und somit den gleichen Wetterphänomenen ausgesetzt sind. 
+Allerdings ist dieser Umstand vernachlässigbar, da die Station und der Gletscher im gleichen Tal liegen und somit etwa den gleichen klimatischen Phänomenen ausgesetzt sind. 
 
 ![Die Entfernung ist jedoch im gleichen Tal [@temperatur-rhonetal]](assets/meteoblue.com-2026-10-07_11-38_-_wetterkarte-im-tal.png){width=70%}
 
 Zudem besitzt der ursprüngliche Datensatz teilweise Lücken, die mit interpolierten Daten ausgefüllt werden mussten.
+
+Es ist denkbar, dass eine Annäherung mittels eines metereologischen Modells eines renomierten Instituts bessere Daten liefen würde, als durch die durchaus weit entfernte Wetterstation.
 
 
 \clearpage
