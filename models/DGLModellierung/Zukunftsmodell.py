@@ -1451,10 +1451,10 @@ grenze = pd.Timestamp(
 
 ax_masse.axvline(
     grenze,
-    color="black",
+    color="white",
     linestyle=":",
     linewidth=1.7,
-    alpha=0.8
+    alpha=0.9
 )
 
 ax_masse.text(
@@ -1580,7 +1580,7 @@ info_text = ax_masse.text(
     0.02,
     "",
     transform=ax_masse.transAxes,
-    fontsize=10,
+    fontsize=8,
     verticalalignment="bottom"
 )
 
@@ -1808,13 +1808,15 @@ if hasattr(check_graphen, "set_frame_props"):
     check_graphen.set_frame_props({
         "edgecolor": "white",
         "facecolor": "black",
-        "linewidth": 1.8
+        "linewidth": 2.0,
+        "s": 95
     })
 
 if hasattr(check_graphen, "set_check_props"):
     check_graphen.set_check_props({
         "color": "white",
-        "linewidth": 2.6
+        "linewidth": 3.0,
+        "s": 75
     })
 
 # Kompatibilitaet mit aelteren Matplotlib-Versionen
@@ -1822,13 +1824,13 @@ if hasattr(check_graphen, "rectangles"):
     for rect in check_graphen.rectangles:
         rect.set_facecolor("black")
         rect.set_edgecolor("white")
-        rect.set_linewidth(1.8)
+        rect.set_linewidth(2.0)
 
 if hasattr(check_graphen, "lines"):
     for pair in check_graphen.lines:
         for line in pair:
             line.set_color("white")
-            line.set_linewidth(2.6)
+            line.set_linewidth(3.0)
 
 # ============================================================
 # UPDATE
