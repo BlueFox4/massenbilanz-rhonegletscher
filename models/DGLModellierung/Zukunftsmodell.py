@@ -76,6 +76,7 @@ M_START = 2160111516.0  # Tonnen
 DT = 1.0 / 366.0
 
 TEMPERATUR_SINCE = 1994
+TEMPERATUR_UNTIL = 2024
 NIEDERSCHLAG_SINCE = 1994
 
 
@@ -638,23 +639,28 @@ temp_mess_jahr = np.array(
 # ============================================================
 # TEMPERATURMODELL + DGL-TERME
 #
-# OPTIMIERUNG:
-# Temperaturfunktion endet mit:
+# WICHTIG:
+# Der Temperaturfaktor wird innerhalb der Temperaturfunktion
+# verarbeitet, genauer im zeitabhängigen d-Parameter der
+# Sinusfunktion.
 #
-#     return temperatur * factor
+# Deshalb darf NICHT mehr einfach
 #
-# Deshalb wird die teure Basistemperatur nur EINMAL mit
-# factor=1 berechnet. Danach gilt exakt:
+#     T_neu = T_basis * faktor
 #
-#     T(factor) = T_basis * factor
+# gerechnet werden.
 #
-# Wichtig: Die Höhenkorrektur wird zuerst in T_basis
-# eingerechnet und DANACH mit dem Faktor multipliziert.
+# Bei jeder Faktoränderung wird erhalteTemperatur(...) erneut
+# mit since, until und factor aufgerufen.
+#
+# Die Trennung zwischen Vergangenheit und Zukunft liegt jetzt
+# vollständig im Temperaturmodell selbst.
+#
+# Zur Beschleunigung wird die externe Funktion trotzdem nur
+# EINMAL pro Tag auf Stationshöhe aufgerufen. Die Temperaturen
+# der Höhenbänder werden danach mit NumPy aus dem bekannten
+# Höhengradienten berechnet.
 # ============================================================
-
-T_station_basis = None
-T_baender_basis = None
-TEMP_MODELL_JAHR_BASIS = None
 
 T_station_dgl = None
 T_baender_dgl = None
@@ -667,53 +673,136 @@ F_TERM = None
 AKTUELLER_TEMP_FAKTOR = None
 
 
-def berechne_basis_temperatur():
+def berechne_temperatur_und_terme(faktor):
     """
-    Führt das externe Temperaturmodell nur einmal mit factor=1 aus.
-    Danach können beliebige Faktoren sehr schnell angewendet werden.
+    Berechnet bei jeder Änderung des Temperaturfaktors
+    die Temperaturfunktion vollständig neu.
+
+    Das Temperaturmodell bekommt direkt:
+        since = TEMPERATUR_SINCE
+        until = TEMPERATUR_UNTIL
+        factor = aktueller Sliderwert
+
+    Die Trennung zwischen Vergangenheit und Zukunft wird
+    ausschließlich von erhalteTemperatur(...) behandelt.
+
+    Anschließend werden die temperaturabhängigen DGL-Terme
+    A_TERM, D_TERM und F_TERM neu berechnet.
     """
 
-    global T_station_basis
-    global T_baender_basis
-    global TEMP_MODELL_JAHR_BASIS
+    global T_station_dgl
+    global T_baender_dgl
+    global TEMP_MODELL_JAHR
 
-    print("Berechne Basistemperatur einmalig (factor=1) ...")
+    global A_TERM
+    global D_TERM
+    global F_TERM
+
+    global AKTUELLER_TEMP_FAKTOR
+
+    faktor = float(faktor)
+
+    print(
+        f"Berechne Temperaturmodell mit Faktor "
+        f"{faktor:.2f} ..."
+    )
 
     start_zeit = time.time()
 
+    # --------------------------------------------------------
     # 1. Temperatur auf Stationshöhe für alle DGL-Tage
-    station_basis = np.empty(
+    #
+    # Der Faktor wird IN der Temperaturfunktion verarbeitet.
+    # --------------------------------------------------------
+
+    station_dgl = np.empty(
         n_dgl,
         dtype=float
     )
 
     for i, t in enumerate(dgl_t):
-        station_basis[i] = TR.erhalteTemperatur(
+
+        # Vergangenheit/Zukunft wird vollständig im Temperaturmodell behandelt.
+        station_dgl[i] = TR.erhalteTemperatur(
             float(t),
             STATIONS_HOEHE,
             TEMPERATUR_SINCE,
-            1.0
+            TEMPERATUR_UNTIL,
+            faktor
         )
 
-    # 2. Höhenkorrektur EINMAL anwenden
+    # --------------------------------------------------------
+    # 2. Temperaturen der Höhenbänder
+    #
+    # Nur die Stations-Temperatur muss teuer neu berechnet
+    # werden. Der lineare Höhengradient bleibt unabhängig
+    # vom Faktor und kann schnell per NumPy angewendet werden.
+    # --------------------------------------------------------
+
     hoehenkorrektur = (
         LAPSE_RATE
-        * (HOEHEN - STATIONS_HOEHE)
+        * (
+            HOEHEN
+            - STATIONS_HOEHE
+        )
     )
 
-    baender_basis = (
-        station_basis[:, None]
+    baender_dgl = (
+        station_dgl[:, None]
         - hoehenkorrektur[None, :]
     )
 
-    # 3. Jahreskurve des Temperaturmodells einmal mit factor=1
-    temp_jahreswerte_basis = []
+    # --------------------------------------------------------
+    # 3. Temperaturabhängige DGL-Terme
+    # --------------------------------------------------------
+
+    schnee_anteil = np.mean(
+        baender_dgl <= T0,
+        axis=1
+    )
+
+    positive_temp = np.maximum(
+        baender_dgl - T0,
+        0.0
+    )
+
+    schmelztemperatur = np.mean(
+        positive_temp,
+        axis=1
+    )
+
+    neues_A = (
+        K_AKK
+        * PP_DGL_m
+        * schnee_anteil
+    )
+
+    neues_D = (
+        schmelztemperatur
+    )
+
+    neues_F = (
+        schmelztemperatur
+        * PP_DGL_m
+    )
+
+    # --------------------------------------------------------
+    # 4. Jahreskurve des Temperaturmodells auf 2900 m
+    #
+    # Für die Darstellung genügen 12 repräsentative
+    # Monatswerte pro Jahr.
+    # --------------------------------------------------------
+
+    temp_jahreswerte = []
 
     for jahr in jahre_plot:
 
         monatswerte = []
 
-        for monat in range(1, 13):
+        for monat in range(
+            1,
+            13
+        ):
 
             tage_monat = calendar.monthrange(
                 int(jahr),
@@ -728,114 +817,54 @@ def berechne_basis_temperatur():
 
             t = (
                 jahr
-                + (datum.dayofyear - 1) / 366.0
+                + (
+                    datum.dayofyear - 1
+                ) / 366.0
             )
 
-            # Direkt auf 2900 m, factor=1
-            T_2900_basis = TR.erhalteTemperatur(
+            T_2900 = TR.erhalteTemperatur(
                 float(t),
                 2900.0,
                 TEMPERATUR_SINCE,
-                1.0
+                TEMPERATUR_UNTIL,
+                faktor
             )
 
             monatswerte.append(
-                T_2900_basis
+                T_2900
             )
 
-        temp_jahreswerte_basis.append(
-            np.mean(monatswerte)
+        temp_jahreswerte.append(
+            np.mean(
+                monatswerte
+            )
         )
 
-    T_station_basis = station_basis
-    T_baender_basis = baender_basis
+    # --------------------------------------------------------
+    # Erst nach erfolgreicher Berechnung globale Werte ersetzen
+    # --------------------------------------------------------
 
-    TEMP_MODELL_JAHR_BASIS = np.array(
-        temp_jahreswerte_basis,
+    T_station_dgl = station_dgl
+    T_baender_dgl = baender_dgl
+
+    A_TERM = neues_A
+    D_TERM = neues_D
+    F_TERM = neues_F
+
+    TEMP_MODELL_JAHR = np.array(
+        temp_jahreswerte,
         dtype=float
-    )
-
-    print(
-        f"Basistemperatur fertig: "
-        f"{time.time() - start_zeit:.2f} s"
-    )
-
-
-def berechne_temperatur_und_terme(faktor):
-    """
-    Sehr schnelle Faktoränderung:
-    keine Aufrufe von TR.erhalteTemperatur mehr.
-    """
-
-    global T_station_dgl
-    global T_baender_dgl
-    global TEMP_MODELL_JAHR
-
-    global A_TERM
-    global D_TERM
-    global F_TERM
-
-    global AKTUELLER_TEMP_FAKTOR
-
-    start_zeit = time.time()
-
-    faktor = float(faktor)
-
-    # Exakt äquivalent zur Originalfunktion:
-    # (Temperatur nach Höhenkorrektur) * factor
-    T_station_dgl = (
-        T_station_basis * faktor
-    )
-
-    T_baender_dgl = (
-        T_baender_basis * faktor
-    )
-
-    TEMP_MODELL_JAHR = (
-        TEMP_MODELL_JAHR_BASIS * faktor
-    )
-
-    # DGL-Terme neu bestimmen
-    schnee_anteil = np.mean(
-        T_baender_dgl <= T0,
-        axis=1
-    )
-
-    positive_temp = np.maximum(
-        T_baender_dgl - T0,
-        0.0
-    )
-
-    schmelztemperatur = np.mean(
-        positive_temp,
-        axis=1
-    )
-
-    A_TERM = (
-        K_AKK
-        * PP_DGL_m
-        * schnee_anteil
-    )
-
-    D_TERM = schmelztemperatur
-
-    F_TERM = (
-        schmelztemperatur
-        * PP_DGL_m
     )
 
     AKTUELLER_TEMP_FAKTOR = faktor
 
     print(
-        f"Temperaturfaktor {faktor:.2f} angewendet: "
-        f"{time.time() - start_zeit:.4f} s"
+        f"Temperaturmodell fertig: "
+        f"{time.time() - start_zeit:.2f} s"
     )
 
 
-# Teure Berechnung nur einmal beim Start
-berechne_basis_temperatur()
-
-# Standardfaktor anwenden
+# Beim Programmstart einmal mit dem Standardfaktor berechnen
 berechne_temperatur_und_terme(
     TEMP_FAKTOR_STANDARD
 )
@@ -1408,7 +1437,7 @@ ax_masse.text(
 # ============================================================
 
 ax_masse.set_title(
-    "Gletschermodell 1955–2100",
+    "Gletschermodell 1955–2100\nM'(t) = M(t)*(PP(t)*c - (T(t) - T_0)(d+PP(t)*f))",
     fontsize=19
 )
 
@@ -1580,33 +1609,12 @@ ax_temp_faktor = plt.axes([
 
 slider_temp_faktor = Slider(
     ax_temp_faktor,
-    "",
+    "Temp.-Faktor",
     TEMP_FAKTOR_MIN,
     TEMP_FAKTOR_MAX,
     valinit=TEMP_FAKTOR_STANDARD,
     valstep=0.01,
     valfmt="%.2f"
-)
-
-slider_temp_faktor.label.set_text(
-    "Temp.-Faktor\n"
-    "T = (a · sin(2π(x-c)/b) + d) · Faktor"
-)
-
-slider_temp_faktor.label.set_position(
-    (0.5, 1.35)
-)
-
-slider_temp_faktor.label.set_horizontalalignment(
-    "center"
-)
-
-slider_temp_faktor.label.set_verticalalignment(
-    "bottom"
-)
-
-slider_temp_faktor.label.set_fontsize(
-    10
 )
 
 # ============================================================
@@ -1866,7 +1874,11 @@ def aktualisieren(
 
 
 # ============================================================
-# TEMPERATURFAKTOR NUR BEIM LOSLASSEN NEU RECHNEN
+# TEMPERATURFAKTOR
+#
+# Erst beim Loslassen des Sliders wird die Temperaturfunktion
+# mit dem neuen Faktor erneut berechnet. Ab wann der Faktor
+# wirkt, regelt das Temperaturmodell über TEMPERATUR_UNTIL.
 # ============================================================
 
 def faktor_losgelassen(
@@ -1883,6 +1895,8 @@ def faktor_losgelassen(
     ):
         return
 
+    # Der Faktor wird direkt an das Temperaturmodell übergeben.
+    # Ab wann er wirkt, regelt erhalteTemperatur(...) selbst.
     berechne_temperatur_und_terme(
         neuer_faktor
     )
@@ -1891,6 +1905,8 @@ def faktor_losgelassen(
         TEMP_MODELL_JAHR
     )
 
+    # Danach Masse und Massenbilanz mit den neuen
+    # Temperaturwerten neu bestimmen.
     aktualisieren()
 
 
