@@ -48,6 +48,7 @@ C_STANDARD = 1.4125375446227554e-06
 D_STANDARD = 0.005623413251903491
 F_STANDARD = 4.4668359215096345
 
+
 T0 = 2.0
 
 
@@ -88,7 +89,6 @@ STATIONS_HOEHE = 482.0
 GLETSCHER_MIN = 2200.0
 GLETSCHER_MAX = 3600.0
 
-# HIER könnt ihr die Auflösung ändern:
 HOEHEN_SCHRITT_M = 100.0
 
 LAPSE_RATE = 0.0065
@@ -1404,7 +1404,7 @@ messpunkte = ax_masse.scatter(
     mess_masse,
     s=45,
     color="black",
-    zorder=10,
+    zorder=2,
     label="Gemessene Masse"
 )
 
@@ -1513,7 +1513,7 @@ ax_bilanz.axhline(
 # LEGENDE
 # ============================================================
 
-ax_masse.legend(
+legende = ax_masse.legend(
     [
         linie_masse_hist,
         linie_bilanz_hist,
@@ -1535,6 +1535,8 @@ ax_masse.legend(
     loc="upper left",
     fontsize=9
 )
+
+legende.set_zorder(100)
 
 
 # ============================================================
