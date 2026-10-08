@@ -44,10 +44,13 @@ CSV_DATEI = aktuelle_datei.parent / "../../data/data_all.csv"
 # KALIBRIERTE STANDARDWERTE
 # ============================================================
 
-C_STANDARD = 1.4125375446227554e-06
-D_STANDARD = 0.005623413251903491
-F_STANDARD = 4.4668359215096345
+# C_STANDARD = 1.4125375446227554e-06
+# D_STANDARD = 0.005623413251903491
+# F_STANDARD = 4.4668359215096345
 
+C_STANDARD = 1.122018454301963e-06
+D_STANDARD = 0.005011872336272725
+F_STANDARD = 0.7943282347242822
 
 T0 = 2.0
 
@@ -760,14 +763,29 @@ def berechne_temperatur_und_terme(faktor):
         axis=1
     )
 
-    positive_temp = np.maximum(
-        baender_dgl - T0,
+    # --------------------------------------------------------
+    # Ablation nach der neuen stueckweisen Definition:
+    #
+    # T <= 0 °C:
+    #   keine Ablation
+    #
+    # 0 < T < T0:
+    #   nur d * T
+    #
+    # T >= T0:
+    #   d * T + PP * f * (T - T0)
+    # --------------------------------------------------------
+
+    # d-Term: Schmelze beginnt bereits oberhalb von 0 °C
+    temp_ablation_d = np.maximum(
+        baender_dgl,
         0.0
     )
 
-    schmelztemperatur = np.mean(
-        positive_temp,
-        axis=1
+    # f-Term: zusaetzlicher Niederschlagseinfluss erst ab T0
+    temp_ablation_f = np.maximum(
+        baender_dgl - T0,
+        0.0
     )
 
     neues_A = (
@@ -776,12 +794,16 @@ def berechne_temperatur_und_terme(faktor):
         * schnee_anteil
     )
 
-    neues_D = (
-        schmelztemperatur
+    neues_D = np.mean(
+        temp_ablation_d,
+        axis=1
     )
 
     neues_F = (
-        schmelztemperatur
+        np.mean(
+            temp_ablation_f,
+            axis=1
+        )
         * PP_DGL_m
     )
 
@@ -1289,6 +1311,13 @@ FARBE_BILANZ = "tab:red"
 FARBE_TEMP = "tab:orange"
 FARBE_PP = "tab:green"
 
+# UI-Farben fuer bessere Beamer-Lesbarkeit
+SLIDER_BLAU = "#00CFFF"
+SLIDER_HINTERGRUND = "#202020"
+PANEL_WEISS = "#FFFFFF"
+PANEL_SCHWARZ = "#000000"
+BUTTON_HOVER = "#D9D9D9"
+
 
 # ============================================================
 # MASSE: FEIN AUFGELÖST
@@ -1627,6 +1656,44 @@ slider_temp_faktor = Slider(
     valfmt="%.2f"
 )
 
+
+# ------------------------------------------------------------
+# SLIDER-STYLING FUER BEAMER
+# ------------------------------------------------------------
+
+for slider in [
+    slider_c,
+    slider_d,
+    slider_f,
+    slider_temp_faktor
+]:
+    slider.ax.set_facecolor(SLIDER_HINTERGRUND)
+
+    slider.label.set_color("white")
+    slider.label.set_fontsize(13)
+    slider.label.set_fontweight("bold")
+
+    slider.valtext.set_color("white")
+    slider.valtext.set_fontsize(12)
+    slider.valtext.set_fontweight("bold")
+
+    # Aktiver Slider-Bereich: kraeftiges Cyan/Blau
+    if hasattr(slider, "poly"):
+        slider.poly.set_facecolor(SLIDER_BLAU)
+        slider.poly.set_alpha(1.0)
+
+    # Positionslinie deutlicher machen
+    if hasattr(slider, "vline"):
+        slider.vline.set_color("white")
+        slider.vline.set_linewidth(2.2)
+
+    # Slider-Knopf kontrastreicher machen
+    if hasattr(slider, "_handle"):
+        slider._handle.set_markerfacecolor("white")
+        slider._handle.set_markeredgecolor(SLIDER_BLAU)
+        slider._handle.set_markeredgewidth(2.0)
+        slider._handle.set_markersize(10)
+
 # ============================================================
 # BUTTONS
 # ============================================================
@@ -1641,12 +1708,19 @@ ax_reset = plt.axes([
 button_reset = Button(
     ax_reset,
     "Berechnete Modellwerte",
-    color="0.35",
-    hovercolor="0.50"
+    color="black",
+    hovercolor="#202020"
 )
 
 button_reset.label.set_color("white")
 button_reset.label.set_fontweight("bold")
+button_reset.label.set_fontsize(11)
+
+for spine in ax_reset.spines.values():
+    spine.set_visible(True)
+    spine.set_color("white")
+    spine.set_linewidth(1.8)
+
 
 ax_save = plt.axes([
     0.89,
@@ -1659,12 +1733,18 @@ ax_save = plt.axes([
 button_save = Button(
     ax_save,
     "CSV speichern",
-    color="0.35",
-    hovercolor="0.50"
+    color="black",
+    hovercolor="#202020"
 )
 
 button_save.label.set_color("white")
 button_save.label.set_fontweight("bold")
+button_save.label.set_fontsize(11)
+
+for spine in ax_save.spines.values():
+    spine.set_visible(True)
+    spine.set_color("white")
+    spine.set_linewidth(1.8)
 
 
 # ============================================================
@@ -1706,29 +1786,49 @@ check_graphen = CheckButtons(
     ]
 )
 
-ax_graphen.set_facecolor("0.92")
+# Graphenauswahl: schwarz mit weisser Schrift und weissen Auswahlkaestchen
+ax_graphen.set_facecolor("black")
+
+ax_graphen.title.set_color("white")
+ax_graphen.title.set_fontsize(12)
+ax_graphen.title.set_fontweight("bold")
 
 for spine in ax_graphen.spines.values():
     spine.set_visible(True)
-    spine.set_color("0.35")
-    spine.set_linewidth(1.2)
+    spine.set_color("white")
+    spine.set_linewidth(1.8)
 
 for label in check_graphen.labels:
-    label.set_color("black")
-    label.set_fontsize(10)
+    label.set_color("white")
+    label.set_fontsize(11)
+    label.set_fontweight("bold")
 
+# Moderne Matplotlib-Versionen
 if hasattr(check_graphen, "set_frame_props"):
     check_graphen.set_frame_props({
-        "edgecolor": "black",
-        "facecolor": "white",
-        "linewidth": 1.4
+        "edgecolor": "white",
+        "facecolor": "black",
+        "linewidth": 1.8
     })
 
 if hasattr(check_graphen, "set_check_props"):
     check_graphen.set_check_props({
-        "color": "black",
-        "linewidth": 2.0
+        "color": "white",
+        "linewidth": 2.6
     })
+
+# Kompatibilitaet mit aelteren Matplotlib-Versionen
+if hasattr(check_graphen, "rectangles"):
+    for rect in check_graphen.rectangles:
+        rect.set_facecolor("black")
+        rect.set_edgecolor("white")
+        rect.set_linewidth(1.8)
+
+if hasattr(check_graphen, "lines"):
+    for pair in check_graphen.lines:
+        for line in pair:
+            line.set_color("white")
+            line.set_linewidth(2.6)
 
 # ============================================================
 # UPDATE
