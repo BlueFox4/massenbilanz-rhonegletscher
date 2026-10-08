@@ -1381,10 +1381,9 @@ messpunkte = ax_masse.scatter(
     mess_masse,
     s=45,
     color="black",
-    zorder=10,
+    zorder=2,
     label="Gemessene Masse"
 )
-
 
 # ============================================================
 # ZUKUNFTSGRENZE
@@ -1490,7 +1489,7 @@ ax_bilanz.axhline(
 # LEGENDE
 # ============================================================
 
-ax_masse.legend(
+legende = ax_masse.legend(
     [
         linie_masse_hist,
         linie_bilanz_hist,
@@ -1512,6 +1511,8 @@ ax_masse.legend(
     loc="upper left",
     fontsize=9
 )
+
+legende.set_zorder(100)
 
 
 # ============================================================
