@@ -48,7 +48,7 @@ Der Rhonegletscher ist ein Gletscher in der Südschweiz, von dem bereits seit Mi
 
 Die historischen Daten über die Gletschermasse und -länge stammen von ["scnat wissen", dem Webportal der schweizer Akademie der Wissenschaften, aus einem Bericht der ETH Zürich](https://naturwissenschaften.ch/snow-glaciers-permafrost-explained/glaciers/mass_balance/rhone). Sie reichen bis 1900 zurück und wurden jährlich erhoben. Zur Überprüfung unserer Modellierung haben wir uns allerdings auf den Erhebungszeitraum zwischen 1955 und 2024 beschränkt.
 
-Mittels eines Web-Scraping-Algorithmus wurden die tagesbezogenen Wetterdaten von einer Wetterstation in Sitten (franz. Sion), einer Stadt im selben Tal wie der Gletscher ermittelt. Sie liegen mehr oder minder kontinuierlich seit dem 1. Januar 1955 vor. 
+Mittels eines Web-Scraping-Algorithmus wurden die tagesbezogenen Wetterdaten von einer Wetterstation in Sitten (franz. Sion), einer Stadt im Tal des Gletschers ermittelt. Sie liegen mehr oder minder kontinuierlich seit dem 1. Januar 1955 vor.
 
 ## Aufbereitung
 
@@ -75,24 +75,30 @@ Zudem besitzt der ursprüngliche Datensatz teilweise Lücken, die mit interpolie
 
 # Modell
 
-## Allgemeine Annahmen
+## Annahmen
 
-### Temperatur
+Zunächst nehmen wir den Gletscher als Quader mit fixer Breite $B = 1,5km$ an. Daraus folgt eine Abhängigkeit von der Länge $L$ für die Oberfläche $O(t) \propto L(t)$ und die Masse $M(t) \propto L(t)$ des Gletschers. Die Temperatur in der für unser Modell gewählten Standardatmosphäre nimmt alle $100m$ um $0,65^{\circ}\mathrm{C}$ ab.
+
+Für die Akkumulation wird davon ausgegangen, dass Niederschlag ab einer Temperatur $T(t) < 2^{\circ}\mathrm{C}$ als der Gletschermasse zuträglich gewertet wird. 
+
+Gleichzeitig wird Niederschlag ab einer Temperatur $T(t) > 2^{\circ}\mathrm{C}$ als der Masse abträglich (Ablation) gewertet. Dann kann man von einer Temperaturabhängigkeit sprechen: $A(t) \sim T(t)$
+
+## Temperatur
 
 Betrachtet man den durchschnittlichen jährlichen Temperaturverlauf, also die durchschnittliche Temperatur für einen bestimmten Tag im Jahresverlauf, lässt sich dieser gut durch eine Sinusfunktion modellieren:
 
 $$
-y = a \cdot \sin\left(2\pi \cdot \frac{x-c}{b}\right) + d
+T(t) = a \cdot \sin\left(2\pi \cdot \frac{x-c}{b}\right) + d
 $$
 
 ![Durchschnittsjahr 1955–2025](assets/temp_avg_all_years.png){width=70%}
 
 Die einzelnen Parameter können dabei wie folgt interpretiert werden:
 
-- $a$ bezeichnet die **Amplitude** in $^\circ\mathrm{C}$ und beschreibt, wie stark die Temperaturen im Jahresverlauf schwanken.
+- $a$ bezeichnet die **Amplitude** in $^{\circ}\mathrm{C}$ und beschreibt, wie stark die Temperaturen im Jahresverlauf schwanken.
 - $b$ bezeichnet die **Periodendauer** in Tagen. Dieser Wert wird sinnvollerweise auf $365{,}2524$ Tage festgelegt.
 - $c$ bezeichnet die **Phasenverschiebung** in Tagen und gibt an, um welchen Betrag der Temperaturverlauf entlang der Zeitachse verschoben ist. Damit lässt sich insbesondere der Zeitpunkt des kältesten bzw. wärmsten Tages bestimmen.
-- $d$ bezeichnet den **Temperaturmittelwert** in $^\circ\mathrm{C}$ und entspricht der vertikalen Verschiebung der Sinuskurve.
+- $d$ bezeichnet den **Temperaturmittelwert** in $^{\circ}\mathrm{C}$ und entspricht der vertikalen Verschiebung der Sinuskurve.
 
 Statt den gesamten Messzeitraum durch eine einzige Sinuskurve zu beschreiben, werden die Parameter $a$, $c$ und $d$ nun für jedes Jahr separat bestimmt. Dadurch kann ihre zeitliche Entwicklung analysiert und für die Modellierung zukünftiger Jahre berücksichtigt werden. Die jeweils optimalen Parameter werden dabei programmatisch für jedes Jahr ermittelt und gespeichert.
 
@@ -124,7 +130,7 @@ In der folgenden Abbildung sind die Regressionsgeraden für einen Zeitraum ab 20
 Zusammenfassend kann das Programm zur Berechnung der Massenbilanz nun für jeden beliebigen Zeitpunkt eine modellierte Temperatur bestimmen. Dazu wird zunächst der Zeitpunkt innerhalb des Jahres bestimmt und anschließend mit den für das jeweilige Jahr ermittelten Regressionsparametern die entsprechende Temperatur berechnet. Daraus ergibt sich die folgende Funktion:
 
 $$
-T = a_{regr}(t) \cdot \sin\left(2\pi \cdot \frac{x-c_{regr}(t)}{b_{regr}(t)}\right) + d_{regr}(t)
+T(t) = a_{regr}(t) \cdot \sin\left(2\pi \cdot \frac{x-c_{regr}(t)}{b_{regr}(t)}\right) + d_{regr}(t)
 $$
 
 Die zugrunde liegenden Messdaten stammen von einer Wetterstation auf einer Höhe von $482,\mathrm{m}$. Der betrachtete Gletscher beginnt jedoch erst auf einer Höhe von etwa $2200,\mathrm{m}$, sodass dort von einer deutlich niedrigeren Temperatur auszugehen ist. Um diesen Höhenunterschied im Modell zu berücksichtigen, wird eine Temperaturabnahme von $0{,}65,^\circ\mathrm{C}$ pro $100,\mathrm{m}$ Höhenzunahme angenommen.
@@ -133,7 +139,7 @@ Damit kann aus den Messdaten der Wetterstation eine modellierte Temperaturentwic
 
 ![Modellierte Temperaturentwicklung vs Daten con 1994 bis 2023](assets/modellWerteVsDatenTemperatur.png){width=70%}
 
-### Niederschlag
+## Niederschlag
 
 Beim Niederschlag lässt sich - betrachtet man die Jahresverläufe - zunächst keine Regelmäßigkeit ausmachen.
 
@@ -149,16 +155,25 @@ Da die Niederschlagsmenge jedoch die richtige Einheit besitzt und somit genauer 
 
 ## Akkumulation
 
-Der Gletscher wird näherungsweise als Quader beschrieben, der eine feste Breite ($B=2km$) hat und dessen Verhätnis zwischen Höhe und Länge immer gleich ist. Man geht weiter davon aus, dass der Niederschlag gleichmäßig auf die gesamte sichtbare Oberfläche, d.h. die obere Oberfläche, trifft und all dieser Niederschlag auch gefriert, sofern die Temperaturen auf den entsprechenden Höhen unter $2°C$ liegt. Für die Massenzunahme des Gletschers geht man weiter davon aus, dass die gesamte Flächenzunahme auf der Längenzunahme beruht ($A = l \cdot B, B = const.$).
+Der Gletscher wird näherungsweise als Quader beschrieben, der eine feste Breite ($B = 1,5km$) hat und dessen Verhältnis zwischen Höhe und Länge immer gleich ist. Man geht weiter davon aus, dass der Niederschlag gleichmäßig auf die gesamte sichtbare Oberfläche, d.h. die obere Oberfläche, trifft und all dieser Niederschlag auch gefriert, sofern die Temperaturen auf den entsprechenden Höhen unter $T_0 = 2^{\circ}\mathrm{C}$ liegt. Für die Massenzunahme des Gletschers geht man weiter davon aus, dass die gesamte Flächenzunahme auf der Längenzunahme beruht ($\frac{\text{Fläche}}{dt} = l \cdot B \text{, } B = const.$).
 
-$$Z(t) = PP(t) \cdot \rho_{Wasser} \cdot c \cdot B \cdot M(t)$$
+$$ 
+Z(t) =
+\begin{cases}
+    0 & \text{für } T(t) \ge T_0 \\
+    PP(t) \cdot \rho_{Wasser} \cdot c \cdot B \cdot M(t) & \text{für } T(t) < T_0
+\end{cases}$$
 
 
 ## Ablation
 
-Ab einer Temperatur von $2°C$ schmilzt der Gletscher. Wenn die Temperatur $T(t) > 2°C$ und es regnet wird die Schmelze um einen unbekannten Faktor $f$ beschleunigt, da Niederschlag eine bessere Wärmleitung ermöglicht. Beide Effekte sind direkt proportional zur Gletschermasse, da diese, unter unseren Annahmen, wiederum zur Gletscheroberfläche proportional ist und der Niederschlagseffekt auf der gesamten Oberfläche stattfindet. Der allgemeine Temperaturschmelzeffekt ist direkt massenabhängig, da Schmelze idealisiert für jedes Kilo Gletschereis gleichmäßig stattfindet. Der Temperaturgradient des Eises innerhalb des Gletschers, also der geringere Einfluss der Außentemperatur auf Eis, das nicht an der Luft liegt, wird als annähernd linear angenommen und fließt demnach in die Schmelzkonstante $d$ ein.
+Ab einer Temperatur $T_0 = 2^{\circ}\mathrm{C}$ schmilzt der Gletscher. Wenn die Temperatur $T(t) > 2^{\circ}\mathrm{C}$ und es regnet, wird die Schmelze um einen unbekannten Faktor $f$ beschleunigt, da Niederschlag eine bessere Wärmleitung ermöglicht. Beide Effekte sind direkt proportional zur Gletschermasse, da diese, unter unseren Annahmen, wiederum zur Gletscheroberfläche proportional ist und der Niederschlagseffekt auf der gesamten Oberfläche stattfindet. Der allgemeine Temperaturschmelzeffekt ist direkt massenabhängig, da Schmelze idealisiert für jedes Kilo Gletschereis gleichmäßig stattfindet. Der Temperaturgradient des Eises innerhalb des Gletschers, also der geringere Einfluss der Außentemperatur auf Eis, das nicht an der Luft liegt, wird als annähernd linear angenommen und fließt demnach in die Schmelzkonstante $d$ ein.
 
-$$A(t) = M(t) \cdot d \cdot (T(t) - T_0) + PP(t) \cdot f \cdot M(t) \cdot (T(t) - T_0)$$
+$$
+A(t) = 
+M(t) \cdot d \cdot (T(t) - T_0) 
++ PP(t) \cdot f \cdot M(t) \cdot (T(t) - T_0)
+$$
 
 
 
