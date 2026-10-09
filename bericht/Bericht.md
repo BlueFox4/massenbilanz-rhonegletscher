@@ -32,9 +32,9 @@ geometry:
   - right=25mm
 ---
 
-# tl;dr
+# TL;DR
 
-Im Zuge der Modellierungswoche 2026, einem Projekt des Zentrums für Mathematik, wurde ein Modell entwickelt, welches auf Basis von historischen Wetterdaten einerseits näherungsweise die historische Massenveränderung des Rhonegletschers im Kanton Wallis in der Schweiz nachstellt und im zweiten Schritt mit Prognosen für die zukünfitgen klimatischen Bedingungen auch die zukünftige Massenveränderung des Gletschers aufzeigt. Vorrangig wurde dabei eine Funktion für die Massenveränderung aufgestellt, welche gleich der Differenz der Massenakkumulation (Massenzunahme) des Gletschers und der Massenablation (Massenabnahme) des Gletschers an einem gewissen Zeitpunkt ist. Dabei sind Massenakkumulation und Massenablation Funktionen, die von Niederschlag und Temperatur zu eben diesem Zeitpunkt abhängig sind. Niederschlag und Temperatur sind ihrerseits Funktionen, die sich aus Wetterdatensätzen der letzten 30 Jahre speißen. Zur optimalen Bestimmung der Modellparameter dienten Daten über die tatsächliche historische Massenbilanz des Gletschers. Man fand dabei für die meisten denkbaren Annahmen für das zukünftige klimatische Verhalten ein Sterben des Gletschers bis zum Ende des Jahrhunderts. 
+Im Zuge der Modellierungswoche 2026, einem Projekt des Zentrums für Mathematik, wurde ein Modell entwickelt, welches auf Basis von historischen Wetterdaten einerseits näherungsweise die historische Massenveränderung des Rhonegletschers im Kanton Wallis in der Schweiz nachstellt und im zweiten Schritt mit Prognosen für die zukünftigen klimatischen Bedingungen auch die zukünftige Massenveränderung des Gletschers aufzeigt. Vorrangig wurde dabei eine Funktion für die Massenveränderung aufgestellt, welche gleich der Differenz der Massenakkumulation (Massenzunahme) des Gletschers und der Massenablation (Massenabnahme) des Gletschers an einem gewissen Zeitpunkt ist. Dabei sind Massenakkumulation und Massenablation Funktionen, die von Niederschlag und Temperatur zu eben diesem Zeitpunkt abhängig sind. Niederschlag und Temperatur sind ihrerseits Funktionen, die sich aus Wetterdatensätzen der letzten 30 Jahre speisen. Zur optimalen Bestimmung der Modellparameter dienten Daten über die tatsächliche historische Massenbilanz des Gletschers. Man fand dabei für die meisten denkbaren Annahmen für das zukünftige klimatische Verhalten ein Sterben des Gletschers bis zum Ende des Jahrhunderts. 
 
 \newpage
 
@@ -43,7 +43,9 @@ Im Zuge der Modellierungswoche 2026, einem Projekt des Zentrums für Mathematik,
 
 # Zielsetzung
 
-Der Rhonegletscher ist ein Gletscher in der Südschweiz, von dem bereits seit Mitte des letzten Jahrhunderts Messdaten über Masse und Länge des Gletschers sowie über das Wetter, etwa Niederschlagmenge, Regentage, Temperatur sowie Windstärke und -richtung vorliegen. Unser Ziel liegt nun darin, im ersten Schritt ein Modell zu entwickeln, das die Massenveränderung des Gletschers historisch bestmöglich beschreibt, und dann weiter die Wetterdaten auf Basis von Saisonalitäten und Trends so in die Zukunft zu prognostizieren, auf dass man eine begründete Vermutung über die zukünftige Massenveränderung des Gletschers mittels eben diesem Modell abgeben kann.
+Der Rhonegletscher ist ein Gletscher in der Südschweiz, von dem bereits seit Mitte des letzten Jahrhunderts Messdaten über Masse und Länge des Gletschers sowie über das Wetter, etwa Niederschlagsmenge, Regentage, Temperatur sowie Windstärke und -richtung vorliegen. 
+
+Unser Ziel liegt nun darin, im ersten Schritt ein Modell zu entwickeln, das die Massenveränderung des Gletschers historisch bestmöglich beschreibt, und dann weiter die Wetterdaten auf Basis von Saisonalitäten und Trends so in die Zukunft zu prognostizieren, auf dass man eine begründete Vermutung über die zukünftige Massenveränderung des Gletschers mittels eben diesem Modell abgeben kann.
 
 \clearpage
 
@@ -52,16 +54,21 @@ Der Rhonegletscher ist ein Gletscher in der Südschweiz, von dem bereits seit Mi
 
 ## Herkunft
 
-Die historischen Daten über die Gletschermassen und -längenänderung stammen von „scnat wissen”, dem Webportal der schweizer Akademie der Wissenschaften, aus einem Bericht der ETH Zürich [@bilanzen]. Die Daten reichen bis 1900 zurück und wurden jährlich erhoben. Zur Überprüfung unserer Modellierung haben wir uns allerdings auf den Erhebungszeitraum zwischen 1955 und 2024 beschränkt.
+Die historischen Daten über die Gletschermassen- und -längenänderung stammen von „scnat wissen”, dem Webportal der Schweizer Akademie der Wissenschaften, aus einem Bericht der ETH Zürich [@bilanzen]. Die Daten reichen bis 1900 zurück und wurden jährlich erhoben. Zur Überprüfung unserer Modellierung haben wir uns allerdings auf den Erhebungszeitraum zwischen 1955 und 2024 beschränkt.
 
-Mittels eines Web-Scraping-Algorithmus in Python, der die Bibliotheken `requests` und `BeautifulSoup` nutzt, wurden die tagesbezogenen Wetterdaten von einer Wetterstation in Sitten (franz. Sion), einer Stadt im Tal des Gletschers, ermittelt. Sie liegen mehr oder minder kontinuierlich seit dem 1. Januar 1955 vor [@wetterdaten].
+Mittels eines Web-Scraping-Algorithmus in Python, der die Bibliotheken `requests` und `BeautifulSoup` nutzt, wurden die tagesbezogenen Wetterdaten von einer Wetterstation in Sitten (frz. Sion), einer Stadt im Tal des Gletschers, ermittelt. Sie liegen mehr oder minder kontinuierlich seit dem 1. Januar 1955 vor [@wetterdaten].
+
+Im Folgenden zeigen Tabellen die Erklärung der Daten, welche uns vorliegen. Die Abkürzungen der Herkunft stehen für:
+
+- tt - _Tutitiempo_ als Quelle für Wetterdaten [@wetterdaten]
+- na - _naturwissenschaften.ch_ als Quelle für Bilanzdaten [@bilanzen]
 
 ## Jahresdaten
 
-Hierbei handelt es sich um alle Daten, die jahresweise erhoben worden sind. Folgende Tabelle zeigt die 
+Hierbei handelt es sich um alle Daten, die jahresweise erhoben worden sind. Folgende Tabelle zeigt den Umfang, Einheit und die Herkunft dieser, nebst einer groben Beschreibung der Bedeutung, ggf. auch der Errechnung der jeweiligen Werte.
 
 | **Dimension** | **Einheit**                 | **Beschreibung**                      | **Herkunft**                                                                                                                                                                        |
-|-----------------|--------------------------|--------------------------------------------------------------|--------------------------------------------|
+|-----------------|--------------------------|---------------------------------------------------------|--------------------------------------------------|
 | **T**         | $^{\circ}C$                        | Temperatur                            | tt (scraped)                                                                                                                                                                        |
 | **TM**        | $^{\circ}C$                        | Maximaltemp.                          | tt (scraped)                                                                                                                                                                        |
 | **Tm**        | $^{\circ}C$                        | Minimaltemp.                          | tt (scraped)                                                                                                                                                                        |
@@ -75,13 +82,13 @@ Hierbei handelt es sich um alle Daten, die jahresweise erhoben worden sind. Folg
 | **GR**        | -                           | Hageltage                             | tt (scraped)                                                                                                                                                                        |
 | **MpA/dt**    | $mm\ w.e. = \frac{kg}{m^2}$ | Massenänderung pro Fläche             | na (abgeschrieben)                                                                                                                                                                  |
 | **L/dt**      | $m$                         | Längenänderung                        | na (abgeschrieben)                                                                                                                                                                  |
-| **L**         | $m$                         | Länge                                 | Hergeleitet aus $\frac{L}{dt}$ und gegebener $Länge\ um\ 1999$ in der Aufgabenstellung (dort ohne Quelle)                                                                           |
+| **L**         | $m$                         | Länge                                 | Hergeleitet aus $\frac{L}{dt}$ und gegebener $\text{Länge um 1999}$ in der Aufgabenstellung (dort ohne Quelle)                                                                           |
 | **A**         | km²                         | Fläche                                | Berechnet aus $L$ und fest angenommener $B$                                                                                                                                         |
 | **M**         | $Mrd.\ t$                   | Durchschnittliche Masse               | Hergeleitet aus $\frac{MpA}{dt}$ und der $MpA$ um 1999 (diese ist berechnet aus dem in der Aufgabenstellung gegebenem $V$, der durchschnittlichen $Dichte\ \rho\ von\ Eis$ und $A$) |
 
 ## Tagesdaten
 
-Hierbei handelt es sich um tagesweise erhobene Wetterdaten. Es wurden keine Daten aus anderen hergeleitet, dementsprechend ist hier weniger Aufwand vonnöten - schlicht das Scraping wurde durchgeführt mit den in diesem Ordner befindlichen Python-Dateien.
+Hierbei handelt es sich um tagesweise erhobene Wetterdaten. Es wurden keine Daten aus anderen hergeleitet, dementsprechend ist hier weniger Aufwand in der Bearbeitung vonnöten. Das Prinzip der Tabelle ist das gleiche wie beim vorherigen Punkt Jahresdaten.
 
 | **Dimension** | **Einheit**    | **Beschreibung**                                                            | **Herkunft**          |
 |---------------|----------------|-----------------------------------------------------------------------------|-----------------------|
@@ -106,13 +113,17 @@ Hierbei handelt es sich um tagesweise erhobene Wetterdaten. Es wurden keine Date
 
 ## Aufbereitung
 
-Diese Daten müssen nun noch aufbereitet werden. Letztendlich muss hier die Masse für jedes Jahr berechnet werden. Hierfür sind die Massenbilanzen jedes Jahrs in $\text{mm w.e.}=\frac{kg}{m^2}$ gegeben, jedoch fehlt ein Ausgangswert, um absolute Daten aus diesen relativen zu bestimmen.
+Zunächst ein Wort zur x-Skalierung der Tagesdaten: Es bestünde die Möglichkeit, diese ab dem ersten Eintrag schlicht durchzunummerieren. Dies ist für die Darstellung jedoch programmatisch unschön wieder in ein fixes Datum zu konvertieren. Deshalb wurde ein Tag im Jahr schlicht als Quotient dargestellt und zum Jahr addiert. So erhält man eine (bis auf Nicht-Schaltjahre) fast gleichmäßige Skalenaufteilung, ohne eine Zeile Programmcode dafür zu verwenden.
+
+$$\text{Jahr} + \frac{\text{Tag im Jahr}}{366}$$
+
+Die nun skalierten Daten müssen nun noch aufbereitet werden. Letztendlich muss hier die Masse für jedes Jahr berechnet werden. Hierfür sind die Massenbilanzen jedes Jahres in $\text{mm w.e.}=\frac{kg}{m^2}$ gegeben, jedoch fehlt ein Ausgangswert, um absolute Daten aus diesen relativen zu bestimmen.
 
 Ein absoluter Datenpunkt muss also zunächst bestimmt werden. Hierfür benötigt man in unserem vereinfachten Quader-Modell wiederum die Länge, wofür wir die Längenbilanzen $\frac{L(t)}{dt}$ in $m$ gegeben haben. Ausgehend von $9830m$ Länge um das Jahr 1999 in der Aufgabenstellung lassen sich nun rekursiv alle anderen Werte berechnen.
 
 $$L(t+1) = L(t) + \frac{L(t+1)}{dt}$$
 
-Als nächstes berechnet man die Fläche. Gemäß der [Annahmen](#annahmen) ist diese also abhängig von einer Breite $B = const.$ und der Länge $L(t)$. Laut „glamos.ch” betrug die Fläche 2023 rund $13.58km^2$ [@factsheet]. Hieraus lässt sich eine Breite von ca. $1500m$ ableiten, die auch den Rest des Datensatzes recht gut abbildet (wobei bei weiterer zeitlicher Entfernung vom Ausgangspunkt mit absolut verfügbaren Daten die Abweichung größer wird und eine Annäherung mit einer linearen Funktion naheliegt). Nun kann man die Massenbilanz (in $\frac{kg}{m^2}$) in eine tatsächliche Massenzunahme (in $kg$) umwandeln:
+Als Nächstes berechnet man die Fläche. Gemäß der [Annahmen](#annahmen) ist diese also abhängig von einer Breite $B = const.$ und der Länge $L(t)$. Laut „glamos.ch” betrug die Fläche 2023 rund $13.58km^2$ [@factsheet]. Hieraus lässt sich eine Breite von ca. $1500m$ ableiten, die auch den Rest des Datensatzes recht gut abbildet (wobei bei weiterer zeitlicher Entfernung vom Ausgangspunkt mit absolut verfügbaren Daten die Abweichung größer wird und eine Annäherung mit einer linearen Funktion naheliegt). Nun kann man die Massenbilanz (in $\frac{kg}{m^2}$) in eine tatsächliche Massenzunahme (in $kg$) umwandeln:
 
 $$\text{Massenzunahme in kg} = \text{Massenbilanz in } \frac{kg}{m^2} \cdot B(t) \cdot L(t)$$
 
@@ -120,7 +131,7 @@ Damit kann man nun wiederum rekursiv alle Massen von einem absoluten Startwert a
 
 ## Schwächen
 
-Die Wetterstation, die die Daten erhoben hat, liegt etwa 90km südwestlicher Richtung vom Rhonegletscher entfernt. Dadurch ist eine gewisse Abweichung von den tatsächlichen Wetterverhältnissen am Gletscher zu erwarten.
+Die Wetterstation, die die Daten erhoben hat, liegt etwa $90 km$ südwestlich vom Rhonegletscher entfernt. Dadurch ist eine gewisse Abweichung von den tatsächlichen Wetterverhältnissen am Gletscher zu erwarten.
 
 ![Das Problem mit der Entfernung [@luftlinie]](assets/luftlinie_klimastation_sion_rhonegletscher.png){width=70%}
 
@@ -130,9 +141,7 @@ Allerdings ist dieser Umstand vernachlässigbar, da die Station und der Gletsche
 
 Zudem besitzt der ursprüngliche Datensatz teilweise Lücken, die mit interpolierten Daten ausgefüllt werden mussten.
 
-Es ist denkbar, dass eine Annäherung mittels eines metereologischen Modells eines renomierten Instituts bessere Daten liefen würde, als durch die durchaus weit entfernte Wetterstation.
-
-Es ist denkbar, dass eine Annäherung mittels eines metereologischen Modells eines renommierten Instituts bessere Daten liefen würde, als durch die durchaus weit entfernte Wetterstation.
+Es ist denkbar, dass eine Annäherung mittels eines meteorologischen Modells eines renommierten Instituts bessere Daten liefern würde, als durch die durchaus weit entfernte Wetterstation.
 
 ## Visualisierung
 
@@ -150,11 +159,11 @@ Zunächst nehmen wir den Gletscher als Quader mit fixer Breite $B = 1,5km$ an. D
 
 Für die Akkumulation wird davon ausgegangen, dass Niederschlag ab einer Temperatur $T(t) < 2^{\circ}C$ als der Gletschermasse zuträglich gewertet wird. 
 
-Gleichzeitig wird Niederschlag ab einer Temperatur $T(t) > 2^{\circ}C$ als der Masse abträglich (Ablation) gewertet. Dann kann man von einer Temperaturabhängigkeit respektive Temperaturähnlichkeit $A(t) \sim T(t)$ sprechen.
+Gleichzeitig wird Niederschlag ab einer Temperatur $T(t) > 2^{\circ}C$ als der Masse abträglich (Ablation) gewertet. Dann kann man von einer Temperaturabhängigkeit, respektive Temperaturähnlichkeit, $A(t) \sim T(t)$ sprechen.
 
 ## Temperatur
 
-Betrachtet man den durchschnittlichen jährlichen Temperaturverlauf, also die durchschnittliche Temperatur für einen bestimmten Tag im Jahresverlauf, lässt sich dieser gut durch eine Sinusfunktion modellieren:
+Betrachtet man den durchschnittlichen, jährlichen Temperaturverlauf, also die durchschnittliche Temperatur für einen bestimmten Tag im Jahresverlauf, lässt sich dieser gut durch eine Sinusfunktion modellieren:
 
 $$
 T(t) = a \cdot \sin\left(2\pi \cdot \frac{x-c}{b}\right) + d
@@ -188,11 +197,11 @@ Die Entwicklung der Parameter lässt sich unter Berücksichtigung ihrer jeweilig
 - Die **Phasenverschiebung $c$** verändert sich nur geringfügig. Dies deutet darauf hin, dass sich der Zeitpunkt der jahreszeitlichen Temperaturminima und -maxima im betrachteten Zeitraum nur wenig verschoben hat. Allerdings ist dieser Zeitpunkt von verschiedenen meteorologischen und klimatischen Faktoren abhängig.
 - Beim **Temperaturmittelwert $d$** ist hingegen ein deutlicher Anstieg von etwa $3^{\circ}C$ über den betrachteten Messzeitraum zu erkennen. Dieser Anstieg steht im Einklang mit der allgemeinen Erwärmung im Zuge des Klimawandels.
 
-Um die Genauigkeit der ermittelten Parameter zu bewerten, kann insbesondere der Parameter $d$, der den mittleren Temperaturwert eines Jahres beschreibt, mit den tatsächlich gemessenen Jahresmitteltemperaturen verglichen werden. In der unteren Abbildung stellt man fest, dass die tatsächlichen Werte nahezu identisch zu den modellierten Werten des Paramters $d$ sind.
+Um die Genauigkeit der ermittelten Parameter zu bewerten, kann insbesondere der Parameter $d$, der den mittleren Temperaturwert eines Jahres beschreibt, mit den tatsächlich gemessenen Jahresmitteltemperaturen verglichen werden. In der unteren Abbildung stellt man fest, dass die tatsächlichen Werte nahezu identisch zu den modellierten Werten des Parameters $d$ sind.
 
 Darüber hinaus stellt sich die Frage, welcher Zeitraum für die Bestimmung der Regressionsgeraden verwendet werden sollte. Wird der gesamte Messzeitraum betrachtet, ergibt sich eine geringere Steigung der Temperaturentwicklung. Dadurch könnte die aktuelle Erwärmung weniger deutlich abgebildet werden. Ein kürzerer Zeitraum reagiert dagegen stärker auf aktuelle Veränderungen, ist jedoch anfälliger für kurzfristige Schwankungen und einzelne ungewöhnlich warme oder kalte Jahre.
 
-In der folgenden Abbildung sind die Regressionsgeraden für einen Zeitraum ab 2014 sowie für eine 30-jährige Klimaperiode von 1994 bis 2023 dargestellt. Wir haben uns bewusst gegen den kürzeren Zeitraum ab 2014 entschieden, da eine 30-jährige Periode besser geeignet ist, langfristige klimatische Entwicklungen abzubilden und den Einfluss kurzfristiger Schwankungen zu reduzieren.
+In der folgenden Abbildung sind die Regressionsgeraden für einen Zeitraum ab 2014 sowie für eine 30-jährige Klimaperiode von 1994 bis 2023 dargestellt. Wir haben uns bewusst gegen den kürzeren Zeitraum ab 2014 entschieden, da eine 30-jährige Periode besser geeignet ist, langfristige klimatische Entwicklungen abzubilden, und den Einfluss kurzfristiger Schwankungen zu reduzieren.
 
 ![Modellierte Temperaturentwicklung mit Daten seit 1994 und 2014](assets/temp_modelled_twice.png){width=70%}
 
@@ -204,9 +213,9 @@ $$
 
 Die zugrunde liegenden Messdaten stammen von einer Wetterstation auf einer Höhe von $482m$. Der betrachtete Gletscher beginnt jedoch erst auf einer Höhe von etwa $2200m$, sodass dort von einer deutlich niedrigeren Temperatur auszugehen ist. Um diesen Höhenunterschied im Modell zu berücksichtigen, wird eine Temperaturabnahme von $0{,}65^{\circ}C$ pro $100m$ Höhenzunahme gemäß des Modells der Standardatmosphäre angenommen.
 
-Damit kann aus den Messdaten der Wetterstation eine modellierte Temperaturentwicklung für die Höhe des Gletschers abgeleitet werden. Diese dient anschließend als Grundlage für die weitere Berechnung der Massenbilanz. Abschließen sieht man in der folgenden Abbildung unsere modellierte Temperatur und die tatsächlichen monatlichen Durchschnittwerte.
+Damit kann aus den Messdaten der Wetterstation eine modellierte Temperaturentwicklung für die Höhe des Gletschers abgeleitet werden. Diese dient anschließend als Grundlage für die weitere Berechnung der Massenbilanz. Abschließend sieht man in der folgenden Abbildung unsere modellierte Temperatur und die tatsächlichen monatlichen Durchschnittwerte.
 
-![Modellierte Temperaturentwicklung vs Daten con 1994 bis 2023](assets/modellWerteVsDatenTemperatur.png){width=70%}
+![Modellierte Temperaturentwicklung vs. Daten von 1994 bis 2023](assets/modellWerteVsDatenTemperatur.png){width=70%}
 
 ## Niederschlag
 
@@ -224,7 +233,7 @@ Da die Niederschlagsmenge jedoch die richtige Einheit besitzt und somit genauer 
 
 ## Akkumulation
 
-Der Gletscher wird näherungsweise als Quader beschrieben, der eine feste Breite ($B = 1,5km$) hat und dessen Verhältnis zwischen Höhe und Länge immer gleich ist. Man geht weiter davon aus, dass der Niederschlag gleichmäßig auf die gesamte sichtbare Oberfläche, trifft und all dieser Niederschlag auch gefriert, sofern die Temperaturen auf den entsprechenden Höhen unter $T_0 = 2^{\circ}C$ liegt. Für die Massenzunahme des Gletschers geht man weiter davon aus, dass die gesamte Flächenzunahme auf der Längenzunahme beruht ($\frac{\text{Fläche}}{dt} = l \cdot B \text{, } B = const.$). 
+Der Gletscher wird näherungsweise als Quader beschrieben, der eine feste Breite ($B = 1,5km$) hat und dessen Verhältnis zwischen Höhe und Länge immer gleich ist. Man geht weiter davon aus, dass der Niederschlag gleichmäßig auf die gesamte sichtbare Oberfläche, trifft und all dieser Niederschlag auch gefriert, sofern die Temperaturen auf den entsprechenden Höhen unter $T_0 = 2^{\circ}C$ liegen. Für die Massenzunahme des Gletschers geht man weiter davon aus, dass die gesamte Flächenzunahme auf der Längenzunahme beruht ($\frac{\text{Fläche}}{dt} = l \cdot B \text{, } B = const.$). 
 
 Daraus lässt sich nun mithilfe des Niederschlags $PP(t)$ in der Einheit $\frac{l}{m^2} = mm$ und der sichtbaren Oberfläche des Gletschers ein Volumen berechnen. Dieses kann man nun mit der Dichte $\rho = 1000 \frac{kg}{m^2}$ von Wasser verrechnen und erhält eine Masse:
 
@@ -232,7 +241,7 @@ $$
 M = \rho \cdot PP(t) \cdot \text{Fläche}
 $$
 
-Wie oben gesagt, nehmen wir eine konstantes Verhältnis zwischen Gletscherhöhe und Gletscherlänge an, welches zunächst von $c$ dargestellt wird. Die Fläche lässt sich aufgrund der Annahme $L \sim M$ folgendermaßen darstellen.
+Wie oben gesagt, nehmen wir ein konstantes Verhältnis zwischen Gletscherhöhe und Gletscherlänge an, welches zunächst von $c$ dargestellt wird. Die Fläche lässt sich aufgrund der Annahme $L \sim M$ folgendermaßen darstellen.
 
 $$\text{Fläche} = B \cdot L(t) \approx c \cdot B \cdot M(t)$$
 
@@ -245,12 +254,14 @@ Z(t) =
     PP(t) \cdot \rho_{Wasser} \cdot c \cdot B \cdot M(t) & \text{für } T(t) < T_0
 \end{cases}$$
 
-Alle weiteren konstanten Einflüsse auf die Akkumulation fließen logischerweise - wenn auch ungewollt - mit in den im folgenden optimierten Parameter c in der Einheit $\frac{1}{mm \cdot Jahr}$ mit ein.
+Alle weiteren konstanten Einflüsse auf die Akkumulation fließen logischerweise - wenn auch ungewollt - mit in den zu optimierenden Parameter c in der Einheit $\frac{1}{mm \cdot Jahr}$ ein.
 
 
 ## Ablation
 
-Ab einer Temperatur $T_0 = 2^{\circ}C$ schmilzt der Gletscher. Wenn die Temperatur $T(t) > 2^{\circ}C$ und es regnet, wird die Schmelze um einen unbekannten Faktor $f$ in der Einheit $\frac{1}{^{\circ}C \cdot Jahr \cdot mm}$ beschleunigt, da Niederschlag eine bessere Wärmleitung ermöglicht. Beide Effekte sind direkt proportional zur Gletschermasse, da diese, unter unseren Annahmen, wiederum zur Gletscheroberfläche proportional ist und der Niederschlagseffekt auf der gesamten Oberfläche stattfindet. Der allgemeine Temperaturschmelzeffekt ist direkt massenabhängig, da Schmelze idealisiert für jedes Kilo Gletschereis gleichmäßig stattfindet. Der Temperaturgradient des Eises innerhalb des Gletschers, also der geringere Einfluss der Außentemperatur auf Eis, das nicht an der Luft liegt, wird als annähernd linear angenommen und fließt demnach in die Schmelzkonstante $d$ in der Einheit $\frac{1}{^{\circ}C \cdot Jahr}$ ein.
+Ab einer Temperatur $T_0 = 2^{\circ}C$ schmilzt der Gletscher. Wenn die Temperatur $T(t) > 2^{\circ}C$ und es regnet, wird die Schmelze um einen unbekannten Faktor $f$ in der Einheit $\frac{1}{^{\circ}C \cdot Jahr \cdot mm}$ beschleunigt, da Niederschlag eine bessere Wärmleitung ermöglicht. 
+
+Beide Effekte sind direkt proportional zur Gletschermasse, da diese - unter unseren Annahmen - wiederum zur sichtbaren Gletscheroberfläche proportional ist und der Niederschlagseffekt auf der gesamten Oberfläche stattfindet. Der allgemeine Temperaturschmelzeffekt ist direkt massenabhängig, da die Schmelze idealisiert für jedes Kilogramm Gletschereis gleichmäßig vonstatten geht. Der Temperaturgradient des Eises innerhalb des Gletschers, also der geringere Einfluss der Außentemperatur auf Eis, das nicht an der Luft liegt, wird als annähernd linear angenommen und fließt demnach in die Schmelzkonstante $d$ in der Einheit $\frac{1}{^{\circ}C \cdot Jahr}$ ein.
 
 $$
 A(t) = 
@@ -267,15 +278,15 @@ $$
 
 ## Vernachlässigung
 
-In die derzetige Modellierung fließen bis dato nur die Temperatur und der Niederschlag ein. Dies scheint zwar eine soweit suffiziente Modellierung herzubieten, aber es ist davon auszugehen, dass der Einbezug weiterer Faktoren an dieser Stelle doch eine bessere Abbildung der Realität ermöglichen würde.
+In die derzeitige Modellierung fließen bis dato nur die Temperatur und der Niederschlag ein. Dies scheint zwar eine soweit suffiziente Modellierung herzubieten, aber es ist davon auszugehen, dass der Einbezug weiterer Faktoren an dieser Stelle doch eine bessere Abbildung der Realität ermöglichen würde.
 
 So gehen wir wie oben beschrieben von einem geometrischen Ideal des Gletschers aus, in dem die Breite wegen der Berge konstant und ebenso das Verhältnis von Höhe zu Länge des Gletschers konstant ist, was es uns weiter erlaubt eine direkte Proportionalität von Masse und Oberfläche anzunehmen. Dabei werden die realen Gegebenheiten vernachlässigt, eine Ungenauigkeit, die allerdings zumindest im Ansatz durch unsere optimierten Modellparameter abgedeckt werden.
 
-Weiter wird nur der Einfluss der Umgebungstemperatur auf den Schmelzvorgang berücksichtigt, nicht aber der Einfluss der direkten Sonneneinstrahlung, welche durch die thermische Absorption des Schnees den Schmelzvorgang weiter beschleunigen und weiter wohl zur Sublimation, also dem direkten Übergang von Eis zu Wasserdampf, durch das Auflösen etwaiger Wasserstoffbrücken führen würde. Der Vorfaktor der Umgebungstemperatur spiegelt diesen Umstand nur bediengt wieder.
+Weiter wird nur der Einfluss der Umgebungstemperatur auf den Schmelzvorgang berücksichtigt, nicht aber der Einfluss der direkten Sonneneinstrahlung, welche durch die thermische Absorption des Schnees den Schmelzvorgang weiter beschleunigen und weiter wohl zur Sublimation, also dem direkten Übergang von Eis zu Wasserdampf, durch das Auflösen etwaiger Wasserstoffbrücken führen würde. Der Vorfaktor der Umgebungstemperatur spiegelt diesen Umstand nur bedingt wider.
 
-Durch Wind und andere Faktoren wie etwa Lawinen werden Schneemassen, die nicht direkt durch Schneefall auf dem Gletscher entstehen, auf diesen verschoben, aber auch von diesem entfernt. Unter der Erwartung, dass die Verschiebung auf den Gletscher nicht nennenswert größer ist als die Verschiebung von dem Gletscher ab. Vernachlässigt dieses Modell diesen Umstand insofern, dass kein eigener Term dafür auftaucht. Eine Näherung gelingt auch hier vorrangig durch die optimierten Parameter des Modells.
+Durch Wind und andere Faktoren - wie etwa Lawinen - werden Schneemassen, die nicht direkt durch Schneefall auf dem Gletscher entstehen, auf diesen verschoben, aber auch von diesem entfernt. Mit der Erwartung, dass die Verschiebung auf den Gletscher nicht nennenswert größer ist als die Verschiebung von dem Gletscher ab, vernachlässigt dieses Modell diesen Umstand insofern, dass kein eigener Term dafür auftaucht. Eine Näherung gelingt auch hier vorrangig durch die optimierten Parameter des Modells.
 
-Die Niederschlagsmodellierung, die vorrangig für die Prognostion der zukünftigen Masse des Gletschers nötig ist, nimmt eine Unabhängigkeit von der Temperatur an. Tatsächlich ist allerdings eine proportionale Relation zwischen Temperatur und Niederschlag bekannt, die somit vernachlässigt wird. Somit fließt zwar der grobe Trend, nicht aber die innerjährliche Fluktuation in das Modell ein und auch dieser [der Trend] nur in indirekter Berücksichtigung der veränderlichen Temperaturprognose.
+Die Niederschlagsmodellierung, die vorrangig für die Prognose der zukünftigen Masse des Gletschers nötig ist, nimmt eine Unabhängigkeit von der Temperatur an. Tatsächlich ist allerdings eine proportionale Relation zwischen Temperatur und Niederschlag bekannt, die somit vernachlässigt wird. Somit fließt zwar der grobe Trend, nicht aber die innerjährliche Fluktuation, in das Modell ein, und auch dieser [der Trend] nur in indirekter Berücksichtigung der veränderlichen Temperaturprognose.
 
 
 \clearpage
@@ -285,7 +296,7 @@ Die Niederschlagsmodellierung, die vorrangig für die Prognostion der zukünftig
 
 ## Implementierung
 
-Mithilfe der Python-Libraries `matplotlib`, `numpy` und `scipy` wurde nun eine Codebasis geschaffen, die die Differentialgleichung (im Folgenden DGL genannt) modelliert. Hierbei können die Parameter $c$, $d$, und $f$ über Schieberegler variiert werden. Auf diese Weise lässt sich die Gleichung numerisch lösen [@git-repo].
+Mithilfe der Python-Bibliotheken `matplotlib`, `numpy` und `scipy` wurde nun eine Codebasis geschaffen, die die Differentialgleichung (im Folgenden DGL genannt) modelliert. Hierbei können die Parameter $c$, $d$, und $f$ über Schieberegler variiert werden. Auf diese Weise lässt sich die Gleichung numerisch lösen [@git-repo].
 
 Zudem wurde noch ein Algorithmus implementiert, welcher die optimalisierte Kombination aller drei Parameter berechnet, um eine möglichst geringe Varianz des Modells zur Messung zu erhalten. Das Resultat lässt sich in Abbildung \ref{fig:modell_screenshot} begutachten.
 
