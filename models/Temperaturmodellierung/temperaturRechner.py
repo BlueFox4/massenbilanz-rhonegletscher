@@ -28,9 +28,29 @@ def erhalteTemperatur(t, h, since, until=date.today().year, factor=1):
     return temperatur
 
 
+def parameter_ausgeben(since=1994, until=date.today().year):
+    print(f"\nParameter berechnen seit {since} bis {until}...")
+
+    erhalteTemperatur(0, 482, since, until)
+
+    y_intercept, slope = params.a_func_polynomial.convert().coef
+    print(f"a(t): {slope}x + {y_intercept}")
+    y_intercept, slope = params.b_func_polynomial.convert().coef
+    print(f"b(t): {slope}x + {y_intercept}")
+    y_intercept, slope = params.c_func_polynomial.convert().coef
+    print(f"c(t): {slope}x + {y_intercept}")
+    y_intercept, slope = params.d_func_polynomial.convert().coef
+    print(f"d(t): {slope}x + {y_intercept}")
+
 if __name__ == "__main__":
     time=1955+(8*31/366)
     hoehe=2000
     while time < 2101:
         print(f"{time}: Model since, factor: 1994, 2 {round(erhalteTemperatur(time, hoehe, 1994, factor=2))}°C | 1994, 1 {round(erhalteTemperatur(time, hoehe, 1994, factor=1))}°C | 2014, 2 {round(erhalteTemperatur(time, hoehe, 2014, factor=2))}°C | 2014, 1 {round(erhalteTemperatur(time, hoehe, 2014, factor=1))}°C")
         time += 1
+    
+    parameter_ausgeben(1994)
+    parameter_ausgeben(2014)
+    
+
+
