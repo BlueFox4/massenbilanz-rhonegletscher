@@ -118,7 +118,7 @@ data_dict_annotations = {
         "-.",  # days since jan 1, 1955
     ],
     "visibility": [
-        True,   # avg temp
+        False,   # avg temp
         False,  # avg temp max
         False,  # avg temp min
         False,  # pressure msl
@@ -128,11 +128,11 @@ data_dict_annotations = {
         True,   # avg wind speed
         False,  # max sustained speed
         False,  # max wind speed
-        True,   # rain days
-        True,   # snow days
+        False,   # rain days
+        False,   # snow days
         False,  # thunder days
         False,  # fog days
-        True,   # days since jan 1, 1955
+        False,   # days since jan 1, 1955
     ],
 }
 
@@ -151,7 +151,7 @@ for i, (key, value) in enumerate(data_dict.items()):
     label = f"{key_beautified} {'in ' + unit if unit != "" else ''} {' /' + str(division_by) if division_by != 1 else ''}"
     color = data_dict_annotations['color'][i]
     plots += ax.plot(data_dict["days_since_1955"], np.array(value)/division_by, visible=visibility, label=label, marker="", linestyle=linestyle, c=color)
-ax.legend()
+ax.legend(loc="lower left")
 plots_by_label = {p.get_label(): p for p in plots}
 
 
@@ -170,7 +170,7 @@ def callback(label):
     pn = plots_by_label[label]
     pn.set_visible(not pn.get_visible())
     pn.figure.canvas.draw_idle()
-    ax.legend()
+    ax.legend(loc="lower right")
 check.on_clicked(callback)
 
 plt.show()

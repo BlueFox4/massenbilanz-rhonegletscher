@@ -32,14 +32,18 @@ geometry:
   - right=25mm
 ---
 
+\vspace{40mm}
+
 # TL;DR
 
-Im Zuge der Modellierungswoche 2026, einem Projekt des Zentrums für Mathematik, wurde ein Modell entwickelt, welches auf Basis von historischen Wetterdaten einerseits näherungsweise die historische Massenveränderung des Rhonegletschers im Kanton Wallis in der Schweiz nachstellt und im zweiten Schritt mit Prognosen für die zukünftigen klimatischen Bedingungen auch die zukünftige Massenveränderung des Gletschers aufzeigt. Vorrangig wurde dabei eine Funktion für die Massenveränderung aufgestellt, welche gleich der Differenz der Massenakkumulation (Massenzunahme) des Gletschers und der Massenablation (Massenabnahme) des Gletschers an einem gewissen Zeitpunkt ist. Dabei sind Massenakkumulation und Massenablation Funktionen, die von Niederschlag und Temperatur zu eben diesem Zeitpunkt abhängig sind. Niederschlag und Temperatur sind ihrerseits Funktionen, die sich aus Wetterdatensätzen der letzten 30 Jahre speisen. Zur optimalen Bestimmung der Modellparameter dienten Daten über die tatsächliche historische Massenbilanz des Gletschers. Man fand dabei für die meisten denkbaren Annahmen für das zukünftige klimatische Verhalten ein Sterben des Gletschers bis zum Ende des Jahrhunderts. 
+Im Zuge der Modellierungswoche 2026, einem Projekt des Zentrums für Mathematik, wurde ein Modell entwickelt, welches auf Basis von historischen Wetterdaten einerseits näherungsweise die historische Massenveränderung des Rhonegletschers im Kanton Wallis in der Schweiz nachstellt und im zweiten Schritt mit Prognosen für die zukünftigen klimatischen Bedingungen auch die zukünftige Massenveränderung des Gletschers aufzeigt. Vorrangig wurde dabei eine Funktion für die Massenveränderung aufgestellt, welche gleich der Differenz der Massenakkumulation (Massenzunahme) des Gletschers und der Massenablation (Massenabnahme) des Gletschers an einem gewissen Zeitpunkt ist. Dabei sind Massenakkumulation und Massenablation jeweils Funktionen, die von Niederschlag und Temperatur zu eben diesem Zeitpunkt abhängig sind. Niederschlag und Temperatur sind ihrerseits Funktionen, die sich aus Wetterdatensätzen der letzten 30 Jahre speisen. Zur optimalen Bestimmung der Modellparameter dienten Daten über die tatsächliche historische Massenbilanz des Gletschers. Man fand dabei für die meisten denkbaren Annahmen für das zukünftige klimatische Verhalten ein Sterben des Gletschers bis zum Ende des Jahrhunderts.
 
 \newpage
 
+
 \tableofcontents
 
+\vspace{10mm}
 
 # Zielsetzung
 
@@ -68,7 +72,7 @@ Im Folgenden zeigen Tabellen die Erklärung der Daten, welche uns vorliegen. Die
 Hierbei handelt es sich um alle Daten, die jahresweise erhoben worden sind. Folgende Tabelle zeigt den Umfang, Einheit und die Herkunft dieser, nebst einer groben Beschreibung der Bedeutung, ggf. auch der Errechnung der jeweiligen Werte.
 
 | **Dimension** | **Einheit**                 | **Beschreibung**                      | **Herkunft**                                                                                                                                                                        |
-|-----------------|--------------------------|---------------------------------------------------------|--------------------------------------------------|
+|-----------------|--------------------------|----------------------------------------------------|--------------------------------------------------------|
 | **T**         | $^{\circ}C$                        | Temperatur                            | tt (scraped)                                                                                                                                                                        |
 | **TM**        | $^{\circ}C$                        | Maximaltemp.                          | tt (scraped)                                                                                                                                                                        |
 | **Tm**        | $^{\circ}C$                        | Minimaltemp.                          | tt (scraped)                                                                                                                                                                        |
@@ -145,9 +149,11 @@ Es ist denkbar, dass eine Annäherung mittels eines meteorologischen Modells ein
 
 ## Visualisierung
 
-Die Abbildung \ref{fig:all_data} zeigt verschiedene der jährlich erhobenen Daten, welche durch Aufbereitung um die Masse erweitert wurden. Hier zeigen sich auch die Datenlücken.
+Die Abbildung \ref{fig:all_data_yearly} zeigt verschiedene der jährlich erhobenen Daten, welche durch Aufbereitung um die Masse erweitert wurden. Hier zeigen sich auch die Datenlücken. In Abbildung \ref{fig:all_data_daily} sieht man wiederum andere Messwerte, welche von Interesse sein könnten.
 
-![Ausschnitt der wichtigsten, aufbereiteten jährlichen Daten](assets/wichtigste_daten.png){#fig:all_data}
+![Ausschnitt der wichtigsten, aufbereiteten jährlichen Daten](assets/wichtigste_daten_jaehrlich.png){#fig:all_data_yearly width=85%}
+
+![Ausschnitt der wichtigsten, aufbereiteten täglichen Daten](assets/wichtigste_daten_taeglich.png){#fig:all_data_daily width=85%}
 
 \clearpage
 
