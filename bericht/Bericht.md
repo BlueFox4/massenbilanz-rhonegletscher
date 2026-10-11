@@ -30,6 +30,9 @@ geometry:
   - bottom=25mm
   - left=25mm
   - right=25mm
+
+header-includes:
+  - \usepackage{afterpage}
 ---
 
 \vspace{40mm}
@@ -156,17 +159,16 @@ Beim Niederschlag ist sie deutlich schlechter: Sitten liegt im inneralpin trocke
 
 Des weiteren besitzt der ursprüngliche Datensatz teilweise Lücken, die mit interpolierten Daten ausgefüllt werden mussten.
 
-Es ist denkbar, dass eine Annäherung mittels eines meteorologischen Modells eines renommierten Instituts bessere Daten liefern würde, als durch die durchaus weit entfernte Wetterstation.
+Es ist zudem denkbar, dass eine Annäherung mittels eines meteorologischen Modells eines renommierten Instituts bessere Daten liefern würde, als durch die durchaus weit entfernte Wetterstation.
 
 ## Visualisierung
 
 Die Abbildung \ref{fig:all_data_yearly} zeigt verschiedene der jährlich erhobenen Daten, welche durch Aufbereitung um die Masse erweitert wurden. Hier zeigen sich auch die Datenlücken. In Abbildung \ref{fig:all_data_daily} sieht man wiederum andere Messwerte, welche von Interesse sein könnten.
 
-![Ausschnitt der wichtigsten, aufbereiteten jährlichen Daten](assets/wichtigste_daten_jaehrlich.png){#fig:all_data_yearly width=85%}
+![Ausschnitt der wichtigsten, aufbereiteten jährlichen Daten](assets/wichtigste_daten_jaehrlich.png){#fig:all_data_yearly}
 
-![Ausschnitt der wichtigsten, aufbereiteten täglichen Daten](assets/wichtigste_daten_taeglich.png){#fig:all_data_daily width=85%}
+![Ausschnitt der wichtigsten, aufbereiteten täglichen Daten](assets/wichtigste_daten_taeglich.png){#fig:all_data_daily}
 
-\clearpage
 
 # Modell
 
@@ -176,10 +178,10 @@ Wir nehmen den Gletscher als Quader mit fester Breite $B = 1,5km$ an, wobei die 
 
 Dann gilt $O(t)=B \cdot L(t)$ und $M(t)=\rho_{Eis} \cdot B \cdot H \cdot L(t)$, also $O(t) \sim L(t)\sim M(t)$. Weiter gilt:
  
-1. **Höhenstufen:** Der Gletscher wird in 15 Höhenstufen im Abstand von $100m$ eingeteilt. Jede Stufe trägt mit demselben Gewicht $1/15$ zur Massenänderung bei.
-2. **Temperatur je Stufe:** Gemäß dem Modell der Standardatmosphäre nimmt die Temperatur um $0,65^{\circ}C$ pro $100m$ ab: $T_i(t) = T_{Basis}(t)-0,65^{\circ}C \cdot i$ für $i=1,\dots,15$.
-3. **Schwelle:** Mit einer einheitlichen Schwelle $T_0 = 2^{\circ}C$ gilt: Bei $T_i < T_0$ fällt Niederschlag als Schnee und akkumuliert. Bei $T_i > T_0$ fällt Niederschlag als Regen zusätzlich schmelzbeschleunigend. Bei $T_i = T_0$ geschieht weder das eine noch das andere.
-4. **Ablation:** ist für positive Temperaturen abhängig von Masse und Niederschlag (eben ab $T_i > T_0$).
+1. **Höhenstufen:** Der Gletscher wird in 15 Höhenstufen im Abstand von $100m$ eingeteilt, um unterschiedliche Temperaturen einfach abbilden zu können.
+2. **Temperatur je Stufe:** Gemäß dem Modell der Standardatmosphäre nimmt die Temperatur um $0,65^{\circ}C$ pro $100m$ ab.
+3. **Schwelle:** Mit einer einheitlichen Schwelle $T_0 = 2^{\circ}C$ gilt: Bei $T(t) < T_0$ fällt Niederschlag als Schnee und akkumuliert. Bei $T(t) > T_0$ fällt Niederschlag als Regen zusätzlich schmelzbeschleunigend. Dies rührt daher, dass Schnee in höheren Atmosphäreschichten entsteht. Bei $T(t) = T_0$ geschieht weder das eine noch das andere.
+4. **Ablation:** ist für positive Temperaturen abhängig von Masse und Niederschlag (eben ab $T(t) > T_0$).
 
 ## Temperatur
 
@@ -194,7 +196,7 @@ $$
 Die einzelnen Parameter können dabei wie folgt interpretiert werden:
 
 - $a$ bezeichnet die **Amplitude** in $^{\circ}C$ und beschreibt, wie stark die Temperaturen im Jahresverlauf schwanken.
-- $b$ bezeichnet die **Periodendauer** in Tagen. Dieser Wert wird sinnvollerweise auf $365{,}2524$ Tage festgelegt.
+- $b$ bezeichnet die **Periodendauer** in Tagen. Dieser Wert wird sinnvollerweise auf $365{,}2425$ Tage festgelegt.
 - $c$ bezeichnet die **Phasenverschiebung** in Tagen und gibt an, um welchen Betrag der Temperaturverlauf entlang der Zeitachse verschoben ist. Damit lässt sich insbesondere der Zeitpunkt des kältesten bzw. wärmsten Tages bestimmen.
 - $d$ bezeichnet den **Temperaturmittelwert** in $^{\circ}C$ und entspricht der vertikalen Verschiebung der Sinuskurve.
 
@@ -219,7 +221,7 @@ d(t)&= 0,06208368218558748t - 113,66875083425288
 Die Entwicklung der Parameter lässt sich unter Berücksichtigung ihrer jeweiligen Bedeutung wie folgt interpretieren:
 
 - Die **Amplitude $a$** steigt leicht an. Dies könnte darauf hindeuten, dass die jahreszeitlichen Temperaturschwankungen im betrachteten Zeitraum zunehmen. Ein möglicher Zusammenhang besteht mit zunehmenden Wetterextremen infolge des Klimawandels.
-- Die **Periodendauer $b$** wurde bei der Berechnung der Parameter auf den festen Wert $365{,}2524$ Tage gesetzt und bleibt daher konstant.
+- Die **Periodendauer $b$** wurde bei der Berechnung der Parameter auf den festen Wert $365{,}2425$ Tage gesetzt und bleibt daher konstant.
 - Die **Phasenverschiebung $c$** verändert sich nur geringfügig. Dies deutet darauf hin, dass sich der Zeitpunkt der jahreszeitlichen Temperaturminima und -maxima im betrachteten Zeitraum nur wenig verschoben hat. Allerdings ist dieser Zeitpunkt von verschiedenen meteorologischen und klimatischen Faktoren abhängig.
 - Beim **Temperaturmittelwert $d$** ist hingegen ein deutlicher Anstieg von etwa $3^{\circ}C$ über den betrachteten Messzeitraum zu erkennen. Dieser Anstieg steht im Einklang mit der allgemeinen Erwärmung im Zuge des Klimawandels.
 
@@ -239,6 +241,8 @@ $$
 
 Die zugrunde liegenden Messdaten stammen von einer Wetterstation auf einer Höhe von $482m$. Der betrachtete Gletscher beginnt jedoch erst auf einer Höhe von etwa $2200m$, sodass dort von einer deutlich niedrigeren Temperatur auszugehen ist. Um diesen Höhenunterschied im Modell zu berücksichtigen, wird eine Temperaturabnahme von $0{,}65^{\circ}C$ pro $100m$ Höhenzunahme gemäß des Modells der Standardatmosphäre angenommen.
 
+$$ T_i(t) = T(t) - 0,0065^{\circ}C \cdot [(2200m - 482m) + 100m \cdot i] \text{ für i} \in [0; 14] $$
+
 Damit kann aus den Messdaten der Wetterstation eine modellierte Temperaturentwicklung für die Höhe des Gletschers abgeleitet werden. Diese dient anschließend als Grundlage für die weitere Berechnung der Massenbilanz. Abschließend sieht man in der Abbildung \ref{fig:temperaturverlauf_modell_realitaet} unsere modellierte Temperatur und die tatsächlichen monatlichen Durchschnittwerte auf Stationshöhe (482 m), also vor der Höhenkorrektur.
 
 ![Modellierte Temperaturentwicklung vs. Daten von 1994 bis 2023](assets/modellWerteVsDatenTemperatur.png){width=70% #fig:temperaturverlauf_modell_realitaet}
@@ -251,7 +255,7 @@ Beim Niederschlag lässt sich - betrachtet man die Jahresverläufe - zunächst k
 
 Kumuliert man jedoch die Tageswerte monatlich und zeichnet eine Ausgleichsgerade durch diese, erhält man eine Funktion, die den Niederschlag pro Monat in $\frac{mm}{Monat}$ annähert. Da die Daten eine hohe Streuung haben, ist dies für den einzelnen Zeitpunkt jedoch ungenau. Um zu validieren, dass zumindest die Steigung stimmt, kumuliert man nun die Regentage jährlich (da diese eine deutlich geringere Streuung aufweisen) und zeichnet auch hier eine Regressionsgerade.
 
-![Jährliche Regentagsanzahl, monatliche Niederschläge und die Ausgleichsgeraden](assets/pp_modelliert.png){width=70% #fig:pp_modelliert}
+![Jährliche Regentagsanzahl, monatliche Niederschläge und die Ausgleichsgeraden](assets/pp_modelliert.png){#fig:pp_modelliert}
 
 Beide Größen steigen. Die Regentage bestätigen damit das Vorzeichen des Trends, nicht aber seine Größe (+19 % beim Niederschlag, +46 % bei den Regentagen). Da die Niederschlagsmenge jedoch die richtige Einheit besitzt, fließt diese - wie die pinke Linie in Abbildung \ref{fig:pp_modelliert} zeigt - in unser tatsächliches Modell ein.
 
@@ -276,10 +280,10 @@ $$\text{Fläche} = B \cdot L(t) \approx c \cdot B \cdot M(t)$$
  Nun lässt sich die Formel für die Zunahmefunktion herleiten.
 
 $$ 
-Z(t) =
+Z_i(t) =
 \begin{cases}
-    0 & \text{für } T(t) \ge T_0 \\
-    PP(t) \cdot \rho_{Wasser} \cdot c \cdot B \cdot M(t) & \text{für } T(t) < T_0
+    0 & \text{für } T_i(t) \ge T_0 \\
+    PP(t) \cdot \rho_{Wasser} \cdot c \cdot B \cdot M(t) & \text{für } T_i(t) < T_0
 \end{cases}$$
 
 Alle weiteren konstanten Einflüsse auf die Akkumulation fließen logischerweise - wenn auch ungewollt - mit in den zu optimierenden Parameter c in der Einheit $\frac{1}{mm \cdot Jahr}$ ein.
@@ -292,14 +296,14 @@ Ab einer Temperatur $T_0 = 0^{\circ}C$ schmilzt der Gletscher. Wenn die Temperat
 Beide Effekte sind direkt proportional zur Gletschermasse, da diese - unter unseren Annahmen - wiederum zur sichtbaren Gletscheroberfläche proportional ist und der Niederschlagseffekt auf der gesamten Oberfläche stattfindet. Der allgemeine Temperaturschmelzeffekt ist direkt massenabhängig, da die Schmelze idealisiert für jedes Kilogramm Gletschereis gleichmäßig vonstatten geht. Der Temperaturgradient des Eises innerhalb des Gletschers, also der geringere Einfluss der Außentemperatur auf Eis, das nicht an der Luft liegt, wird als annähernd linear angenommen und fließt demnach in die Schmelzkonstante $d$ in der Einheit $\frac{1}{^{\circ}C \cdot Jahr}$ ein.
 
 $$
-A(t) = 
+A_i(t) = 
 \begin{cases}
     0 
-    & \text{für } T(t) \le 0\\
-    M(t) \cdot d \cdot (T(t))
-    & \text{für } 0 < T(t) < 2 \\
-    M(t) \cdot d \cdot (T(t)) 
-    + PP(t) \cdot f \cdot M(t) \cdot (T(t) - T_0) & \text{für } T(t) \ge 2
+    & \text{für } T_i(t) \le 0\\
+    M(t) \cdot d \cdot T_i(t)
+    & \text{für } 0 < T_i(t) < 2 \\
+    M(t) \cdot d \cdot T_i(t) 
+    + PP(t) \cdot f \cdot M(t) \cdot (T_i(t) - T_0) & \text{für } T_i(t) \ge 2
 \end{cases}
 $$
 
@@ -308,7 +312,7 @@ $$
 Die Massenänderung ist der gewichtete Mittelwert über die 15 Höhenstufen:
 
 $$\frac{dM}{dt}
-= \frac{1}{15} \sum_{i=1}^{15}\bigl[Z_i(t)-A_i(t)\bigr]$$
+= \frac{1}{15} \sum_{i=0}^{14}\bigl(Z_i(t)-A_i(t)\bigr)$$
 
 Die Gewichtung $\frac{1}{15}$ bedeutet, dass jede Stufe als gleich großer Flächenanteil angenommen wird.
 
