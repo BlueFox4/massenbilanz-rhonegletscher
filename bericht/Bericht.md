@@ -10,9 +10,9 @@ numbersections: true
 author: 
 - Benjamin Burkhardt
 - Ole Hayn
-- Fabian Lehmann
-- Neo Koidl
 - Jona Jeritslev
+- Neo Koidl
+- Fabian Lehmann
 - Magnus Wagner
 
 header-right: MODWO2026 Kassel
